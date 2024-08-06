@@ -6,12 +6,12 @@ import random
 pg.init()
 
 # Размеры экрана
-screen_width = 1024
+screen_width = 1200
 screen_height = 720
 
 # Создание экрана
 screen = pg.display.set_mode((screen_width, screen_height))
-pg.display.set_caption("Производственный симулятор")
+pg.display.set_caption("TIsD")
 
 # Цвета
 WHITE = (255, 255, 255)
@@ -28,6 +28,8 @@ DAY_EVENT = pg.USEREVENT + 1
 pg.time.set_timer(DAY_EVENT, 3000)
 
 INCREASE_MONEY = pg.USEREVENT + 2
+PANKROT_EVENT = pg.USEREVENT + 1
+pg.time.set_timer(PANKROT_EVENT, 5000)
 pg.time.set_timer(INCREASE_MONEY, 1000)
 
 font = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 20)
@@ -387,8 +389,9 @@ def generate_description(vehicle_type):
     return full_description
 
 
-def generate_random_orders(n):
-    orders = []
+def generate_random_orders(n, orders, order_index=None):
+    orders = orders
+    buttons = []
     for _ in range(n):
         name = random.choice(names)
         surname = random.choice(surnames)
@@ -398,8 +401,15 @@ def generate_random_orders(n):
         deadline = random.randint(5, 10)
         description = generate_description(vehicle_type)
         popularity = random.randint(1, 10)
-        orders.append(Order(vehicle_type, quality, price, deadline, name, surname, description, popularity))
-    return orders
+        if order_index is None:
+            orders.append(Order(vehicle_type, quality, price, deadline, name, surname, description, popularity))
+            reload_order = Button("", image="Game_ind/GUI/Order_GUI/window_order_open/reload_order.png", x=0, y=0,
+                                  visible_width=50, visible_height=50, total_height=64, total_width=64, func=None)
+            buttons.append(reload_order)
+        else:
+            orders[order_index] = Order(vehicle_type, quality, price, deadline, name, surname, description, popularity)
+
+    return orders, buttons
 
 
 def generate_shop_window(shop_items):
@@ -448,11 +458,12 @@ conveyor_images = [load_image(file, width=400, height=700) for file in conveyor_
 
 
 class Button:
-    def __init__(self, text, x, y, visible_width, visible_height, total_width, total_height, text_font=font, func=None):
+    def __init__(self, text, x, y, visible_width, visible_height, total_width, total_height, text_font=font, func=None,
+                 image="Game_ind/GUI/Base_GUI/Button_GUI/Button.png"):
         self.func = func
         self.x = x
         self.y = y
-        self.image = load_image('Game_ind/GUI/Base_GUI/Button_GUI/Button.png', total_width, total_height)
+        self.image = load_image(image, total_width, total_height)
         # self.rect = self.image.get_bounding_rect()
         self.visible_rect = pg.Rect(x, y + 24, visible_width, visible_height)
 
@@ -517,6 +528,9 @@ class Order:
         # pg.draw.rect(screen, "black", self.rect)
         pass
 
+    def reload_order(self, index_order):
+        pass
+
 
 class Shop:
     def __init__(self, price, quality, category, name, description):
@@ -565,12 +579,19 @@ class Game:
         self.conveyor = Conveyor()
         self.day = 0
         self.selected_order = None
+        self.selected_button = None
+        self.pankrot_mode = True
+
+        self.reload_limits = 5
+        self.save_days = 0
+        self.is_saved_day = False
 
         self.order_start_x = 473  # X-координата, с которой начинается первый заказ
         self.order_start_y = 30  # Y-координата, с которой начинается первый заказ
+        self.reload_order_button_y = 128
 
-        self.items_start_x = 480
-        self.items_start_y = 41
+        self.items_start_x = 480  # X-координата, с которой начинается первый заказ
+        self.items_start_y = 41  # Y-координата, с которой начинается первый заказ
 
         self.INCREASE_COINS = pg.USEREVENT + 2
         pg.time.set_timer(self.INCREASE_COINS, 1000)
@@ -581,12 +602,14 @@ class Game:
             "Game_ind/Base/conveir_all/conveir_up/1c/conveir_up_64x64.png", 400, 700)
         self.money_image = load_image("Game_ind/GUI/Base_GUI/money/money_64x64.png", 64, 64)
         self.popularity_image = load_image("Game_ind/GUI/Base_GUI/Popularity/100%/popularity100_64x64.png", 64, 64)
-        self.windowGUI = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 390, 440)
+        self.windowGUIorder = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 460, 440)
         self.ButtonGuiOrder = Button("Orders", 650, 10, 124, 58, 120, 120, func=self.toggle_orders_window)
         self.ButtonGuiShop = Button("Shop", 790, 10, 122, 58, 120, 120, func=self.toggle_shop_window)
         self.OrderGui = load_image("Game_ind/GUI/Order_GUI/order_mini/order_mini.png", 346, 256)
         self.showcase_of_products = load_image("Game_ind/GUI/Shop_GUI/showcase_of_products.png", 280, 220)
+        self.pankrot_image = load_image("Game_ind/GUI/Base_GUI/Icons_for_ideas/Pankrot_icon.png", 32, 32)
 
+        # self.reload_order_rect = self.reload_order.get_rect()
         pg.time.set_timer(self.money + 1, 500)
 
         self.money_text = text_render(f"{self.money}")
@@ -600,7 +623,7 @@ class Game:
         self.show_shop_window = False
         self.orders_button_rect = pg.Rect(self.ButtonGuiOrder.rect)  # Позиция и размеры кнопки "Заказы"
 
-        self.orders = generate_random_orders(5)
+        self.orders, self.reload_buttons = generate_random_orders(5, self.orders)
 
         self.info_window_width = 527  # Примерная ширина окна информации
         self.info_window_height = 528  # Примерная высота окна информации
@@ -617,18 +640,24 @@ class Game:
         padding = 77  # Отступ между заказами
 
         # Отрисовка окна заказов
-        screen.blit(self.windowGUI, (450, 97))  # Позиция окна заказов
+        screen.blit(self.windowGUIorder, (450, 97))  # Позиция окна заказов
 
         for index, order in enumerate(self.orders):
             order_y_position = self.order_start_y + (index * padding)
+            reload_y_position = self.reload_order_button_y + (index * padding)
             order.rect.topleft = (self.order_start_x, order_y_position)
             # Отрисовка каждого заказа здесь
             screen.blit(self.OrderGui, order.rect.topleft)
+            screen.blit(self.reload_buttons[index].image, (order.rect.right, reload_y_position))
 
         for index, order in enumerate(self.orders):
             order_y_position = self.order_start_y + (index * padding)
             order.rect.topleft = (self.order_start_x, order_y_position + 95)
-            # order.draw(screen)
+
+        for index, button in enumerate(self.reload_buttons):
+            order_y_position = self.order_start_y + (index * padding)
+            button.rect.topleft = (self.orders[index].rect.right + 8, order_y_position + 103)
+            # pg.draw.rect(screen, "Black", button.rect)
 
         y_start = 130  # Начальная позиция для текста заказов
 
@@ -657,15 +686,8 @@ class Game:
     def draw_shop_window(self, mode):
         shop_index = 0
         padding = 80
-        screen.blit(self.windowGUI, (450, 97))
-        # for index, item in enumerate(self.items_all):
-        #     if item.category == mode:
-        #         #item_y_position = self.items_start_y + (index * padding)
-        #         #item.rect.topleft = (self.items_start_x, item_y_position)
-        #         item_y_position = self.items_start_y + (index * padding)
-        #         item.rect.topleft = (self.items_start_x, item_y_position)
-        #         # Отрисовка каждого заказа здесь
-        #         screen.blit(self.showcase_of_products, item.rect.topleft)
+        self.windowGUIshop = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 390, 530)
+        screen.blit(self.windowGUIshop, (450, 97))
 
         for item in range(len(self.items_all)):
             if self.items_all[item].category == mode:
@@ -680,11 +702,10 @@ class Game:
             if self.items_all[item].category == mode:
                 items_y_position = self.items_start_y + (shop_index * padding)
                 self.items_all[item].rect.topleft = (self.items_start_x, items_y_position + 90)
-                #pg.draw.rect(screen, "Black", self.items_all[item].rect)
+                # pg.draw.rect(screen, "Black", self.items_all[item].rect)
                 shop_index += 1
 
         y_start = 140
-
 
         for item in self.items_all:
             if item.category == mode:
@@ -712,6 +733,11 @@ class Game:
         self.popularity -= amount
         if self.popularity < 0:
             self.popularity = 0
+
+    def lose_money(self, amount):
+        self.popularity -= amount
+        if self.money <= 0:
+            self.pankrot_mode = True
 
     def add_orders(self, order):
         self.orders.append(order)
@@ -748,11 +774,17 @@ class Game:
         if self.selected_order:
             # Путь к изображению окна информации о заказе
             info_window_image_path = "Game_ind/GUI/Order_GUI/window_order_open/window_order_open.png"
+            accept_order = "Game_ind/GUI/Order_GUI/window_order_open/accept_order_button.png"
+            reject_order = "Game_ind/GUI/Order_GUI/window_order_open/reject_order_button.png"
             # Загрузка и отрисовка окна информации о заказе
             info_window_image = load_image(info_window_image_path, self.info_window_width, self.info_window_height)
+            accept_order_image = load_image(accept_order, 100, 100)
+            reject_order_image = load_image(reject_order, 100, 100)
             info_window_x = 50  # Начальная X-координата для окна информации
             info_window_y = 0  # Начальная Y-координата для окна информации
             screen.blit(info_window_image, (info_window_x, info_window_y))
+            screen.blit(accept_order_image, (info_window_x + 20, info_window_y + 328))
+            screen.blit(reject_order_image, (info_window_x + 140, info_window_y + 328))
 
             # Отрисовка текста описания заказа
             description_text = font_mini.render(self.selected_order.description, True, WHITE)
@@ -776,43 +808,82 @@ while running:
 
         # Обработка событий (например, нажатие кнопок)
         if event.type == pg.MOUSEBUTTONDOWN:
-            if game.selected_order and not game.selected_order.rect.collidepoint(event.pos):
-                # Если клик был вне окна информации, сбрасываем выбранный заказ
-                game.selected_order = None
+            mouse_pressed = pg.mouse.get_pressed()
+            if mouse_pressed[0] or mouse_pressed[2]:
+                if game.selected_order and not game.selected_order.rect.collidepoint(event.pos):
+                    # Если клик был вне окна информации, сбрасываем выбранный заказ
+                    game.selected_order = None
 
-            if game.show_orders_window:
-                for order in game.orders:
-                    if order.rect.collidepoint(event.pos):
-                        # Если кликнули по заказу, который уже выбран, закрываем окно информации
-                        if game.selected_order == order:
-                            game.selected_order = None
-                        else:
-                            # Иначе открываем окно информации для нового заказа
-                            game.selected_order = order
-                        break  # Выходим из цикла, так как заказ найден
+                if game.show_orders_window:
+                    for order in game.orders:
+                        if order.rect.collidepoint(event.pos):
+                            # Если кликнули по заказу, который уже выбран, закрываем окно информации
+                            if game.selected_order == order:
+                                game.selected_order = None
+                            else:
+                                # Иначе открываем окно информации для нового заказа
+                                game.selected_order = order
+                            break  # Выходим из цикла, так как заказ найден
 
-            if game.show_shop_window:
-                for item in game.items_all:
-                    if item.rect.collidepoint(event.pos):
-                        if game.money >= item.price:
-                            game.money -= item.price
+                if game.show_shop_window:
+                    for item in game.items_all:
+                        if item.rect.collidepoint(event.pos):
+                            # Если кликнули на окну с товаром
+                            if game.money >= item.price:
+                                # То если денег денег больше, чем указано на ценнике товара, то покупка совершается
+                                game.money -= item.price
+                                # Списываются деньги
 
         if event.type == DAY_EVENT:
             game.day += 1
-            print(f'День номер {game.day}')
+            print(game.day)
+
+            if game.reload_limits == 0 and game.is_saved_day == False:
+                print("reload limits enabled")
+                game.save_days = game.day
+                game.is_saved_day = True
+            if game.save_days + 10 == game.day:
+                game.reload_limits = 5
+                game.is_saved_day = False
+                print("reload of limits")
+
+        if event.type == PANKROT_EVENT:
+            if game.pankrot_mode:
+                game.popularity -= 1
 
         if event.type == INCREASE_MONEY:
             game.money += 1
 
         if event.type == pg.MOUSEBUTTONDOWN and game.orders_button_rect.collidepoint(event.pos):
-            game.ButtonGuiOrder.is_clicked(event)
+            mouse_pressed = pg.mouse.get_pressed()
+            if mouse_pressed[0]:
+                game.ButtonGuiOrder.is_clicked(event)
         game.ButtonGuiShop.is_clicked(event)
 
+        # if event.type == pg.MOUSEBUTTONDOWN and game.reload_order.rect.collidepoint(event.pos):
+        #     game.reload_order.is_clicked(event)
+        #     print(game.reload_buttons)
+
         if event.type == pg.MOUSEBUTTONDOWN and game.show_orders_window:
-            for order in game.orders:
-                if order.rect.collidepoint(event.pos):
-                    game.selected_order = order  # Запоминаем выбранный заказ
-                    break  # Выходим из цикла, так как заказ найден
+            mouse_pressed = pg.mouse.get_pressed()
+            if mouse_pressed[0]:
+                for order in game.orders:
+                    if order.rect.collidepoint(event.pos):
+                        game.selected_order = order  # Запоминаем выбранный заказ
+                        break  # Выходим из цикла, так как заказ найден
+
+        if event.type == pg.MOUSEBUTTONDOWN and game.show_orders_window:
+            mouse_pressed = pg.mouse.get_pressed()
+            if mouse_pressed[0]:
+                for button in game.reload_buttons:
+                    if button.rect.collidepoint(event.pos) and game.reload_limits > 0:
+                        game.reload_limits -= 1
+                        print(game.reload_limits)
+                        order_index = game.reload_buttons.index(button)
+                        game.selected_button = button  # Запоминаем выбранный заказ
+                        game.orders[order_index] = generate_random_orders(1, game.orders, order_index=order_index)[0][order_index]
+                        print(game.reload_buttons[game.reload_buttons.index(button)])
+                        break  # Выходим из цикла, так как заказ найден
 
     # Переход к следующему изображению
     now = pg.time.get_ticks()
@@ -834,4 +905,3 @@ while running:
 # Завершение PyGame
 pg.quit()
 sys.exit()
-#goida
