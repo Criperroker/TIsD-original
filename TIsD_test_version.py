@@ -19,11 +19,10 @@ BLACK = (0, 0, 0)
 
 # Установка FPS
 clock = pg.time.Clock()
-FPS = 24
+FPS = 30
 
 last_update = pg.time.get_ticks()
 current_image = 0
-current_image_reload = 0
 
 DAY_EVENT = pg.USEREVENT + 1
 pg.time.set_timer(DAY_EVENT, 3000)
@@ -50,138 +49,6 @@ surnames = ["Barnett", "Hammond", "Tings", "Richards", "Malone", "Wheeler", "Hun
             "Bird", "Ruiz", "Brown", "Rice", "Munoz", "Ramos", "Mitchell", "Hundred", "Berry", "Wheeler", "George",
             "Bishop", "Stokes", "Burrows", "Hicks", "Rhodes", "Tate", "Hargraves", "Simmons", "Cantrell", "Eland",
             "Jensen", "Stevens", "Woolridge", "Garraway", "Cook", "Nicholas", "Smart", "Schmidt", "Anchondo", "Fabela"]
-
-# shop_items = {
-#     "Carbon fiber cladding":
-#         {
-#             "price": 500,
-#             "description": "Its carbon fiber cladding",
-#             "quality": 50,
-#             "category": "appearance",
-#             "image": "123"
-#         },
-#     "Glass":
-#         {
-#             "price": 50,
-#             "description": "Its glass",
-#             "quality": 502,
-#             "category": "appearance",
-#             "image": "123"
-#         },
-#     "Bumper":
-#         {
-#             "price": 100,
-#             "description": "Its bumper",
-#             "quality": 504,
-#             "category": "appearance",
-#             "image": "123"
-#         },
-#     "Doors":
-#         {
-#             "price": 100,
-#             "description": "Its doors",
-#             "quality": 505,
-#             "category": "appearance",
-#             "image": "123"
-#         },
-#     "Headlights":
-#         {
-#             "price": 100,
-#             "description": "Its headlights",
-#             "quality": 50,
-#             "category": "appearance",
-#             "image": "123"
-#         },
-#     "Rear view mirrors":
-#         {
-#             "price": 100,
-#             "description": "Its rear view mirrors",
-#             "quality": 50,
-#             "category": "appearance",
-#             "image": "123"
-#         },
-#     "Gearbox":
-#         {
-#             "price": 100,
-#             "description": "Its gearbox",
-#             "quality": 50,
-#             "category": "transmission",
-#             "image": "123"
-#         },
-#     "Engine":
-#         {
-#             "price": 100,
-#             "description": "Its trunk",
-#             "quality": 50,
-#             "category": "transmission",
-#             "image": "123"
-#         },
-#     "gimbal drive":
-#         {
-#             "price": 100,
-#             "description": "Its gimbal drive",
-#             "quality": 50,
-#             "category": "transmission",
-#             "image": "123"
-#         },
-#     "Main transfer":
-#         {
-#             "price": 100,
-#             "description": "Its Main transfer",
-#             "quality": 50,
-#             "category": "transmission",
-#             "image": "123"
-#         },
-#     "Wheels":
-#         {
-#             "price": 100,
-#             "description": "Its wheels",
-#             "quality": 50,
-#             "category": "transmission",
-#             "image": "123"
-#         },
-#     "Helm":
-#         {
-#             "price": 100,
-#             "description": "Its helm",
-#             "quality": 50,
-#             "category": "management mechanisms",
-#             "image": "123"
-#         },
-#     "Shock absorbers":
-#         {
-#             "price": 100,
-#             "description": "Its shock absorbers",
-#             "quality": 50,
-#             "category": "management mechanisms",
-#             "image": "123"
-#         },
-#     "Elastic spring":
-#         {
-#             "price": 100,
-#             "description": "Its elastic spring",
-#             "quality": 50,
-#             "category": "management mechanisms",
-#             "image": "123"
-#         },
-#     "Radio":
-#         {
-#             "price": 100,
-#             "description": "Its radio",
-#             "quality": 50,
-#             "category": "salon",
-#             "image": "123"
-#         },
-#     "Seat":
-#         {
-#             "price": 100,
-#             "description": "Its seat",
-#             "quality": 50,
-#             "category": "salon",
-#             "image": "123"
-#         }
-# }
-
 
 shop_items = {
     "appearance":
@@ -323,8 +190,44 @@ shop_items = {
                     "quality": 50,
                     "category": "salon",
                     "image": "123"
+                },
+            "Oven":
+                {
+                    "price": 100,
+                    "description": "Its oven",
+                    "quality": 50,
+                    "category": "salon",
+                    "image": "123"
+                },
+            "Conditioner":
+                {
+                    "price": 100,
+                    "description": "Its conditioner",
+                    "quality": 50,
+                    "category": "salon",
+                    "image": "123"
+                },
+            "Ventilation":
+                {
+                    "price": 100,
+                    "description": "Its ventilation",
+                    "quality": 50,
+                    "category": "salon",
+                    "image": "123"
+                }
+        },
+    "maintenance":
+        {
+            "Oil":
+                {
+                    "price": 100,
+                    "description": "Its oil",
+                    "quality": 50,
+                    "category": "Maintenance",
+                    "image": "123"
                 }
         }
+
 }
 
 
@@ -357,9 +260,15 @@ def handle_produce_button_click(game):
     print("Производство машины запущено")
 
 
-def load_image(file, width, height):
-    image = pg.image.load(file).convert_alpha()
-    image = pg.transform.scale(image, (width, height))
+def load_image(file, width=None, height=None):
+    # Если file уже является объектом изображения, пропускаем загрузку
+    if isinstance(file, pg.Surface):
+        image = file
+    else:
+        image = pg.image.load(file).convert_alpha()
+
+    if width and height:
+        image = pg.transform.scale(image, (width, height))
 
     return image
 
@@ -404,8 +313,8 @@ def generate_random_orders(n, orders, order_index=None):
         popularity = random.randint(1, 10)
         if order_index is None:
             orders.append(Order(vehicle_type, quality, price, deadline, name, surname, description, popularity))
-            reload_order = Button("", image="Game_ind/GUI/Order_GUI/window_order_open/reload_order.png", x=0, y=0,
-                                  visible_width=50, visible_height=50, total_height=64, total_width=64, func=None)
+            reload_order = AnimatedButton("", x=-100, y=-100, visible_width=50, visible_height=50, total_height=64,
+                                          total_width=64, func=None, images=reload_button_images)
             buttons.append(reload_order)
         else:
             orders[order_index] = Order(vehicle_type, quality, price, deadline, name, surname, description, popularity)
@@ -455,44 +364,15 @@ conveyor_images_path = [
 
 ]
 
-animation_reload_path = [
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-1.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-2.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-3.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-4.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-5.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-6.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-7.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-8.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-9.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-10.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-11.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-12.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-13.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-14.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-15.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-16.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-17.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-18.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-19.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-20.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-21.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-22.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-23.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-24.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-25.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-26.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-27.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-28.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-29.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-30.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-31.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-32.png",
-    "Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-33.png"
-]
-
 conveyor_images = [load_image(file, width=400, height=700) for file in conveyor_images_path]
-animation_reload_images = [load_image(file, width=64, height=64) for file in animation_reload_path]
+
+# Загрузка кадров анимации для кнопки перезагрузки
+reload_button_images = [
+    load_image("Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-1.png", 50, 50),
+    load_image("Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-2.png", 50, 50),
+    load_image("Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-3.png", 50, 50)
+
+]
 
 
 class Button:
@@ -526,6 +406,39 @@ class Button:
                     self.func()
         elif event.type == pg.MOUSEBUTTONUP and event.button == 1:
             self.is_pressed = False
+
+
+class AnimatedButton(Button):
+    def __init__(self, text, x, y, visible_width, visible_height, total_width, total_height, text_font=font, func=None,
+                 images=None, hover_images=None):
+        super().__init__(text, x, y, visible_width, visible_height, total_width, total_height, text_font, func,
+                         image=images[0])
+        self.images = images  # Список кадров анимации
+        self.hover_images = hover_images if hover_images else images  # Кадры анимации при наведении
+        self.current_frame = 0  # Текущий кадр анимации
+        self.last_update = pg.time.get_ticks()  # Время последнего обновления кадра
+        self.animation_speed = 150  # Скорость анимации в миллисекундах
+        self.is_hovered = False  # Флаг наведения курсора
+
+    def update(self):
+        if self.is_hovered:
+            # Обновление кадра анимации при наведении
+            now = pg.time.get_ticks()
+            if now - self.last_update > self.animation_speed:
+                self.last_update = now
+                self.current_frame = (self.current_frame + 1) % len(self.hover_images)
+                self.image = self.hover_images[self.current_frame]  # Установка текущего кадра
+        else:
+            # Устанавливаем первый кадр по умолчанию, если не наведено
+            self.image = self.images[0]
+
+    def draw(self, screen):
+        screen.blit(self.image, (self.x, self.y))
+        screen.blit(self.text, self.text_rect)
+
+    def check_hover(self, mouse_pos):
+        # Проверяем, наведен ли курсор на кнопку
+        self.is_hovered = self.rect.collidepoint(mouse_pos)
 
 
 class Conveyor:
@@ -644,8 +557,9 @@ class Game:
         self.ButtonGuiOrder = Button("Orders", 650, 10, 124, 58, 120, 120, func=self.toggle_orders_window)
         self.ButtonGuiShop = Button("Shop", 790, 10, 122, 58, 120, 120, func=self.toggle_shop_window)
         self.OrderGui = load_image("Game_ind/GUI/Order_GUI/order_mini/order_mini.png", 346, 256)
-        self.showcase_of_products = load_image("Game_ind/GUI/Shop_GUI/showcase_of_products.png", 280, 220)
+        self.showcase_of_products = load_image("Game_ind/GUI/Shop_GUI/showcase_of_products.png", 280, 240)
         self.pankrot_image = load_image("Game_ind/GUI/Base_GUI/Icons_for_ideas/Pankrot_icon.png", 32, 32)
+        self.transmission_tab_image = load_image("Game_ind/GUI/Shop_GUI/transmission_tab.png", 64, 64)
 
         # self.reload_order_rect = self.reload_order.get_rect()
         pg.time.set_timer(self.money + 1, 500)
@@ -686,8 +600,7 @@ class Game:
             order.rect.topleft = (self.order_start_x, order_y_position)
             # Отрисовка каждого заказа здесь
             screen.blit(self.OrderGui, order.rect.topleft)
-            # screen.blit(self.reload_buttons[index].image, (order.rect.right, reload_y_position))
-            screen.blit(animation_reload_images[current_image_reload], (order.rect.right, reload_y_position))
+            screen.blit(self.reload_buttons[index].image, (order.rect.right, reload_y_position))
 
         for index, order in enumerate(self.orders):
             order_y_position = self.order_start_y + (index * padding)
@@ -724,7 +637,7 @@ class Game:
 
     def draw_shop_window(self, mode):
         shop_index = 0
-        padding = 80
+        padding = 85
         self.windowGUIshop = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 390, 530)
         screen.blit(self.windowGUIshop, (450, 97))
 
@@ -751,11 +664,11 @@ class Game:
                 shop_name = f"{item.name}"
                 shop_price = f"{item.price}"
                 shop_quality = f"Quality: {item.quality}"
-                screen.blit(font_mini.render(shop_name, True, BLACK), (575, y_start))
-                screen.blit(font_mini.render(shop_price, True, BLACK), (720, y_start + 40))
-                screen.blit(font_mini.render(shop_quality, True, BLACK), (576, y_start + 40))
+                screen.blit(font_mini.render(shop_name, True, BLACK), (575, y_start + 10))
+                screen.blit(font_mini.render(shop_price, True, BLACK), (720, y_start + 52))
+                screen.blit(font_mini.render(shop_quality, True, BLACK), (576, y_start + 52))
 
-                y_start += 80
+                y_start += 85
 
     def update(self):
         pass
@@ -808,7 +721,7 @@ class Game:
             self.draw_orders_window()
 
         if self.show_shop_window:
-            self.draw_shop_window(mode="appearance")
+            self.draw_shop_window(mode="maintenance")
 
         if self.selected_order:
             # Путь к изображению окна информации о заказе
@@ -835,12 +748,16 @@ class Game:
                                   self.info_window_width - 60)  # Уменьшить ширину для отступов
             screen.blit(font_mini.render(self.selected_order.name, True, WHITE), (100, 140))
             screen.blit(font_mini.render(self.selected_order.surname, True, WHITE), (350, 140))
+            screen.blit(font_mini.render("Accept", True, WHITE), (info_window_x + 46, info_window_y + 368))
+            screen.blit(font_mini.render("Reject", True, WHITE), (info_window_x + 168, info_window_y + 368))
 
 
 # Игровой цикл
 game = Game()
 running = True
 while running:
+    mouse_pos = pg.mouse.get_pos()  # Получаем текущую позицию курсора
+
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
@@ -850,41 +767,32 @@ while running:
             mouse_pressed = pg.mouse.get_pressed()
             if mouse_pressed[0] or mouse_pressed[2]:
                 if game.selected_order and not game.selected_order.rect.collidepoint(event.pos):
-                    # Если клик был вне окна информации, сбрасываем выбранный заказ
                     game.selected_order = None
 
                 if game.show_orders_window:
                     for order in game.orders:
                         if order.rect.collidepoint(event.pos):
-                            # Если кликнули по заказу, который уже выбран, закрываем окно информации
                             if game.selected_order == order:
                                 game.selected_order = None
                             else:
-                                # Иначе открываем окно информации для нового заказа
                                 game.selected_order = order
-                            break  # Выходим из цикла, так как заказ найден
+                            break
 
                 if game.show_shop_window:
                     for item in game.items_all:
                         if item.rect.collidepoint(event.pos):
-                            # Если кликнули на окну с товаром
                             if game.money >= item.price:
-                                # То если денег денег больше, чем указано на ценнике товара, то покупка совершается
                                 game.money -= item.price
-                                # Списываются деньги
 
         if event.type == DAY_EVENT:
             game.day += 1
-            print(game.day)
 
             if game.reload_limits == 0 and game.is_saved_day == False:
-                print("reload limits enabled")
                 game.save_days = game.day
                 game.is_saved_day = True
             if game.save_days + 10 == game.day:
                 game.reload_limits = 5
                 game.is_saved_day = False
-                print("reload of limits")
 
         if event.type == PANKROT_EVENT:
             if game.pankrot_mode:
@@ -902,19 +810,10 @@ while running:
         if event.type == pg.MOUSEBUTTONDOWN and game.show_orders_window:
             mouse_pressed = pg.mouse.get_pressed()
             if mouse_pressed[0]:
-                for order in game.orders:
-                    if order.rect.collidepoint(event.pos):
-                        game.selected_order = order  # Запоминаем выбранный заказ
-                        break  # Выходим из цикла, так как заказ найден
-
-        if event.type == pg.MOUSEBUTTONDOWN and game.show_orders_window:
-            mouse_pressed = pg.mouse.get_pressed()
-            if mouse_pressed[0]:
                 for button in game.reload_buttons:
                     if button.rect.collidepoint(event.pos) and game.reload_limits > 0:
                         game.reload_limits -= 1
                         print(game.reload_limits)
-                        print(animation_reload_images[current_image_reload])
                         order_index = game.reload_buttons.index(button)
                         game.selected_button = button  # Запоминаем выбранный заказ
                         game.orders[order_index] = generate_random_orders(1, game.orders, order_index=order_index)[0][
@@ -924,13 +823,21 @@ while running:
 
     # Переход к следующему изображению
     now = pg.time.get_ticks()
-    if (now - last_update) > FPS:
+    if now - last_update > FPS:
         last_update = 0
         current_image = (current_image + 1) % len(conveyor_images)
-        current_image_reload = (current_image_reload + 1) % len(animation_reload_images)
-    # Заполнение экрана цветом
+
+    # Заполнение экрана фоном
     screen.blit(background_image, (0, 0))
     screen.blit(conveyor_images[current_image], (210, 0))
+
+    # Обновление анимации кнопок reload
+    for button in game.reload_buttons:
+        button.check_hover(mouse_pos)  # Проверяем, наведен ли курсор на кнопку
+        button.update()
+        button.draw(screen)
+
+    # Отрисовка остальных элементов игры
     game.draw()
 
     # Обновление экрана
@@ -942,3 +849,5 @@ while running:
 # Завершение PyGame
 pg.quit()
 sys.exit()
+
+# сделать вкладки магазина - доделать полностью функционал магазина. Начать делать концепт склада
