@@ -1,3 +1,5 @@
+import os
+
 import pygame as pg
 import sys
 import random
@@ -59,7 +61,7 @@ shop_items = {
                     "description": "Its carbon fiber cladding",
                     "quality": 50,
                     "category": "appearance",
-                    "image": ""
+                    "image": "123"
                 },
             "Glass":
                 {
@@ -67,7 +69,7 @@ shop_items = {
                     "description": "Its glass",
                     "quality": 502,
                     "category": "appearance",
-                    "image": ""
+                    "image": "123"
                 },
             "Bumper":
                 {
@@ -75,7 +77,7 @@ shop_items = {
                     "description": "Its bumper",
                     "quality": 504,
                     "category": "appearance",
-                    "image": ""
+                    "image": "123"
                 },
             "Doors":
                 {
@@ -83,7 +85,7 @@ shop_items = {
                     "description": "Its doors",
                     "quality": 505,
                     "category": "appearance",
-                    "image": ""
+                    "image": "123"
                 },
             "Headlights":
                 {
@@ -91,7 +93,7 @@ shop_items = {
                     "description": "Its headlights",
                     "quality": 50,
                     "category": "appearance",
-                    "image": ""
+                    "image": "123"
                 },
             "Rear view mirrors":
                 {
@@ -99,7 +101,7 @@ shop_items = {
                     "description": "Its rear view mirrors",
                     "quality": 50,
                     "category": "appearance",
-                    "image": ""
+                    "image": "123"
                 },
         },
     "transmission":
@@ -110,7 +112,7 @@ shop_items = {
                     "description": "Its gearbox",
                     "quality": 50,
                     "category": "transmission",
-                    "image": ""
+                    "image": "123"
                 },
             "Engine":
                 {
@@ -118,7 +120,7 @@ shop_items = {
                     "description": "Its trunk",
                     "quality": 50,
                     "category": "transmission",
-                    "image": ""
+                    "image": "123"
                 },
             "gimbal drive":
                 {
@@ -126,7 +128,7 @@ shop_items = {
                     "description": "Its gimbal drive",
                     "quality": 50,
                     "category": "transmission",
-                    "image": ""
+                    "image": "123"
                 },
             "Main transfer":
                 {
@@ -134,7 +136,7 @@ shop_items = {
                     "description": "Its Main transfer",
                     "quality": 50,
                     "category": "transmission",
-                    "image": ""
+                    "image": "123"
                 },
             "Wheels":
                 {
@@ -142,7 +144,7 @@ shop_items = {
                     "description": "Its wheels",
                     "quality": 50,
                     "category": "transmission",
-                    "image": ""
+                    "image": "123"
                 },
         },
     "management mechanisms":
@@ -153,7 +155,7 @@ shop_items = {
                     "description": "Its helm",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": ""
+                    "image": "123"
                 },
             "Shock absorbers":
                 {
@@ -161,7 +163,7 @@ shop_items = {
                     "description": "Its shock absorbers",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": ""
+                    "image": "123"
                 },
             "Elastic spring":
                 {
@@ -169,7 +171,7 @@ shop_items = {
                     "description": "Its elastic spring",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": ""
+                    "image": "123"
 
                 },
         },
@@ -181,7 +183,7 @@ shop_items = {
                     "description": "Its radio",
                     "quality": 50,
                     "category": "salon",
-                    "image": ""
+                    "image": "123"
                 },
             "Seat":
                 {
@@ -189,7 +191,7 @@ shop_items = {
                     "description": "Its seat",
                     "quality": 50,
                     "category": "salon",
-                    "image": ""
+                    "image": "123"
                 },
             "Oven":
                 {
@@ -197,7 +199,7 @@ shop_items = {
                     "description": "Its oven",
                     "quality": 50,
                     "category": "salon",
-                    "image": ""
+                    "image": "123"
                 },
             "Conditioner":
                 {
@@ -205,7 +207,7 @@ shop_items = {
                     "description": "Its conditioner",
                     "quality": 50,
                     "category": "salon",
-                    "image": ""
+                    "image": "123"
                 },
             "Ventilation":
                 {
@@ -213,7 +215,7 @@ shop_items = {
                     "description": "Its ventilation",
                     "quality": 50,
                     "category": "salon",
-                    "image": ""
+                    "image": "123"
                 }
         },
     "maintenance":
@@ -255,17 +257,58 @@ def wrap_text(text, font, max_width):
     return wrapped_lines
 
 
+
+def get_non_transparent_rect(image):
+    # Загружаем изображение с поддержкой альфа-канала
+    image = image.convert_alpha()
+
+    # Получаем размеры изображения
+    width, height = image.get_size()
+
+    # Инициализируем границы непрозрачных пикселей
+    min_x, min_y = width, height
+    max_x, max_y = 0, 0
+
+    # Перебираем все пиксели изображения
+    for y in range(height):
+        for x in range(width):
+            # Получаем цвет пикселя (RGBA)
+            r, g, b, a = image.get_at((x, y))
+            if a != 0:  # Если пиксель непрозрачный
+                # Обновляем границы
+                min_x = min(min_x, x)
+                min_y = min(min_y, y)
+                max_x = max(max_x, x)
+                max_y = max(max_y, y)
+
+    # Создаем прямоугольник, охватывающий все непрозрачные пиксели
+    if min_x <= max_x and min_y <= max_y:
+        return pg.Rect(min_x, min_y, max_x - min_x + 1, max_y - min_y + 1)
+    else:
+        # Если все пиксели прозрачны, возвращаем пустой прямоугольник
+        return pg.Rect(0, 0, 0, 0)
+
 def handle_produce_button_click(game):
     game.conveyor.produce_vehicle(LightVehicle())
     print("Производство машины запущено")
 
 
+
 def load_image(file, width=None, height=None):
-    # Если file уже является объектом изображения, пропускаем загрузку
+    # Проверяем, является ли file уже объектом Surface
     if isinstance(file, pg.Surface):
         image = file
+    elif isinstance(file, (str, bytes, os.PathLike)):
+        if os.path.exists(file):
+            image = pg.image.load(file).convert_alpha()
+        else:
+            # Если файл не найден, создаем прозрачное изображение
+            image = pg.Surface((width, height), pg.SRCALPHA)
+            image.fill((0, 0, 0, 0))  # Полностью прозрачное изображение
     else:
-        image = pg.image.load(file).convert_alpha()
+        # Если ни путь, ни Surface не переданы, создаем прозрачное изображение
+        image = pg.Surface((width, height), pg.SRCALPHA)
+        image.fill((0, 0, 0, 0))  # Полностью прозрачное изображение
 
     if width and height:
         image = pg.transform.scale(image, (width, height))
@@ -313,8 +356,8 @@ def generate_random_orders(n, orders, order_index=None):
         popularity = random.randint(1, 10)
         if order_index is None:
             orders.append(Order(vehicle_type, quality, price, deadline, name, surname, description, popularity))
-            reload_order = AnimatedButton("", x=-100, y=-100, visible_width=50, visible_height=50, total_height=64,
-                                          total_width=64, func=None, images=reload_button_images)
+            # Создаем AnimatedButton только для перезагрузки заказов
+            reload_order = AnimatedButton("", x=-100, y=-100, total_width=64, total_height=64, func=None, images=reload_button_images)
             buttons.append(reload_order)
         else:
             orders[order_index] = Order(vehicle_type, quality, price, deadline, name, surname, description, popularity)
@@ -322,21 +365,19 @@ def generate_random_orders(n, orders, order_index=None):
     return orders, buttons
 
 
+
+
 def generate_shop_window(shop_items):
     items_all = []
-    for item in shop_items:
-        category = item
-        for item1 in shop_items[item]:
-            name = item1
-            quality = shop_items[item][name]['quality']
-            price = shop_items[item][name]['price']
-            description = shop_items[item][name]['description']
-            image_item = shop_items[item][name]['image']
-
-            items_all.append(Shop(price=price, quality=quality, category=category, name=name, description=description, image=image_item))
-    print(items_all)
-
+    for category, items in shop_items.items():
+        for name, details in items.items():
+            quality = details['quality']
+            price = details['price']
+            description = details['description']
+            image = details.get('image')  # Путь к изображению, может быть None
+            items_all.append(Shop(price=price, quality=quality, category=category, name=name, description=description, image=image))
     return items_all
+
 
 
 background_image = load_image("Game_ind/GUI/Base_GUI/Backraund/Backraund.png", screen_width, screen_height)
@@ -377,26 +418,26 @@ reload_button_images = [
 
 
 class Button:
-    def __init__(self, text, x, y, visible_width, visible_height, total_width, total_height, text_font=font, func=None,
+    def __init__(self, text, x, y, total_width=None, total_height=None, text_font=font, func=None,
                  image="Game_ind/GUI/Base_GUI/Button_GUI/Button.png"):
         self.func = func
         self.x = x
         self.y = y
         self.image = load_image(image, total_width, total_height)
-        # self.rect = self.image.get_bounding_rect()
-        self.visible_rect = pg.Rect(x, y + 24, visible_width, visible_height)
 
-        self.rect = self.visible_rect
+        # Получаем прямоугольник с учетом непрозрачных областей изображения
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (self.x, self.y)  # Устанавливаем позицию Rect
 
         self.text = text_render(text)
-        self.text_rect = self.text.get_rect()
-        self.text_font = text_font
-        self.text_rect.center = self.rect.center
+        self.text_rect = self.text.get_rect(center=self.rect.center)
+        self.text_rect = self.text_rect[0], self.text_rect[1] - 7 # текст по центру кнопки
+
 
         self.is_pressed = False
 
     def draw(self, screen):
-        screen.blit(self.image, (self.x, self.y))
+        screen.blit(self.image, self.rect.topleft)
         screen.blit(self.text, self.text_rect)
 
     def is_clicked(self, event):
@@ -409,12 +450,14 @@ class Button:
             self.is_pressed = False
 
 
+
 class AnimatedButton(Button):
-    def __init__(self, text, x, y, visible_width, visible_height, total_width, total_height, text_font=font, func=None,
+    def __init__(self, text, x, y, total_width=None, total_height=None, text_font=font, func=None,
                  images=None, hover_images=None):
-        super().__init__(text, x, y, visible_width, visible_height, total_width, total_height, text_font, func,
-                         image=images[0])
-        self.images = images  # Список кадров анимации
+        super().__init__(text, x, y, total_width=total_width, total_height=total_height, text_font=text_font, func=func,
+                         image=images[0])  # Передаем первое изображение как основное для кнопки
+
+        self.images = images  # Здесь сохраняются все кадры анимации
         self.hover_images = hover_images if hover_images else images  # Кадры анимации при наведении
         self.current_frame = 0  # Текущий кадр анимации
         self.last_update = pg.time.get_ticks()  # Время последнего обновления кадра
@@ -423,23 +466,23 @@ class AnimatedButton(Button):
 
     def update(self):
         if self.is_hovered:
-            # Обновление кадра анимации при наведении
             now = pg.time.get_ticks()
             if now - self.last_update > self.animation_speed:
                 self.last_update = now
                 self.current_frame = (self.current_frame + 1) % len(self.hover_images)
                 self.image = self.hover_images[self.current_frame]  # Установка текущего кадра
         else:
-            # Устанавливаем первый кадр по умолчанию, если не наведено
-            self.image = self.images[0]
+            self.image = self.images[0]  # Устанавливаем первый кадр по умолчанию, если не наведено
 
     def draw(self, screen):
-        screen.blit(self.image, (self.x, self.y))
+        # Отрисовка текущего кадра изображения
+        screen.blit(self.image, self.rect.topleft)
         screen.blit(self.text, self.text_rect)
 
     def check_hover(self, mouse_pos):
         # Проверяем, наведен ли курсор на кнопку
         self.is_hovered = self.rect.collidepoint(mouse_pos)
+
 
 
 class Conveyor:
@@ -491,9 +534,14 @@ class Shop:
         self.name = name
         self.description = description
         self.category = category
-        if image is not None or image != "":
-            self.image = load_image(image, 64, 64)
-        self.rect = pg.Rect(0, 0, 278, 71)
+
+        if image: # если image е равен None (передали)
+            self.image = load_image(image, 64, 64)  # Загружаем картинку
+            non_transparent_rect = get_non_transparent_rect(self.image)  # Функция, которая получает rect без фона
+            self.rect = non_transparent_rect  # Установка позиции картинки
+        else:
+            self.image = pg.Surface((64, 64), pg.SRCALPHA)
+            self.rect = self.image.get_rect()
 
     def buy(self):
         pass
@@ -556,14 +604,31 @@ class Game:
         self.conveyor_image = load_image(
             "Game_ind/Base/conveir_all/conveir_up/1c/conveir_up_64x64.png", 400, 700)
         self.money_image = load_image("Game_ind/GUI/Base_GUI/money/money_64x64.png", 64, 64)
+        self.money_image_rect = get_non_transparent_rect(self.money_image)
+        self.money_image_rect.topleft = (screen_width / 15, 40)
+
         self.popularity_image = load_image("Game_ind/GUI/Base_GUI/Popularity/100%/popularity100_64x64.png", 64, 64)
+        self.popularity_image_rect = get_non_transparent_rect(self.popularity_image)
+        self.popularity_image_rect.topleft = (screen_width / 15, 120)
+
         self.windowGUIorder = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 460, 440)
-        self.ButtonGuiOrder = Button("Orders", 650, 10, 124, 58, 120, 120, func=self.toggle_orders_window)
-        self.ButtonGuiShop = Button("Shop", 790, 10, 122, 58, 120, 120, func=self.toggle_shop_window)
+        self.windowGUIorder_image_rect = get_non_transparent_rect(self.popularity_image)
+
+        self.ButtonGuiOrder = Button("Orders", 650, 10, total_width=120, total_height=120, func=self.toggle_orders_window)
+
+        self.ButtonGuiShop = Button("Shop", 790, 10, total_width=120, total_height=120, func=self.toggle_shop_window)
+
         self.OrderGui = load_image("Game_ind/GUI/Order_GUI/order_mini/order_mini.png", 346, 256)
+        self.OrderGui_image_rect = get_non_transparent_rect(self.OrderGui)
+
         self.showcase_of_products = load_image("Game_ind/GUI/Shop_GUI/showcase_of_products.png", 280, 240)
+        self.showcase_of_products_image_rect = get_non_transparent_rect(self.showcase_of_products)
+
         self.pankrot_image = load_image("Game_ind/GUI/Base_GUI/Icons_for_ideas/Pankrot_icon.png", 32, 32)
+        self.pankrot_image_rect = get_non_transparent_rect(self.pankrot_image)
+
         self.transmission_tab_image = load_image("Game_ind/GUI/Shop_GUI/transmission_tab.png", 64, 64)
+        self.transmission_tab_image_rect = get_non_transparent_rect(self.transmission_tab_image)
 
         # self.reload_order_rect = self.reload_order.get_rect()
         pg.time.set_timer(self.money + 1, 500)
@@ -584,13 +649,33 @@ class Game:
         self.info_window_width = 527  # Примерная ширина окна информации
         self.info_window_height = 528  # Примерная высота окна информации
 
+        # Пример загрузки изображения
+        example_image = load_image("Game_ind/Tehnick/Moduls_of_car/oil.png", 400, 400)
+
+        # Получение прямоугольника непрозрачной области изображения
+        self.non_transparent_rect = get_non_transparent_rect(example_image)
+        print("Непрозрачная область изображения:", self.non_transparent_rect)
+
+        # Выводим прямоугольник на экран для наглядности
+        self.example_image = example_image
+        self.example_image_rect = self.non_transparent_rect
+
     def toggle_orders_window(self):
-        if self.show_shop_window == False:
+        if not self.show_shop_window:
             self.show_orders_window = not self.show_orders_window
-            print("4")
-        elif self.show_shop_window == True:
+            if not self.show_orders_window:
+                # Прячем кнопки, не очищая список
+                for button in self.reload_buttons:
+                    button.rect.topleft = (-100, -100)
+            print("Orders window toggled")
+        elif self.show_shop_window:
             self.show_orders_window = not self.show_orders_window
             self.show_shop_window = not self.show_shop_window
+            if not self.show_orders_window:
+                # Прячем кнопки, не очищая список
+                for button in self.reload_buttons:
+                    button.rect.topleft = (-100, -100)
+            print("Orders and Shop windows toggled")
 
     def draw_orders_window(self):
         padding = 77  # Отступ между заказами
@@ -631,13 +716,17 @@ class Game:
             y_start += 77
 
     def toggle_shop_window(self):
-        if self.show_orders_window == False:
+        if not self.show_orders_window:
             self.show_shop_window = not self.show_shop_window
-            print("5")
-        elif self.show_orders_window == True:
-            print("6")
+            print("Shop window toggled")
+        elif self.show_orders_window:
             self.show_shop_window = not self.show_shop_window
             self.show_orders_window = not self.show_orders_window
+            if not self.show_orders_window:
+                # Прячем кнопки, не очищая список
+                for button in self.reload_buttons:
+                    button.rect.topleft = (-100, -100)
+            print("Shop and Orders windows toggled")
 
     def draw_shop_window(self, mode):
         shop_index = 0
@@ -651,7 +740,9 @@ class Game:
                 self.items_all[item].rect.topleft = (self.items_start_x, item_y_position)
                 # Отрисовка каждого шаблона для товара(картинка)
                 screen.blit(self.showcase_of_products, self.items_all[item].rect.topleft)
-                screen.blit(self.showcase_of_products, self.items_all[item].image.get_rect())
+
+                pg.draw.rect(screen, (255, 0, 0), self.items_all[item].rect, 2)
+                print(self.items_all[item].name)
                 shop_index += 1
 
         shop_index = 0
@@ -666,12 +757,15 @@ class Game:
 
         for item in self.items_all:
             if item.category == mode:
+
                 shop_name = f"{item.name}"
                 shop_price = f"{item.price}"
                 shop_quality = f"Quality: {item.quality}"
                 screen.blit(font_mini.render(shop_name, True, BLACK), (575, y_start + 10))
                 screen.blit(font_mini.render(shop_price, True, BLACK), (720, y_start + 52))
                 screen.blit(font_mini.render(shop_quality, True, BLACK), (576, y_start + 52))
+                screen.blit(item.image, (200, 200))
+                print(item.rect)
 
                 y_start += 85
 
@@ -715,10 +809,11 @@ class Game:
             y += line_height + 10  # Смещаем Y на высоту строки для отрисовки следующей строки
 
     def draw(self):
-        screen.blit(self.money_image, (screen_width / 15, 40))
+        screen.blit(self.money_image, self.money_image_rect)
         screen.blit(text_render(self.money), (screen_width / 15 + 60, 65))
-        screen.blit(self.popularity_image, (screen_width / 15, 120))
+        screen.blit(self.popularity_image, self.popularity_image_rect)
         screen.blit(text_render(str(self.popularity) + "%"), (screen_width / 15 + 60, 145))
+
         self.ButtonGuiOrder.draw(screen)
         self.ButtonGuiShop.draw(screen)
 
@@ -755,6 +850,13 @@ class Game:
             screen.blit(font_mini.render(self.selected_order.surname, True, WHITE), (350, 140))
             screen.blit(font_mini.render("Accept", True, WHITE), (info_window_x + 46, info_window_y + 368))
             screen.blit(font_mini.render("Reject", True, WHITE), (info_window_x + 168, info_window_y + 368))
+
+
+        screen.blit(self.example_image, (100, 100))
+
+        # Смещение rect на позицию изображения
+        rect_with_offset = self.example_image_rect.move(100, 100)
+        pg.draw.rect(screen, (255, 0, 0), rect_with_offset, 2)
 
 
 # Игровой цикл
