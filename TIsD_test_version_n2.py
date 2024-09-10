@@ -353,6 +353,7 @@ def generate_description(vehicle_type):
 def generate_random_orders(n, orders, order_index=None):
     orders = orders
     buttons = []
+    order_image = []
     for _ in range(n):
         name = random.choice(names)
         surname = random.choice(surnames)
@@ -365,13 +366,16 @@ def generate_random_orders(n, orders, order_index=None):
         if order_index is None:
             orders.append(Order(vehicle_type, quality, price, deadline, name, surname, description, popularity))
             # Создаем AnimatedButton только для перезагрузки заказов
-            reload_order = AnimatedButton("", x=-100, y=-100, total_width=64, total_height=64, func=None,
+            reload_order = AnimatedButton("", x=-100, y=-100, total_width=50, total_height=50, func=None,
                                           images=reload_button_images)
+            animation_order = AnimatedOrder("", x=0, y=0, total_width=346, total_height=256, func=None,
+                                          images=gui_order_window_images)
             buttons.append(reload_order)
+            order_image.append(animation_order)
         else:
             orders[order_index] = Order(vehicle_type, quality, price, deadline, name, surname, description, popularity)
 
-    return orders, buttons
+    return orders, buttons, order_image
 
 
 def generate_shop_window(shop_items):
@@ -420,10 +424,13 @@ reload_button_images = [
     load_image("Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-1.png", 50, 50),
     load_image("Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-2.png", 50, 50),
     load_image("Game_ind/GUI/Order_GUI/window_order_open/animation_reload_button/reload_order-3.png", 50, 50)
-
 ]
+
 gui_order_window_images = [
-    load_image("Game_ind/GUI/Order_GUI/animation_order_mini/order_mini-1.png.png", )
+    load_image("Game_ind/GUI/Order_GUI/animation_order_mini/order_mini-1.png.png", 346, 256),
+    load_image("Game_ind/GUI/Order_GUI/animation_order_mini/order_mini-2.png.png", 346, 256),
+    load_image("Game_ind/GUI/Order_GUI/animation_order_mini/order_mini-3.png.png", 346, 256),
+    load_image("Game_ind/GUI/Order_GUI/animation_order_mini/order_mini-4.png.png", 346, 256)
 ]
 
 
@@ -436,7 +443,8 @@ class Button:
         self.image = load_image(image, total_width, total_height)
 
         # Получаем прямоугольник с учетом непрозрачных областей изображения
-        self.rect = self.image.get_rect()
+        # self.rect = self.image.get_rect()
+        self.rect = get_non_transparent_rect(self.image)
         self.rect.topleft = (self.x, self.y)  # Устанавливаем позицию Rect
 
         self.text = text_render(text)
@@ -448,6 +456,7 @@ class Button:
     def draw(self, screen):
         screen.blit(self.image, self.rect.topleft)
         screen.blit(self.text, self.text_rect)
+        pg.draw.rect(screen, "Red", self.rect)
 
     def is_clicked(self, event):
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
@@ -470,6 +479,39 @@ class AnimatedButton(Button):
         self.current_frame = 0  # Текущий кадр анимации
         self.last_update = pg.time.get_ticks()  # Время последнего обновления кадра
         self.animation_speed = 150  # Скорость анимации в миллисекундах
+        self.is_hovered = False  # Флаг наведения курсора
+
+    def update(self):
+        if self.is_hovered:
+            now = pg.time.get_ticks()
+            if now - self.last_update > self.animation_speed:
+                self.last_update = now
+                self.current_frame = (self.current_frame + 1) % len(self.hover_images)
+                self.image = self.hover_images[self.current_frame]  # Установка текущего кадра
+        else:
+            self.image = self.images[0]  # Устанавливаем первый кадр по умолчанию, если не наведено
+
+    def draw(self, screen):
+        # Отрисовка текущего кадра изображения
+        screen.blit(self.image, self.rect.topleft)
+        screen.blit(self.text, self.text_rect)
+
+    def check_hover(self, mouse_pos):
+        # Проверяем, наведен ли курсор на кнопку
+        self.is_hovered = self.rect.collidepoint(mouse_pos)
+
+
+class AnimatedOrder(Button):
+    def __init__(self, text, x, y, total_width=None, total_height=None, text_font=font, func=None,
+                 images=None, hover_images=None):
+        super().__init__(text, x, y, total_width=total_width, total_height=total_height, text_font=text_font, func=func,
+                         image=images[0])  # Передаем первое изображение как основное для кнопки
+
+        self.images = images  # Здесь сохраняются все кадры анимации
+        self.hover_images = hover_images if hover_images else images  # Кадры анимации при наведении
+        self.current_frame = 0  # Текущий кадр анимации
+        self.last_update = pg.time.get_ticks()  # Время последнего обновления кадра
+        self.animation_speed = 40  # Скорость анимации в миллисекундах
         self.is_hovered = False  # Флаг наведения курсора
 
     def update(self):
@@ -659,7 +701,7 @@ class Game:
         self.show_shop_window = False
         self.orders_button_rect = pg.Rect(self.ButtonGuiOrder.rect)  # Позиция и размеры кнопки "Заказы"
 
-        self.orders, self.reload_buttons = generate_random_orders(5, self.orders)
+        self.orders, self.reload_buttons, self.orders_images = generate_random_orders(5, self.orders)
 
         self.info_window_width = 527  # Примерная ширина окна информации
         self.info_window_height = 528  # Примерная высота окна информации
@@ -708,8 +750,10 @@ class Game:
             reload_y_position = self.reload_order_button_y + (index * padding)
             order.rect.topleft = (self.order_start_x, order_y_position)
             # Отрисовка каждого заказа здесь
-            screen.blit(self.OrderGui, order.rect.topleft)
+            #screen.blit(self.OrderGui, order.rect.topleft)
             screen.blit(self.reload_buttons[index].image, (order.rect.right, reload_y_position))
+            screen.blit(self.orders_images[index].image, order.rect.topleft)
+            pg.draw.rect(screen,"Red", self.reload_buttons[index].rect, 2)
 
         for index, order in enumerate(self.orders):
             order_y_position = self.order_start_y + (index * padding)
@@ -718,6 +762,11 @@ class Game:
         for index, button in enumerate(self.reload_buttons):
             order_y_position = self.order_start_y + (index * padding)
             button.rect.topleft = (self.orders[index].rect.right + 8, order_y_position + 103)
+            # pg.draw.rect(screen, "Black", button.rect)
+
+        for index, button in enumerate(self.orders_images):
+            order_y_position = self.order_start_y + (index * padding)
+            button.rect.topleft = (self.orders[index].rect.right + 8, order.rect.topleft)
             # pg.draw.rect(screen, "Black", button.rect)
 
         y_start = 130  # Начальная позиция для текста заказов
@@ -778,8 +827,8 @@ class Game:
                 screen.blit(resized_image, item.rect.topleft)
 
                 # Отрисовка Rect для наглядности
-                #pg.draw.rect(screen, (255, 0, 0), showcase_rect, 2)  # Красный прямоугольник для showcase_of_products
-                #pg.draw.rect(screen, (0, 255, 0), item.rect, 2)  # Зеленый прямоугольник для товара
+                # pg.draw.rect(screen, (255, 0, 0), showcase_rect, 2)  # Красный прямоугольник для showcase_of_products
+                # pg.draw.rect(screen, (0, 255, 0), item.rect, 2)  # Зеленый прямоугольник для товара
 
                 # Отладочная информация
                 # print(f"Item: {item.name}, Offset: {item.rect.topleft}, Size: {item.rect.size}")
@@ -893,7 +942,6 @@ class Game:
             screen.blit(font_mini.render("Accept", True, WHITE), (info_window_x + 46, info_window_y + 368))
             screen.blit(font_mini.render("Reject", True, WHITE), (info_window_x + 168, info_window_y + 368))
 
-
         # Смещение rect на позицию изображения
         rect_with_offset = self.example_image_rect.move(100, 100)
 
@@ -914,7 +962,7 @@ while running:
             if mouse_pressed[0] or mouse_pressed[2]:
                 if game.selected_order and not game.selected_order.rect.collidepoint(
                         event.pos) and not game.accept_button_rect.collidepoint(
-                        event.pos) and not game.reject_button_rect.collidepoint(event.pos):
+                    event.pos) and not game.reject_button_rect.collidepoint(event.pos):
                     game.selected_order = None
 
                 if game.show_orders_window:
@@ -990,6 +1038,11 @@ while running:
         button.check_hover(mouse_pos)  # Проверяем, наведен ли курсор на кнопку
         button.update()
         button.draw(screen)
+
+    for order in game.orders_images:
+        order.check_hover(mouse_pos)  # Проверяем, наведен ли курсор на кнопку
+        order.update()
+        order.draw(screen)
 
     # Отрисовка остальных элементов игры
     game.draw()
