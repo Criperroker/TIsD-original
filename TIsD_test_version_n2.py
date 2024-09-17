@@ -61,7 +61,7 @@ shop_items = {
                     "description": "Its carbon fiber cladding",
                     "quality": 50,
                     "category": "appearance",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Glass":
                 {
@@ -69,7 +69,7 @@ shop_items = {
                     "description": "Its glass",
                     "quality": 502,
                     "category": "appearance",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/glass.png"
                 },
             "Bumper":
                 {
@@ -77,7 +77,7 @@ shop_items = {
                     "description": "Its bumper",
                     "quality": 504,
                     "category": "appearance",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Doors":
                 {
@@ -85,7 +85,7 @@ shop_items = {
                     "description": "Its doors",
                     "quality": 505,
                     "category": "appearance",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Headlights":
                 {
@@ -93,7 +93,7 @@ shop_items = {
                     "description": "Its headlights",
                     "quality": 50,
                     "category": "appearance",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Rear view mirrors":
                 {
@@ -101,7 +101,7 @@ shop_items = {
                     "description": "Its rear view mirrors",
                     "quality": 50,
                     "category": "appearance",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
         },
     "transmission":
@@ -112,7 +112,7 @@ shop_items = {
                     "description": "Its gearbox",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Engine":
                 {
@@ -120,7 +120,7 @@ shop_items = {
                     "description": "Its trunk",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "gimbal drive":
                 {
@@ -128,7 +128,7 @@ shop_items = {
                     "description": "Its gimbal drive",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Main transfer":
                 {
@@ -136,7 +136,7 @@ shop_items = {
                     "description": "Its Main transfer",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Wheels":
                 {
@@ -144,7 +144,7 @@ shop_items = {
                     "description": "Its wheels",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
         },
     "management mechanisms":
@@ -155,7 +155,7 @@ shop_items = {
                     "description": "Its helm",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/helm.png"
                 },
             "Shock absorbers":
                 {
@@ -163,7 +163,7 @@ shop_items = {
                     "description": "Its shock absorbers",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Elastic spring":
                 {
@@ -171,7 +171,7 @@ shop_items = {
                     "description": "Its elastic spring",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
 
                 },
         },
@@ -183,7 +183,7 @@ shop_items = {
                     "description": "Its radio",
                     "quality": 50,
                     "category": "salon",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Seat":
                 {
@@ -191,7 +191,7 @@ shop_items = {
                     "description": "Its seat",
                     "quality": 50,
                     "category": "salon",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Oven":
                 {
@@ -199,7 +199,7 @@ shop_items = {
                     "description": "Its oven",
                     "quality": 50,
                     "category": "salon",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Conditioner":
                 {
@@ -207,7 +207,7 @@ shop_items = {
                     "description": "Its conditioner",
                     "quality": 50,
                     "category": "salon",
-                    "image": "123"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
                 },
             "Ventilation":
                 {
@@ -366,10 +366,10 @@ def generate_random_orders(n, orders, order_index=None):
         if order_index is None:
             orders.append(Order(vehicle_type, quality, price, deadline, name, surname, description, popularity))
             # Создаем AnimatedButton только для перезагрузки заказов
-            reload_order = AnimatedButton("", x=-100, y=-100, total_width=50, total_height=50, func=None,
+            reload_order = AnimatedButton("", x=-100, y=-100, total_width=53, total_height=55, func=None,
                                           images=reload_button_images)
             animation_order = AnimatedOrder("", x=0, y=0, total_width=346, total_height=256, func=None,
-                                          images=gui_order_window_images)
+                                            images=gui_order_window_images)
             buttons.append(reload_order)
             order_image.append(animation_order)
         else:
@@ -444,19 +444,19 @@ class Button:
 
         # Получаем прямоугольник с учетом непрозрачных областей изображения
         # self.rect = self.image.get_rect()
-        self.rect = get_non_transparent_rect(self.image)
-        self.rect.topleft = (self.x, self.y)  # Устанавливаем позицию Rect
+        self.rect = get_non_transparent_rect(self.image).move(self.x, self.y)
+        # self.rect.topleft = (self.x, self.y + 10)  # Устанавливаем позицию Rect
 
         self.text = text_render(text)
         self.text_rect = self.text.get_rect(center=self.rect.center)
-        self.text_rect = self.text_rect[0], self.text_rect[1] - 7  # текст по центру кнопки
+        self.text_rect = self.text_rect[0], self.text_rect[1]  # текст по центру кнопки
 
         self.is_pressed = False
 
     def draw(self, screen):
-        screen.blit(self.image, self.rect.topleft)
+        screen.blit(self.image, (self.x, self.y))
         screen.blit(self.text, self.text_rect)
-        pg.draw.rect(screen, "Red", self.rect)
+        # pg.draw.rect(screen, "Red", self.rect)
 
     def is_clicked(self, event):
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
@@ -511,7 +511,7 @@ class AnimatedOrder(Button):
         self.hover_images = hover_images if hover_images else images  # Кадры анимации при наведении
         self.current_frame = 0  # Текущий кадр анимации
         self.last_update = pg.time.get_ticks()  # Время последнего обновления кадра
-        self.animation_speed = 40  # Скорость анимации в миллисекундах
+        self.animation_speed = 100  # Скорость анимации в миллисекундах
         self.is_hovered = False  # Флаг наведения курсора
 
     def update(self):
@@ -525,9 +525,7 @@ class AnimatedOrder(Button):
             self.image = self.images[0]  # Устанавливаем первый кадр по умолчанию, если не наведено
 
     def draw(self, screen):
-        # Отрисовка текущего кадра изображения
-        screen.blit(self.image, self.rect.topleft)
-        screen.blit(self.text, self.text_rect)
+        pass
 
     def check_hover(self, mouse_pos):
         # Проверяем, наведен ли курсор на кнопку
@@ -585,18 +583,20 @@ class Shop:
         self.category = category
 
         if image:
-            self.image = load_image(image, 278, 71)
-            non_transparent_rect = get_non_transparent_rect(self.image)
-            self.rect = non_transparent_rect
+            # Загрузка и масштабирование изображения только один раз
+            self.original_image = load_image(image, 278, 71)
+            self.image = pg.transform.scale(self.original_image, (64, 64))  # Масштабируем сразу
+            self.rect = get_non_transparent_rect(self.image)
         else:
-            self.image = pg.Surface((278, 71), pg.SRCALPHA)
+            self.image = pg.Surface((96, 96), pg.SRCALPHA)
             self.rect = self.image.get_rect()
 
     def draw(self, screen, x, y):
-        # Устанавливаем координаты для непрозрачной части изображения
-        self.rect.topleft = (x + self.rect.x, y + self.rect.y)
-        # Отрисовываем изображение, учитывая смещение
+        # Отрисовываем изображение без повторной трансформации
         screen.blit(self.image, (x, y))
+
+    def update(self):
+        pass
 
 
 class Vehicle:
@@ -659,10 +659,21 @@ class Game:
         self.DECREASE = pg.USEREVENT + 3
         pg.time.set_timer(self.DECREASE, 1000)
 
+        self.info_window_width = 527  # Примерная ширина окна информации
+        self.info_window_height = 528  # Примерная высота окна информации
+
+        self.info_window_x = 50  # Начальная X-координата для окна информации
+        self.info_window_y = 0  # Начальная Y-координата для окна информации
+
+        self.info_window_image = load_image("Game_ind/GUI/Order_GUI/window_order_open/window_order_open.png",
+                                            self.info_window_width, self.info_window_height)
+
         self.conveyor_image = load_image(
             "Game_ind/Base/conveir_all/conveir_up/1c/conveir_up_64x64.png", 400, 700)
         self.money_image = load_image("Game_ind/GUI/Base_GUI/money/money_64x64.png", 64, 64)
         self.money_image_rect = get_non_transparent_rect(self.money_image).move((screen_width / 15, 40))
+        self.accept_order_image = load_image(self.accept_order, 100, 100)
+        self.reject_order_image = load_image(self.reject_order, 100, 100)
 
         self.popularity_image = load_image("Game_ind/GUI/Base_GUI/Popularity/100%/popularity100_64x64.png", 64, 64)
         self.popularity_image_rect = get_non_transparent_rect(self.popularity_image).move((screen_width / 15, 120))
@@ -677,6 +688,8 @@ class Game:
 
         self.OrderGui = load_image("Game_ind/GUI/Order_GUI/order_mini/order_mini.png", 346, 256)
         self.OrderGui_image_rect = get_non_transparent_rect(self.OrderGui)
+
+        self.windowGUIshop = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 390, 530)
 
         self.showcase_of_products = load_image("Game_ind/GUI/Shop_GUI/showcase_of_products.png", 280, 240)
         self.showcase_of_products_image_rect = get_non_transparent_rect(self.showcase_of_products)
@@ -702,9 +715,6 @@ class Game:
         self.orders_button_rect = pg.Rect(self.ButtonGuiOrder.rect)  # Позиция и размеры кнопки "Заказы"
 
         self.orders, self.reload_buttons, self.orders_images = generate_random_orders(5, self.orders)
-
-        self.info_window_width = 527  # Примерная ширина окна информации
-        self.info_window_height = 528  # Примерная высота окна информации
 
         # Пример загрузки изображения
         example_image = load_image("Game_ind/GUI/Shop_GUI/appearance_tab.png", 400, 400)
@@ -750,10 +760,9 @@ class Game:
             reload_y_position = self.reload_order_button_y + (index * padding)
             order.rect.topleft = (self.order_start_x, order_y_position)
             # Отрисовка каждого заказа здесь
-            #screen.blit(self.OrderGui, order.rect.topleft)
+            # screen.blit(self.OrderGui, order.rect.topleft)
             screen.blit(self.reload_buttons[index].image, (order.rect.right, reload_y_position))
             screen.blit(self.orders_images[index].image, order.rect.topleft)
-            pg.draw.rect(screen,"Red", self.reload_buttons[index].rect, 2)
 
         for index, order in enumerate(self.orders):
             order_y_position = self.order_start_y + (index * padding)
@@ -761,12 +770,12 @@ class Game:
 
         for index, button in enumerate(self.reload_buttons):
             order_y_position = self.order_start_y + (index * padding)
-            button.rect.topleft = (self.orders[index].rect.right + 8, order_y_position + 103)
+            button.rect.topleft = (self.orders[index].rect.right + 6, order_y_position + 103)
             # pg.draw.rect(screen, "Black", button.rect)
 
         for index, button in enumerate(self.orders_images):
             order_y_position = self.order_start_y + (index * padding)
-            button.rect.topleft = (self.orders[index].rect.right + 8, order.rect.topleft)
+            button.rect.topleft = (self.orders[index].rect.left, order_y_position + 90)
             # pg.draw.rect(screen, "Black", button.rect)
 
         y_start = 130  # Начальная позиция для текста заказов
@@ -803,36 +812,18 @@ class Game:
         self.windowGUIshop = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 390, 530)
         screen.blit(self.windowGUIshop, (450, 97))
 
+        # Отрисовываем только те элементы, которые соответствуют выбранной категории (mode)
         for item in self.items_all:
             if item.category == mode:
                 item_y_position = self.items_start_y + (shop_index * padding)
 
-                # Масштабируем изображение товара до единого размера
-                resized_image = pg.transform.scale(item.image, self.item_size)
-
-                # Корректируем showcase_of_products_image_rect с учетом непрозрачных областей
-                showcase_rect = get_non_transparent_rect(self.showcase_of_products)
-                showcase_rect = showcase_rect.move(self.items_start_x, item_y_position)
-
-                # Устанавливаем Rect для позиции
-                # item.rect = get_non_transparent_rect(resized_image)
-                item.rect = showcase_rect
-                item.rect.topleft = (self.items_start_x,
-                                     item_y_position + 90)  # тут нужно менять и подбирать размер RECT + может быть поменять размер картинки
-
                 # Отрисовка фона для товаров
                 screen.blit(self.showcase_of_products, (self.items_start_x, item_y_position))
+                # pg.draw.rect(screen, "Black", self.showcase_of_products_image_rect)
 
-                # Отрисовка масштабированного изображения товара
-                screen.blit(resized_image, item.rect.topleft)
+                # Отрисовка изображений товаров (которые теперь уже загружены и масштабированы)
+                screen.blit(item.image, item.rect.topleft)
 
-                # Отрисовка Rect для наглядности
-                # pg.draw.rect(screen, (255, 0, 0), showcase_rect, 2)  # Красный прямоугольник для showcase_of_products
-                # pg.draw.rect(screen, (0, 255, 0), item.rect, 2)  # Зеленый прямоугольник для товара
-
-                # Отладочная информация
-                # print(f"Item: {item.name}, Offset: {item.rect.topleft}, Size: {item.rect.size}")
-                # print(f"Showcase Rect: {showcase_rect.topleft}, Size: {showcase_rect.size}")
                 shop_index += 1
 
         shop_index = 0
@@ -844,20 +835,18 @@ class Game:
                 shop_index += 1
 
         y_start = 140
-
         for item in self.items_all:
             if item.category == mode:
                 shop_name = f"{item.name}"
                 shop_price = f"{item.price}"
                 shop_quality = f"Quality: {item.quality}"
+
+                # Отрисовка текста рядом с товарами
                 screen.blit(font_mini.render(shop_name, True, BLACK), (575, y_start + 10))
                 screen.blit(font_mini.render(shop_price, True, BLACK), (720, y_start + 52))
                 screen.blit(font_mini.render(shop_quality, True, BLACK), (576, y_start + 52))
 
                 y_start += 85
-
-    def update(self):
-        pass
 
     def process_orders(self):
         for order in self.orders:
@@ -908,39 +897,31 @@ class Game:
             self.draw_orders_window()
 
         if self.show_shop_window:
-            self.draw_shop_window(mode="salon")
+            self.draw_shop_window(mode="management mechanisms")
 
         if self.selected_order:
-            # Путь к изображению окна информации о заказе
-            info_window_image_path = "Game_ind/GUI/Order_GUI/window_order_open/window_order_open.png"
-
             # Загрузка и отрисовка окна информации о заказе
-            info_window_image = load_image(info_window_image_path, self.info_window_width, self.info_window_height)
-            accept_order_image = load_image(self.accept_order, 100, 100)
-            reject_order_image = load_image(self.reject_order, 100, 100)
 
-            info_window_x = 50  # Начальная X-координата для окна информации
-            info_window_y = 0  # Начальная Y-координата для окна информации
-            screen.blit(info_window_image, (info_window_x, info_window_y))
-            screen.blit(accept_order_image, (info_window_x + 20, info_window_y + 328))
-            screen.blit(reject_order_image, (info_window_x + 140, info_window_y + 328))
-            self.accept_button_rect = get_non_transparent_rect(accept_order_image).move(info_window_x + 20,
-                                                                                        info_window_y + 328)
+            screen.blit(self.info_window_image, (self.info_window_x, self.info_window_y))
+            screen.blit(self.accept_order_image, (self.info_window_x + 20, self.info_window_y + 328))
+            screen.blit(self.reject_order_image, (self.info_window_x + 140, self.info_window_y + 328))
+            self.accept_button_rect = get_non_transparent_rect(self.accept_order_image).move(self.info_window_x + 20,
+                                                                                             self.info_window_y + 328)
 
-            self.reject_button_rect = get_non_transparent_rect(reject_order_image).move(info_window_x + 140,
-                                                                                        info_window_y + 328)
+            self.reject_button_rect = get_non_transparent_rect(self.reject_order_image).move(self.info_window_x + 140,
+                                                                                             self.info_window_y + 328)
             # Отрисовка текста описания заказа
             description_text = font_mini.render(self.selected_order.description, True, WHITE)
 
-            info_text_x = info_window_x + 30  # Небольшой отступ от края окна информации
-            info_text_y = info_window_y + 200  # Небольшой отступ от края окна информации
+            info_text_x = self.info_window_x + 30  # Небольшой отступ от края окна информации
+            info_text_y = self.info_window_y + 200  # Небольшой отступ от края окна информации
             # screen.blit(description_text, (info_text_x, info_text_y))
             self.draw_description(self.selected_order.description, font_mini, screen, info_text_x, info_text_y,
                                   self.info_window_width - 60)  # Уменьшить ширину для отступов
             screen.blit(font_mini.render(self.selected_order.name, True, WHITE), (100, 140))
             screen.blit(font_mini.render(self.selected_order.surname, True, WHITE), (350, 140))
-            screen.blit(font_mini.render("Accept", True, WHITE), (info_window_x + 46, info_window_y + 368))
-            screen.blit(font_mini.render("Reject", True, WHITE), (info_window_x + 168, info_window_y + 368))
+            screen.blit(font_mini.render("Accept", True, WHITE), (self.info_window_x + 46, self.info_window_y + 368))
+            screen.blit(font_mini.render("Reject", True, WHITE), (self.info_window_x + 168, self.info_window_y + 368))
 
         # Смещение rect на позицию изображения
         rect_with_offset = self.example_image_rect.move(100, 100)
@@ -962,7 +943,7 @@ while running:
             if mouse_pressed[0] or mouse_pressed[2]:
                 if game.selected_order and not game.selected_order.rect.collidepoint(
                         event.pos) and not game.accept_button_rect.collidepoint(
-                    event.pos) and not game.reject_button_rect.collidepoint(event.pos):
+                        event.pos) and not game.reject_button_rect.collidepoint(event.pos):
                     game.selected_order = None
 
                 if game.show_orders_window:
