@@ -61,7 +61,7 @@ shop_items = {
                     "description": "Its carbon fiber cladding",
                     "quality": 50,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Glass":
                 {
@@ -77,7 +77,7 @@ shop_items = {
                     "description": "Its bumper",
                     "quality": 504,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Doors":
                 {
@@ -85,7 +85,7 @@ shop_items = {
                     "description": "Its doors",
                     "quality": 505,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Headlights":
                 {
@@ -93,7 +93,7 @@ shop_items = {
                     "description": "Its headlights",
                     "quality": 50,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Rear view mirrors":
                 {
@@ -101,7 +101,7 @@ shop_items = {
                     "description": "Its rear view mirrors",
                     "quality": 50,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
         },
     "transmission":
@@ -112,7 +112,7 @@ shop_items = {
                     "description": "Its gearbox",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Engine":
                 {
@@ -120,7 +120,7 @@ shop_items = {
                     "description": "Its trunk",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "gimbal drive":
                 {
@@ -128,7 +128,7 @@ shop_items = {
                     "description": "Its gimbal drive",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Main transfer":
                 {
@@ -136,7 +136,7 @@ shop_items = {
                     "description": "Its Main transfer",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Wheels":
                 {
@@ -144,7 +144,7 @@ shop_items = {
                     "description": "Its wheels",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
         },
     "management mechanisms":
@@ -163,7 +163,7 @@ shop_items = {
                     "description": "Its shock absorbers",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Elastic spring":
                 {
@@ -171,7 +171,7 @@ shop_items = {
                     "description": "Its elastic spring",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/elastic_spring.png"
 
                 },
         },
@@ -183,7 +183,7 @@ shop_items = {
                     "description": "Its radio",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Seat":
                 {
@@ -191,7 +191,7 @@ shop_items = {
                     "description": "Its seat",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Oven":
                 {
@@ -199,7 +199,7 @@ shop_items = {
                     "description": "Its oven",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Conditioner":
                 {
@@ -207,7 +207,7 @@ shop_items = {
                     "description": "Its conditioner",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
             "Ventilation":
                 {
@@ -215,7 +215,7 @@ shop_items = {
                     "description": "Its ventilation",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 }
         },
     "maintenance":
@@ -226,7 +226,7 @@ shop_items = {
                     "description": "Its oil",
                     "quality": 50,
                     "category": "Maintenance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 },
 
             "Oil":
@@ -235,7 +235,7 @@ shop_items = {
                     "description": "Its oil",
                     "quality": 50,
                     "category": "Maintenance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/oil.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
                 }
         },
 
@@ -619,7 +619,7 @@ class MediumVehicle(Vehicle):
 
 class HardVehicle(Vehicle):
     def __init__(self):
-        super().__init__(speed=50, power=200, mass=70)
+        super().__init__(speed=50, power=250, mass=70)
 
 
 class Game:
@@ -635,17 +635,21 @@ class Game:
         self.selected_order = None
         self.selected_button = None
         self.pankrot_mode = True
+
         self.accept_order = "Game_ind/GUI/Order_GUI/window_order_open/accept_order_button.png"
         self.reject_button_rect = None
         accept_order_image = load_image(self.accept_order, 100, 100)
 
         self.reject_order = "Game_ind/GUI/Order_GUI/window_order_open/reject_order_button.png"
         reject_order_image = load_image(self.reject_order, 100, 100)
+
         self.accept_button_rect = get_non_transparent_rect(accept_order_image)
         self.reject_button_rect = get_non_transparent_rect(reject_order_image)
         self.reload_limits = 5
         self.save_days = 0
         self.is_saved_day = False
+
+
 
         self.order_start_x = 473  # X-координата, с которой начинается первый заказ
         self.order_start_y = 30  # Y-координата, с которой начинается первый заказ
@@ -686,6 +690,9 @@ class Game:
 
         self.ButtonGuiShop = Button("Shop", 790, 10, total_width=120, total_height=120, func=self.toggle_shop_window)
 
+        self.ButtonGuiWarehouse = Button("Storage", 930, 10, total_width=120, total_height=120,
+                                         func=self.toggle_storage_window)
+
         self.OrderGui = load_image("Game_ind/GUI/Order_GUI/order_mini/order_mini.png", 346, 256)
         self.OrderGui_image_rect = get_non_transparent_rect(self.OrderGui)
 
@@ -712,7 +719,9 @@ class Game:
 
         self.show_orders_window = False  # Флаг для отображения окна заказов
         self.show_shop_window = False
+        self.show_storage_window = False
         self.orders_button_rect = pg.Rect(self.ButtonGuiOrder.rect)  # Позиция и размеры кнопки "Заказы"
+        self.storage_button_rect = pg.Rect(self.ButtonGuiWarehouse.rect)  # Позиция и размеры кнопки "Склад"
 
         self.orders, self.reload_buttons, self.orders_images = generate_random_orders(5, self.orders)
 
@@ -733,17 +742,18 @@ class Game:
         self.item_size = (self.item_width, self.item_height)
 
     def toggle_orders_window(self):
-        if not self.show_shop_window:
-            self.show_orders_window = not self.show_orders_window
+        if not self.show_orders_window:
+            self.show_orders_window = True
+            self.show_shop_window = False
+            self.show_storage_window = False
             if not self.show_orders_window:
                 # Прячем кнопки, не очищая список
                 for button in self.reload_buttons:
                     button.rect.topleft = (-100, -100)
             print("Orders window toggled")
-        elif self.show_shop_window:
+        elif self.show_orders_window:
             self.show_orders_window = not self.show_orders_window
-            self.show_shop_window = not self.show_shop_window
-            if not self.show_orders_window:
+            if self.show_orders_window == False:
                 # Прячем кнопки, не очищая список
                 for button in self.reload_buttons:
                     button.rect.topleft = (-100, -100)
@@ -794,59 +804,80 @@ class Game:
             y_start += 77
 
     def toggle_shop_window(self):
-        if not self.show_orders_window:
+        if not self.show_shop_window:
+            self.show_shop_window = True
+            self.show_orders_window = False
+            self.show_storage_window = False
+            for button in self.reload_buttons:
+                button.rect.topleft = (-100, -100)
+        elif self.show_shop_window:
             self.show_shop_window = not self.show_shop_window
-            print("Shop window toggled")
-        elif self.show_orders_window:
-            self.show_shop_window = not self.show_shop_window
-            self.show_orders_window = not self.show_orders_window
-            if not self.show_orders_window:
+
+            if not self.show_shop_window:
                 # Прячем кнопки, не очищая список
                 for button in self.reload_buttons:
                     button.rect.topleft = (-100, -100)
-            print("Shop and Orders windows toggled")
 
     def draw_shop_window(self, mode):
         shop_index = 0
         padding = 85
         self.windowGUIshop = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 390, 530)
         screen.blit(self.windowGUIshop, (450, 97))
+        self.appearance_button_image = load_image("Game_ind/GUI/Shop_GUI/appearance.png", 64, 64)
+        self.appearance_button_rect = get_non_transparent_rect(self.appearance_button_image)
+        screen.blit(self.appearance_button_image, (500, 100))
 
-        # Отрисовываем только те элементы, которые соответствуют выбранной категории (mode)
         for item in self.items_all:
             if item.category == mode:
                 item_y_position = self.items_start_y + (shop_index * padding)
 
-                # Отрисовка фона для товаров
+                # Отрисовка фона витрины
                 screen.blit(self.showcase_of_products, (self.items_start_x, item_y_position))
-                # pg.draw.rect(screen, "Black", self.showcase_of_products_image_rect)
 
-                # Отрисовка изображений товаров (которые теперь уже загружены и масштабированы)
-                screen.blit(item.image, item.rect.topleft)
+                # Получаем rect витрины и устанавливаем его для item.rect
+                showcase_rect = self.showcase_of_products_image_rect.move(self.items_start_x, item_y_position)
+                item.rect = showcase_rect
 
-                shop_index += 1
 
-        shop_index = 0
-        for item in range(len(self.items_all)):
-            if self.items_all[item].category == mode:
-                items_y_position = self.items_start_y + (shop_index * padding)
-                self.items_all[item].rect.topleft = (self.items_start_x, items_y_position + 90)
-                # pg.draw.rect(screen, "Black", self.items_all[item].rect)
+                # Рассчитываем координаты для центрирования изображения внутри витрины
+                image_x = self.items_start_x + 15
+                image_y = item_y_position + 100
+
+                screen.blit(item.image, (image_x, image_y))
+                pg.draw.rect(screen, "red", item.rect, 2)
                 shop_index += 1
 
         y_start = 140
         for item in self.items_all:
             if item.category == mode:
                 shop_name = f"{item.name}"
-                shop_price = f"{item.price}"
-                shop_quality = f"Quality: {item.quality}"
+                shop_price = f"{item.price}$"
+                shop_quality = f"Quality: {item.quality}%"
+                shop_description = f"{item.description}"
 
                 # Отрисовка текста рядом с товарами
                 screen.blit(font_mini.render(shop_name, True, BLACK), (575, y_start + 10))
                 screen.blit(font_mini.render(shop_price, True, BLACK), (720, y_start + 52))
                 screen.blit(font_mini.render(shop_quality, True, BLACK), (576, y_start + 52))
+                screen.blit(font_mini.render(shop_description, True, BLACK),(580, y_start + 30))
 
                 y_start += 85
+
+    def toggle_storage_window(self):
+        if not self.show_storage_window:
+            self.show_storage_window = True
+            self.show_orders_window = False
+            self.show_shop_window = False
+            for button in self.reload_buttons:
+                button.rect.topleft = (-100, -100)
+        elif self.show_storage_window:
+            self.show_storage_window = not self.show_storage_window
+
+
+    def draw_storage_window(self):
+        if self.show_storage_window:
+            self.windowGUIStorage = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 420, 530)
+            screen.blit(self.windowGUIStorage, (500, 97))
 
     def process_orders(self):
         for order in self.orders:
@@ -892,12 +923,16 @@ class Game:
 
         self.ButtonGuiOrder.draw(screen)
         self.ButtonGuiShop.draw(screen)
+        self.ButtonGuiWarehouse.draw(screen)
 
         if self.show_orders_window:
             self.draw_orders_window()
 
         if self.show_shop_window:
             self.draw_shop_window(mode="management mechanisms")
+
+        if self.show_storage_window:
+            self.draw_storage_window()
 
         if self.selected_order:
             # Загрузка и отрисовка окна информации о заказе
@@ -961,11 +996,14 @@ while running:
                             if game.money >= item.price:
                                 game.money -= item.price
 
+                if event.type == pg.MOUSEBUTTONDOWN and game.storage_button_rect.collidepoint(event.pos):
+                    mouse_pressed = pg.mouse.get_pressed()
+                    if mouse_pressed[0]:
+                        game.ButtonGuiWarehouse.is_clicked(event)
+
                 if game.accept_button_rect.collidepoint(event.pos):
                     if game.money >= 500:
                         game.money -= 500
-
-            # if game.windowGUIorder_image_rect.collidepoint(event.pos):
 
         if event.type == DAY_EVENT:
             game.day += 1
