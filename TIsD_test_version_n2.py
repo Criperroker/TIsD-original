@@ -36,6 +36,7 @@ pg.time.set_timer(INCREASE_MONEY, 1000)
 
 font = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 20)
 font_mini = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 10)
+font_description = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 8)
 
 names = ["Walton", "Bennett", "Paul", "Andrea", "Stewart", "Stefan", "Lee", "Sally", "Wade", "Ava", "Abby", "Dwight",
          "Goodwin", "Don", "Valerie", "Zach", "Leonard", "Gregory", "Lane", "Jaylee", "Alvin", "Alina", "Margaret",
@@ -61,7 +62,8 @@ shop_items = {
                     "description": "Its carbon fiber cladding",
                     "quality": 50,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Glass":
                 {
@@ -69,7 +71,8 @@ shop_items = {
                     "description": "Its glass",
                     "quality": 502,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/glass.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/glass.png",
+                    "account": 0
                 },
             "Bumper":
                 {
@@ -77,7 +80,9 @@ shop_items = {
                     "description": "Its bumper",
                     "quality": 504,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
+
                 },
             "Doors":
                 {
@@ -85,7 +90,8 @@ shop_items = {
                     "description": "Its doors",
                     "quality": 505,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Headlights":
                 {
@@ -93,7 +99,8 @@ shop_items = {
                     "description": "Its headlights",
                     "quality": 50,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Rear view mirrors":
                 {
@@ -101,7 +108,8 @@ shop_items = {
                     "description": "Its rear view mirrors",
                     "quality": 50,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
         },
     "transmission":
@@ -112,7 +120,8 @@ shop_items = {
                     "description": "Its gearbox",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Engine":
                 {
@@ -120,7 +129,8 @@ shop_items = {
                     "description": "Its trunk",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "gimbal drive":
                 {
@@ -128,7 +138,8 @@ shop_items = {
                     "description": "Its gimbal drive",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Main transfer":
                 {
@@ -136,7 +147,8 @@ shop_items = {
                     "description": "Its Main transfer",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Wheels":
                 {
@@ -144,7 +156,8 @@ shop_items = {
                     "description": "Its wheels",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
         },
     "management mechanisms":
@@ -155,7 +168,8 @@ shop_items = {
                     "description": "Its helm",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/helm.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/helm.png",
+                    "account": 0
                 },
             "Shock absorbers":
                 {
@@ -163,7 +177,8 @@ shop_items = {
                     "description": "Its shock absorbers",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Elastic spring":
                 {
@@ -171,7 +186,8 @@ shop_items = {
                     "description": "Its elastic spring",
                     "quality": 50,
                     "category": "management mechanisms",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/elastic_spring.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/elastic_spring.png",
+                    "account": 0
 
                 },
         },
@@ -183,7 +199,8 @@ shop_items = {
                     "description": "Its radio",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Seat":
                 {
@@ -191,7 +208,8 @@ shop_items = {
                     "description": "Its seat",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Oven":
                 {
@@ -199,7 +217,8 @@ shop_items = {
                     "description": "Its oven",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Conditioner":
                 {
@@ -207,7 +226,8 @@ shop_items = {
                     "description": "Its conditioner",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
             "Ventilation":
                 {
@@ -215,7 +235,8 @@ shop_items = {
                     "description": "Its ventilation",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 }
         },
     "maintenance":
@@ -226,7 +247,8 @@ shop_items = {
                     "description": "Its oil",
                     "quality": 50,
                     "category": "Maintenance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 },
 
             "Oil":
@@ -235,7 +257,8 @@ shop_items = {
                     "description": "Its oil",
                     "quality": 50,
                     "category": "Maintenance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png"
+                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "account": 0
                 }
         },
 
@@ -386,8 +409,10 @@ def generate_shop_window(shop_items):
             price = details['price']
             description = details['description']
             image = details.get('image')  # Путь к изображению, может быть None
+            account = details['account']
             items_all.append(
-                Shop(price=price, quality=quality, category=category, name=name, description=description, image=image))
+                Shop(price=price, quality=quality, category=category, name=name, description=description, image=image,
+                     account=account))
     return items_all
 
 
@@ -575,12 +600,13 @@ class Order:
 
 
 class Shop:
-    def __init__(self, price, quality, category, name, description, image=None):
+    def __init__(self, price, quality, category, name, description, image=None, account = None):
         self.price = price
         self.quality = quality
         self.name = name
         self.description = description
         self.category = category
+        self.account = account
 
         if image:
             # Загрузка и масштабирование изображения только один раз
@@ -597,6 +623,11 @@ class Shop:
 
     def update(self):
         pass
+
+
+class Storage:
+    def __init__(self, level):
+        self.level = level
 
 
 class Vehicle:
@@ -634,6 +665,7 @@ class Game:
         self.day = 0
         self.selected_order = None
         self.selected_button = None
+        self.storage = Storage(1)
         self.pankrot_mode = True
 
         self.accept_order = "Game_ind/GUI/Order_GUI/window_order_open/accept_order_button.png"
@@ -643,13 +675,19 @@ class Game:
         self.reject_order = "Game_ind/GUI/Order_GUI/window_order_open/reject_order_button.png"
         reject_order_image = load_image(self.reject_order, 100, 100)
 
+        self.level_buy_storage = "Game_ind/GUI/Base_GUI/Button_GUI/Button.png"
+        self.level_buy_storage_image = load_image(self.level_buy_storage, 150, 150)
+        self.level_buy_storage_rect = get_non_transparent_rect(self.level_buy_storage_image).move(685, 73)
+
         self.accept_button_rect = get_non_transparent_rect(accept_order_image)
         self.reject_button_rect = get_non_transparent_rect(reject_order_image)
+
+        self.shop_mode = "appearance"
+        self.shop_rects = []
+
         self.reload_limits = 5
         self.save_days = 0
         self.is_saved_day = False
-
-
 
         self.order_start_x = 473  # X-координата, с которой начинается первый заказ
         self.order_start_y = 30  # Y-координата, с которой начинается первый заказ
@@ -685,12 +723,19 @@ class Game:
         self.windowGUIorder = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 460, 440)
         self.windowGUIorder_image_rect = get_non_transparent_rect(self.popularity_image)
 
-        self.ButtonGuiOrder = Button("Orders", 650, 10, total_width=120, total_height=120,
+        self.appearance_button_image = load_image("Game_ind/GUI/Shop_GUI/appearance_tab.png", 90, 90)
+        self.salon_tab_image = load_image("Game_ind/GUI/Shop_GUI/salon_tab.png", 89, 89)
+        self.transmission_tab_image = load_image("Game_ind/GUI/Shop_GUI/transmission_tab.png", 88, 88)
+        self.management_mechanisms_tab_image = load_image("Game_ind/GUI/Shop_GUI/management_mechanisms_tab.png", 88, 88)
+
+        self.in_storage_image = load_image("Game_ind/GUI/Shop_GUI/in_storage.png", 32, 32)
+
+        self.ButtonGuiOrder = Button("Orders", 650, 5, total_width=120, total_height=120,
                                      func=self.toggle_orders_window)
 
-        self.ButtonGuiShop = Button("Shop", 790, 10, total_width=120, total_height=120, func=self.toggle_shop_window)
+        self.ButtonGuiShop = Button("Shop", 790, 5, total_width=120, total_height=120, func=self.toggle_shop_window)
 
-        self.ButtonGuiWarehouse = Button("Storage", 930, 10, total_width=120, total_height=120,
+        self.ButtonGuiWarehouse = Button("Storage", 930, 5, total_width=120, total_height=120,
                                          func=self.toggle_storage_window)
 
         self.OrderGui = load_image("Game_ind/GUI/Order_GUI/order_mini/order_mini.png", 346, 256)
@@ -703,9 +748,6 @@ class Game:
 
         self.pankrot_image = load_image("Game_ind/GUI/Base_GUI/Icons_for_ideas/Pankrot_icon.png", 32, 32)
         self.pankrot_image_rect = get_non_transparent_rect(self.pankrot_image)
-
-        self.transmission_tab_image = load_image("Game_ind/GUI/Shop_GUI/transmission_tab.png", 64, 64)
-        self.transmission_tab_image_rect = get_non_transparent_rect(self.transmission_tab_image)
 
         # self.reload_order_rect = self.reload_order.get_rect()
         pg.time.set_timer(self.money + 1, 500)
@@ -821,11 +863,20 @@ class Game:
     def draw_shop_window(self, mode):
         shop_index = 0
         padding = 85
-        self.windowGUIshop = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 390, 530)
+        self.windowGUIshop = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 390, 570)
         screen.blit(self.windowGUIshop, (450, 97))
-        self.appearance_button_image = load_image("Game_ind/GUI/Shop_GUI/appearance.png", 64, 64)
-        self.appearance_button_rect = get_non_transparent_rect(self.appearance_button_image)
-        screen.blit(self.appearance_button_image, (500, 100))
+        self.shop_rects = []
+
+        self.appearance_button_rect = get_non_transparent_rect(self.appearance_button_image).move(480, 65)
+        self.salon_tab_rect = get_non_transparent_rect(self.salon_tab_image).move(642, 60)
+        self.transmission_tab_rect = get_non_transparent_rect(self.transmission_tab_image).move(562, 60)
+        self.management_mechanisms_tab_rect = get_non_transparent_rect(self.management_mechanisms_tab_image).move(722,
+                                                                                                                  60)
+
+        screen.blit(self.appearance_button_image, (480, 65))
+        screen.blit(self.salon_tab_image, (642, 60))
+        screen.blit(self.transmission_tab_image, (562, 60))
+        screen.blit(self.management_mechanisms_tab_image, (722, 60))
 
         for item in self.items_all:
             if item.category == mode:
@@ -833,18 +884,21 @@ class Game:
 
                 # Отрисовка фона витрины
                 screen.blit(self.showcase_of_products, (self.items_start_x, item_y_position))
+                screen.blit(self.in_storage_image, (765, 120 + item_y_position))
 
                 # Получаем rect витрины и устанавливаем его для item.rect
                 showcase_rect = self.showcase_of_products_image_rect.move(self.items_start_x, item_y_position)
                 item.rect = showcase_rect
-
+                if item.rect not in self.shop_rects:
+                    self.shop_rects.append(item.rect)
+                    print(self.shop_rects)
 
                 # Рассчитываем координаты для центрирования изображения внутри витрины
                 image_x = self.items_start_x + 15
                 image_y = item_y_position + 100
 
                 screen.blit(item.image, (image_x, image_y))
-                pg.draw.rect(screen, "red", item.rect, 2)
+                pg.draw.rect(screen, "red", showcase_rect, 2)
                 shop_index += 1
 
         y_start = 140
@@ -854,12 +908,14 @@ class Game:
                 shop_price = f"{item.price}$"
                 shop_quality = f"Quality: {item.quality}%"
                 shop_description = f"{item.description}"
+                shop_account = f"{item.account}"
 
                 # Отрисовка текста рядом с товарами
                 screen.blit(font_mini.render(shop_name, True, BLACK), (575, y_start + 10))
                 screen.blit(font_mini.render(shop_price, True, BLACK), (720, y_start + 52))
                 screen.blit(font_mini.render(shop_quality, True, BLACK), (576, y_start + 52))
-                screen.blit(font_mini.render(shop_description, True, BLACK),(580, y_start + 30))
+                screen.blit(font_description.render(shop_description, True, BLACK), (580, y_start + 30))
+                screen.blit(font.render(shop_account, True, WHITE), (800, y_start + 29))
 
                 y_start += 85
 
@@ -873,11 +929,14 @@ class Game:
         elif self.show_storage_window:
             self.show_storage_window = not self.show_storage_window
 
-
     def draw_storage_window(self):
         if self.show_storage_window:
-            self.windowGUIStorage = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 420, 530)
+            self.windowGUIStorage = load_image("Game_ind/GUI/Storage_GUI/window_storage.png", 520, 450)
             screen.blit(self.windowGUIStorage, (500, 97))
+            pg.draw.rect(screen, "RED", self.level_buy_storage_rect, 2)
+            levelup = f"Level {self.storage.level}"
+            screen.blit(self.level_buy_storage_image, (685, 73))
+            screen.blit(font.render(levelup, True, BLACK), (707, 130))
 
     def process_orders(self):
         for order in self.orders:
@@ -929,7 +988,8 @@ class Game:
             self.draw_orders_window()
 
         if self.show_shop_window:
-            self.draw_shop_window(mode="management mechanisms")
+            self.draw_shop_window(mode=self.shop_mode)
+            print(self.shop_mode)
 
         if self.show_storage_window:
             self.draw_storage_window()
@@ -991,10 +1051,23 @@ while running:
                             break
 
                 if game.show_shop_window:
+                    if game.appearance_button_rect.collidepoint(event.pos):
+                        game.shop_mode = "appearance"
+
+                    if game.management_mechanisms_tab_rect.collidepoint(event.pos):
+                        game.shop_mode = "management mechanisms"
+
+                    if game.salon_tab_rect.collidepoint(event.pos):
+                        game.shop_mode = "salon"
+
+                    if game.transmission_tab_rect.collidepoint(event.pos):
+                        game.shop_mode = "transmission"
+
                     for item in game.items_all:
                         if item.rect.collidepoint(event.pos):
                             if game.money >= item.price:
                                 game.money -= item.price
+                                print(item.name)
 
                 if event.type == pg.MOUSEBUTTONDOWN and game.storage_button_rect.collidepoint(event.pos):
                     mouse_pressed = pg.mouse.get_pressed()
@@ -1018,6 +1091,9 @@ while running:
         if event.type == PANKROT_EVENT:
             if game.pankrot_mode:
                 game.popularity -= 1
+
+        if game.level_buy_storage_rect.collidepoint(mouse_pos):
+            pass
 
         if event.type == INCREASE_MONEY:
             game.money += 1
