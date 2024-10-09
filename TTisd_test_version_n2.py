@@ -135,13 +135,13 @@ shop_items = {
                     "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
                     "account": 0
                 },
-            "gimbal drive":
+            "Сlutch":
                 {
                     "price": 100,
                     "description": "Its gimbal drive",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/clutch.png",
                     "account": 0
                 },
             "Main transfer":
@@ -202,7 +202,7 @@ shop_items = {
                     "description": "Its radio",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/radio.png",
                     "account": 0
                 },
             "Seat":
@@ -238,7 +238,7 @@ shop_items = {
                     "description": "Its ventilation",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/ventilation.png",
                     "account": 0
                 }
         },
