@@ -21,7 +21,10 @@ BLACK = (0, 0, 0)
 
 # Установка FPS
 clock = pg.time.Clock()
-FPS = 30
+FPS = 60
+
+alfa_type = 0
+fade_speed = 25
 
 last_update = pg.time.get_ticks()
 current_image = 0
@@ -132,13 +135,13 @@ shop_items = {
                     "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
                     "account": 0
                 },
-            "gimbal drive":
+            "Сlutch":
                 {
                     "price": 100,
                     "description": "Its gimbal drive",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/clutch.png",
                     "account": 0
                 },
             "Main transfer":
@@ -199,7 +202,7 @@ shop_items = {
                     "description": "Its radio",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/radio.png",
                     "account": 0
                 },
             "Seat":
@@ -235,7 +238,7 @@ shop_items = {
                     "description": "Its ventilation",
                     "quality": 50,
                     "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/ventilation.png",
                     "account": 0
                 }
         },
@@ -289,34 +292,42 @@ def wrap_text(text, font, max_width):
     return wrapped_lines
 
 
+# def get_non_transparent_rect(image):
+#     # Загружаем изображение с поддержкой альфа-канала
+#     image = image.convert_alpha()
+#
+#     # Получаем размеры изображения
+#     width, height = image.get_size()
+#
+#     # Инициализируем границы непрозрачных пикселей
+#     min_x, min_y = width, height
+#     max_x, max_y = 0, 0
+#
+#     # Перебираем все пиксели изображения
+#     for y in range(height):
+#         for x in range(width):
+#             # Получаем цвет пикселя (RGBA)
+#             r, g, b, a = image.get_at((x, y))
+#             if a != 0:  # Если пиксель непрозрачный
+#                 # Обновляем границы
+#                 min_x = min(min_x, x)
+#                 min_y = min(min_y, y)
+#                 max_x = max(max_x, x)
+#                 max_y = max(max_y, y)
+#
+#     # Создаем прямоугольник, охватывающий все непрозрачные пиксели
+#     if min_x <= max_x and min_y <= max_y:
+#         return pg.Rect(min_x, min_y, max_x - min_x + 1, max_y - min_y + 1)
+#     else:
+#         # Если все пиксели прозрачны, возвращаем пустой прямоугольник
+#         return pg.Rect(0, 0, 0, 0)
+
 def get_non_transparent_rect(image):
-    # Загружаем изображение с поддержкой альфа-канала
-    image = image.convert_alpha()
-
-    # Получаем размеры изображения
-    width, height = image.get_size()
-
-    # Инициализируем границы непрозрачных пикселей
-    min_x, min_y = width, height
-    max_x, max_y = 0, 0
-
-    # Перебираем все пиксели изображения
-    for y in range(height):
-        for x in range(width):
-            # Получаем цвет пикселя (RGBA)
-            r, g, b, a = image.get_at((x, y))
-            if a != 0:  # Если пиксель непрозрачный
-                # Обновляем границы
-                min_x = min(min_x, x)
-                min_y = min(min_y, y)
-                max_x = max(max_x, x)
-                max_y = max(max_y, y)
-
-    # Создаем прямоугольник, охватывающий все непрозрачные пиксели
-    if min_x <= max_x and min_y <= max_y:
-        return pg.Rect(min_x, min_y, max_x - min_x + 1, max_y - min_y + 1)
+    mask = pg.mask.from_surface(image)
+    rect = mask.get_bounding_rects()
+    if rect:
+        return rect[0]
     else:
-        # Если все пиксели прозрачны, возвращаем пустой прямоугольник
         return pg.Rect(0, 0, 0, 0)
 
 
@@ -465,23 +476,54 @@ class Button:
         self.func = func
         self.x = x
         self.y = y
-        self.image = load_image(image, total_width, total_height)
+        self.image_def = load_image(image, total_width, total_height)
+        self.image = self.image_def
 
-        # Получаем прямоугольник с учетом непрозрачных областей изображения
-        # self.rect = self.image.get_rect()
-        self.rect = get_non_transparent_rect(self.image).move(self.x, self.y)
-        # self.rect.topleft = (self.x, self.y + 10)  # Устанавливаем позицию Rect
+        # Получаем непрозрачный прямоугольник
+        non_transparent_rect = get_non_transparent_rect(self.image)
+        self.offset_x = non_transparent_rect.x
+        self.offset_y = non_transparent_rect.y
+        self.non_transparent_rect = non_transparent_rect
 
+        # Устанавливаем self.rect в позицию кнопки с размером непрозрачной области
+        self.rect = pg.Rect(self.x, self.y, non_transparent_rect.width, non_transparent_rect.height)
+
+        # Рендерим текст и центрируем его на кнопке
         self.text = text_render(text)
         self.text_rect = self.text.get_rect(center=self.rect.center)
-        self.text_rect = self.text_rect[0], self.text_rect[1]  # текст по центру кнопки
 
         self.is_pressed = False
+        self.is_hovered = False
+
+        self.hovered_button = "Game_ind/GUI/Base_GUI/Button_GUI/Button_2.png"
+        self.hovered_button_image = load_image(self.hovered_button, total_width, total_height)
+        # Получаем непрозрачный прямоугольник для изображения при наведении
+        hovered_non_transparent_rect = get_non_transparent_rect(self.hovered_button_image)
+        self.hover_offset_x = hovered_non_transparent_rect.x
+        self.hover_offset_y = hovered_non_transparent_rect.y
+        self.hover_non_transparent_rect = hovered_non_transparent_rect
+
+    def update(self):
+        if self.is_hovered:
+            self.image = self.hovered_button_image
+            self.current_offset_x = self.hover_offset_x
+            self.current_offset_y = self.hover_offset_y
+            self.rect.size = self.hover_non_transparent_rect.size
+        else:
+            self.image = self.image_def
+            self.current_offset_x = self.offset_x
+            self.current_offset_y = self.offset_y
+            self.rect.size = self.non_transparent_rect.size
 
     def draw(self, screen):
-        screen.blit(self.image, (self.x, self.y))
+        # Рисуем изображение с учетом смещения
+        screen.blit(self.image, (self.x - self.current_offset_x, self.y - self.current_offset_y))
+        # Рисуем текст
         screen.blit(self.text, self.text_rect)
-        # pg.draw.rect(screen, "Red", self.rect)
+        # Для отладки: рисуем прямоугольник
+
+    def check_hover(self, mouse_pos):
+        self.is_hovered = self.rect.collidepoint(mouse_pos)
 
     def is_clicked(self, event):
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
@@ -600,7 +642,7 @@ class Order:
 
 
 class Shop:
-    def __init__(self, price, quality, category, name, description, image=None, account = None):
+    def __init__(self, price, quality, category, name, description, image=None, account=None):
         self.price = price
         self.quality = quality
         self.name = name
@@ -667,6 +709,7 @@ class Game:
         self.selected_button = None
         self.storage = Storage(1)
         self.pankrot_mode = True
+        self.in_storage = False
 
         self.accept_order = "Game_ind/GUI/Order_GUI/window_order_open/accept_order_button.png"
         self.reject_button_rect = None
@@ -676,13 +719,21 @@ class Game:
         reject_order_image = load_image(self.reject_order, 100, 100)
 
         self.level_buy_storage = "Game_ind/GUI/Base_GUI/Button_GUI/Button.png"
-        self.level_buy_storage_image = load_image(self.level_buy_storage, 150, 150)
+        self.level_buy_storage_image = load_image(self.level_buy_storage, 150, 150).convert_alpha()
         self.level_buy_storage_rect = get_non_transparent_rect(self.level_buy_storage_image).move(685, 73)
+
+        self.description_level_storage = "Game_ind/GUI/Base_GUI/Description/description_1type.png"
+        self.description_level_storage_image = load_image(self.description_level_storage, 150, 150).convert_alpha()
+        self.description_level_storage_rect = get_non_transparent_rect(self.description_level_storage_image).move(685,
+                                                                                                                  73)
+
+        self.only_storage = ""
 
         self.accept_button_rect = get_non_transparent_rect(accept_order_image)
         self.reject_button_rect = get_non_transparent_rect(reject_order_image)
 
         self.shop_mode = "appearance"
+        self.storage_filter_mode = "appearance"
         self.shop_rects = []
 
         self.reload_limits = 5
@@ -728,15 +779,18 @@ class Game:
         self.transmission_tab_image = load_image("Game_ind/GUI/Shop_GUI/transmission_tab.png", 88, 88)
         self.management_mechanisms_tab_image = load_image("Game_ind/GUI/Shop_GUI/management_mechanisms_tab.png", 88, 88)
 
+        self.button_next_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button_next.png", 64, 64)
+
         self.in_storage_image = load_image("Game_ind/GUI/Shop_GUI/in_storage.png", 32, 32)
 
-        self.ButtonGuiOrder = Button("Orders", 650, 5, total_width=120, total_height=120,
+        self.ButtonGuiOrder = Button("Orders", 650, 20, total_width=120, total_height=120,
                                      func=self.toggle_orders_window)
 
-        self.ButtonGuiShop = Button("Shop", 790, 5, total_width=120, total_height=120, func=self.toggle_shop_window)
+        self.ButtonGuiShop = Button("Shop", 790, 20, total_width=120, total_height=120, func=self.toggle_shop_window)
 
-        self.ButtonGuiWarehouse = Button("Storage", 930, 5, total_width=120, total_height=120,
+        self.ButtonGuiWarehouse = Button("Storage", 930, 20, total_width=120, total_height=120,
                                          func=self.toggle_storage_window)
+        self.main_buttons = [self.ButtonGuiShop, self.ButtonGuiWarehouse, self.ButtonGuiOrder]
 
         self.OrderGui = load_image("Game_ind/GUI/Order_GUI/order_mini/order_mini.png", 346, 256)
         self.OrderGui_image_rect = get_non_transparent_rect(self.OrderGui)
@@ -748,6 +802,9 @@ class Game:
 
         self.pankrot_image = load_image("Game_ind/GUI/Base_GUI/Icons_for_ideas/Pankrot_icon.png", 32, 32)
         self.pankrot_image_rect = get_non_transparent_rect(self.pankrot_image)
+
+        self.storage_icon_image = load_image("Game_ind/GUI/Storage_GUI/storage_icon.png", 310, 224)
+        self.storage_icon_rect = get_non_transparent_rect(self.storage_icon_image)
 
         # self.reload_order_rect = self.reload_order.get_rect()
         pg.time.set_timer(self.money + 1, 500)
@@ -860,46 +917,67 @@ class Game:
                 for button in self.reload_buttons:
                     button.rect.topleft = (-100, -100)
 
+    # def toggle_shop_window(self):
+    #     if not self.show_orders_window:
+    #         self.show_shop_window = not self.show_shop_window
+    #         if self.show_shop_window:
+    #             # При каждом переключении вкладки очищаем старые товары
+    #             self.clear_old_items()
+    #         print("Shop window toggled")
+
+    # def clear_old_items(self):
+    #     # Перемещаем все элементы за пределы экрана
+    #     for item in self.items_all:
+    #         item.rect.topleft = (-100, -100)  # Перемещение за пределы экрана
+
     def draw_shop_window(self, mode):
         shop_index = 0
-        padding = 85
+        padding = 87
         self.windowGUIshop = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 390, 570)
         screen.blit(self.windowGUIshop, (450, 97))
         self.shop_rects = []
 
+        # Обновляем кнопки вкладок
         self.appearance_button_rect = get_non_transparent_rect(self.appearance_button_image).move(480, 65)
         self.salon_tab_rect = get_non_transparent_rect(self.salon_tab_image).move(642, 60)
         self.transmission_tab_rect = get_non_transparent_rect(self.transmission_tab_image).move(562, 60)
         self.management_mechanisms_tab_rect = get_non_transparent_rect(self.management_mechanisms_tab_image).move(722,
                                                                                                                   60)
+
+        # Отрисовка вкладок
         screen.blit(self.appearance_button_image, (480, 65))
         screen.blit(self.salon_tab_image, (642, 60))
         screen.blit(self.transmission_tab_image, (562, 60))
         screen.blit(self.management_mechanisms_tab_image, (722, 60))
 
+        # Обрабатываем только товары в текущей вкладке
         for item in self.items_all:
             if item.category == mode:
+                # Если товар находится в текущей вкладке
                 item_y_position = self.items_start_y + (shop_index * padding)
 
                 # Отрисовка фона витрины
                 screen.blit(self.showcase_of_products, (self.items_start_x, item_y_position))
                 screen.blit(self.in_storage_image, (765, 120 + item_y_position))
 
-                # Получаем rect витрины и устанавливаем его для item.rect
+                # Обновляем Rect витрины только для текущего элемента
                 showcase_rect = self.showcase_of_products_image_rect.move(self.items_start_x, item_y_position)
                 item.rect = showcase_rect
                 if item.rect not in self.shop_rects:
                     self.shop_rects.append(item.rect)
-                    print(self.shop_rects)
 
                 # Рассчитываем координаты для центрирования изображения внутри витрины
                 image_x = self.items_start_x + 15
                 image_y = item_y_position + 100
 
+                # Отрисовка изображения товара
                 screen.blit(item.image, (image_x, image_y))
-                pg.draw.rect(screen, "red", showcase_rect, 2)
                 shop_index += 1
+            else:
+                # Перемещаем элементы, которые не принадлежат текущей вкладке, за пределы экрана
+                item.rect.topleft = (-100, -100)
 
+        # Отрисовка текста для каждого товара в текущей вкладке
         y_start = 140
         for item in self.items_all:
             if item.category == mode:
@@ -910,7 +988,7 @@ class Game:
                 shop_account = f"{item.account}"
 
                 # Отрисовка текста рядом с товарами
-                screen.blit(font_mini.render(shop_name, True, BLACK), (575, y_start + 10))
+                screen.blit(font_mini.render(shop_name, True, BLACK), (575, y_start + 11))
                 screen.blit(font_mini.render(shop_price, True, BLACK), (720, y_start + 52))
                 screen.blit(font_mini.render(shop_quality, True, BLACK), (576, y_start + 52))
                 screen.blit(font_description.render(shop_description, True, BLACK), (580, y_start + 30))
@@ -930,12 +1008,74 @@ class Game:
 
     def draw_storage_window(self):
         if self.show_storage_window:
+            padding = 80
+            shop_index = 0
+            x_position = 490
+
             self.windowGUIStorage = load_image("Game_ind/GUI/Storage_GUI/window_storage.png", 520, 450)
             screen.blit(self.windowGUIStorage, (500, 97))
-            pg.draw.rect(screen, "RED", self.level_buy_storage_rect, 2)
             levelup = f"Level {self.storage.level}"
+            not_item = "There is nothing"
+            item_in_storage = "Place is full"
+
+            self.button_next_rect = get_non_transparent_rect(self.button_next_image).move(880, 140)
+
             screen.blit(self.level_buy_storage_image, (685, 73))
             screen.blit(font.render(levelup, True, BLACK), (707, 130))
+            screen.blit(self.button_next_image, (880, 112))
+
+            for item in self.items_all:
+
+                item_y_position = self.items_start_y + (shop_index * padding)
+                if item.account != 0:
+                    if item.category == game.storage_filter_mode:
+
+                        self.in_storage = True
+                        if shop_index == 4:
+
+                            print("full inventory")
+
+                        else:
+                            screen.blit(self.showcase_of_products, (x_position + 35, item_y_position + 50))
+
+                            shop_index += 1
+
+                    if game.storage_filter_mode == "":
+
+                        if shop_index == 4:
+
+                            print("full inventory")
+
+                        else:
+                            screen.blit(self.showcase_of_products, (x_position + 35, item_y_position + 50))
+
+                            shop_index += 1
+
+                    elif self.in_storage == False:
+                        screen.blit(font.render(not_item, True, WHITE), (640, 260))
+
+                if item in self.items_all:
+                    storage_quality = f"{item.quality}"
+                    storage_name = f"{item.name}"
+                    storage_name_account = f"{item.account}"
+                    storage_description = f"{item.description}"
+
+                    if item.account != 0:
+                        if item.category == game.storage_filter_mode:
+                            self.in_storage = True
+                            screen.blit(font_description.render(storage_description, True, BLACK),
+                                        (x_position + 135, item_y_position + 175))
+                            screen.blit(font_mini.render(storage_name, True, BLACK),
+                                        (x_position + 131, item_y_position + 155))
+
+                        elif game.storage_filter_mode == "":
+                            screen.blit(font_description.render(storage_description, True, BLACK),
+                                        (x_position + 135, item_y_position + 175))
+                            screen.blit(font_mini.render(storage_name, True, BLACK),
+                                        (x_position + 131, item_y_position + 155))
+
+
+            screen.blit(game.description_level_storage_image, game.description_level_storage_rect)
 
     def process_orders(self):
         for order in self.orders:
@@ -988,7 +1128,6 @@ class Game:
 
         if self.show_shop_window:
             self.draw_shop_window(mode=self.shop_mode)
-            print(self.shop_mode)
 
         if self.show_storage_window:
             self.draw_storage_window()
@@ -1037,7 +1176,7 @@ while running:
             if mouse_pressed[0] or mouse_pressed[2]:
                 if game.selected_order and not game.selected_order.rect.collidepoint(
                         event.pos) and not game.accept_button_rect.collidepoint(
-                        event.pos) and not game.reject_button_rect.collidepoint(event.pos):
+                    event.pos) and not game.reject_button_rect.collidepoint(event.pos):
                     game.selected_order = None
 
                 if game.show_orders_window:
@@ -1066,7 +1205,28 @@ while running:
                         if item.rect.collidepoint(event.pos):
                             if game.money >= item.price:
                                 game.money -= item.price
+                                item.account += 1
                                 print(item.name)
+
+                if game.show_storage_window:
+                    if game.appearance_button_rect.collidepoint(event.pos) and game.storage_filter_mode == "":
+                        game.storage_filter_mode = "appearance"
+
+                    if game.management_mechanisms_tab_rect.collidepoint(event.pos) and game.storage_filter_mode == "":
+                        game.storage_filter_mode = "management mechanisms"
+
+                    if game.salon_tab_rect.collidepoint(event.pos) and game.storage_filter_mode == "":
+                        game.storage_filter_mode = "salon"
+
+                    if game.transmission_tab_rect.collidepoint(event.pos) and game.storage_filter_mode == "":
+                        game.storage_filter_mode = "transmission"
+
+                    if game.transmission_tab_rect.collidepoint(event.pos) or game.salon_tab_rect.collidepoint(
+                        event.pos) or game.management_mechanisms_tab_rect.collidepoint(
+                        event.pos) or game.appearance_button_rect.collidepoint(event.pos):
+
+                        if game.storage_filter_mode != "":
+                            game.storage_filter_mode = ""
 
                 if event.type == pg.MOUSEBUTTONDOWN and game.storage_button_rect.collidepoint(event.pos):
                     mouse_pressed = pg.mouse.get_pressed()
@@ -1090,9 +1250,6 @@ while running:
         if event.type == PANKROT_EVENT:
             if game.pankrot_mode:
                 game.popularity -= 1
-
-        if game.level_buy_storage_rect.collidepoint(mouse_pos):
-            pass
 
         if event.type == INCREASE_MONEY:
             game.money += 1
@@ -1138,8 +1295,26 @@ while running:
         order.update()
         order.draw(screen)
 
+    for button in game.main_buttons:
+        button.check_hover(mouse_pos)  # Проверяем, наведен ли курсор на кнопку
+        button.update()
+        button.draw(screen)
+
+    if game.level_buy_storage_rect.collidepoint(mouse_pos):
+
+        if alfa_type < 255:
+            alfa_type += fade_speed
+            if alfa_type > 255:
+                alfa_type = 255
+    else:
+        if alfa_type > 0:
+            alfa_type -= fade_speed
+
+        if alfa_type < 0:
+            alfa_type = 0
     # Отрисовка остальных элементов игры
     game.draw()
+    game.description_level_storage_image.set_alpha(alfa_type)
 
     # Обновление экрана
     pg.display.flip()
