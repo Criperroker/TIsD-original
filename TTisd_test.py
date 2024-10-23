@@ -65,7 +65,7 @@ shop_items = {
                     "description": "Its carbon fiber cladding",
                     "quality": 50,
                     "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/Carbon fiber cladding.png",
                     "account": 0
                 },
             "Glass":
@@ -126,6 +126,15 @@ shop_items = {
                     "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
                     "account": 0
                 },
+            "Shock absorbers":
+                {
+                    "price": 100,
+                    "description": "Its shock absorbers",
+                    "quality": 50,
+                    "category": "management mechanisms",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/Shock absorbers.png",
+                    "account": 0
+                },
             "Engine":
                 {
                     "price": 100,
@@ -159,7 +168,7 @@ shop_items = {
                     "description": "Its wheels",
                     "quality": 50,
                     "category": "transmission",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/wheels.png",
                     "account": 0
                 },
         },
@@ -174,15 +183,7 @@ shop_items = {
                     "image": "Game_ind/Tehnick/Moduls_of_car/helm.png",
                     "account": 0
                 },
-            "Shock absorbers":
-                {
-                    "price": 100,
-                    "description": "Its shock absorbers",
-                    "quality": 50,
-                    "category": "management mechanisms",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
-                    "account": 0
-                },
+
             "Elastic spring":
                 {
                     "price": 100,
@@ -733,7 +734,7 @@ class Game:
         self.reject_button_rect = get_non_transparent_rect(reject_order_image)
 
         self.shop_mode = "appearance"
-        self.storage_filter_mode = "appearance"
+        self.storage_filter_mode = ""
         self.shop_rects = []
 
         self.reload_limits = 5
@@ -806,7 +807,6 @@ class Game:
         self.storage_icon_image = load_image("Game_ind/GUI/Storage_GUI/storage_icon.png", 310, 224)
         self.storage_icon_rect = get_non_transparent_rect(self.storage_icon_image)
 
-        # self.reload_order_rect = self.reload_order.get_rect()
         pg.time.set_timer(self.money + 1, 500)
 
         self.money_text = text_render(f"{self.money}")
@@ -1016,7 +1016,19 @@ class Game:
             screen.blit(self.windowGUIStorage, (500, 97))
             levelup = f"Level {self.storage.level}"
             not_item = "There is nothing"
-            item_in_storage = "Place is full"
+
+            self.appearance_button_rect = get_non_transparent_rect(self.appearance_button_image).move(814, 328)
+            self.salon_tab_rect = get_non_transparent_rect(self.salon_tab_image).move(894, 328)
+            self.transmission_tab_rect = get_non_transparent_rect(self.transmission_tab_image).move(894, 355)
+            self.management_mechanisms_tab_rect = get_non_transparent_rect(self.management_mechanisms_tab_image).move(
+                814,
+                355)
+
+            # Отрисовка вкладок
+            screen.blit(self.appearance_button_image, (814, 328))
+            screen.blit(self.salon_tab_image, (894, 322))
+            screen.blit(self.transmission_tab_image, (894, 355))
+            screen.blit(self.management_mechanisms_tab_image, (816, 355))
 
             self.button_next_rect = get_non_transparent_rect(self.button_next_image).move(880, 140)
 
@@ -1029,30 +1041,26 @@ class Game:
                 item_y_position = self.items_start_y + (shop_index * padding)
                 if item.account != 0:
                     if item.category == game.storage_filter_mode:
-
                         self.in_storage = True
-                        if shop_index == 4:
-
-                            print("full inventory")
-
-                        else:
+                        if shop_index < 4:
                             screen.blit(self.showcase_of_products, (x_position + 35, item_y_position + 50))
-
                             shop_index += 1
 
-                    if game.storage_filter_mode == "":
-
-                        if shop_index == 4:
-
+                        else:
                             print("full inventory")
 
-                        else:
+                    elif game.storage_filter_mode == "":
+                        self.in_storage = True
+                        if shop_index < 4:
                             screen.blit(self.showcase_of_products, (x_position + 35, item_y_position + 50))
-
                             shop_index += 1
 
-                    elif self.in_storage == False:
-                        screen.blit(font.render(not_item, True, WHITE), (640, 260))
+                        else:
+                            print("full inventory")
+
+
+                elif self.in_storage == False:
+                    screen.blit(font.render(not_item, True, WHITE), (640, 260))
 
                 if item in self.items_all:
                     storage_quality = f"{item.quality}"
@@ -1062,18 +1070,21 @@ class Game:
 
                     if item.account != 0:
                         if item.category == game.storage_filter_mode:
-                            self.in_storage = True
-                            screen.blit(font_description.render(storage_description, True, BLACK),
-                                        (x_position + 135, item_y_position + 175))
-                            screen.blit(font_mini.render(storage_name, True, BLACK),
-                                        (x_position + 131, item_y_position + 155))
+
+                            if shop_index <= 4:
+                                print(shop_index)
+                                screen.blit(font_description.render(storage_description, True, BLACK),
+                                            (x_position + 135, item_y_position + 175))
+                                screen.blit(font_mini.render(storage_name, True, BLACK),
+                                            (x_position + 131, item_y_position + 155))
 
                         elif game.storage_filter_mode == "":
-                            screen.blit(font_description.render(storage_description, True, BLACK),
-                                        (x_position + 135, item_y_position + 175))
-                            screen.blit(font_mini.render(storage_name, True, BLACK),
-                                        (x_position + 131, item_y_position + 155))
-
+                            if shop_index <= 4:
+                                print(shop_index)
+                                screen.blit(font_description.render(storage_description, True, BLACK),
+                                            (x_position + 135, item_y_position + 175))
+                                screen.blit(font_mini.render(storage_name, True, BLACK),
+                                            (x_position + 131, item_y_position + 155))
 
             screen.blit(game.description_level_storage_image, game.description_level_storage_rect)
 
@@ -1165,6 +1176,7 @@ game = Game()
 running = True
 while running:
     mouse_pos = pg.mouse.get_pos()  # Получаем текущую позицию курсора
+    # print(mouse_pos)
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
@@ -1209,24 +1221,41 @@ while running:
                                 print(item.name)
 
                 if game.show_storage_window:
-                    if game.appearance_button_rect.collidepoint(event.pos) and game.storage_filter_mode == "":
-                        game.storage_filter_mode = "appearance"
+                    if game.appearance_button_rect.collidepoint(event.pos):
+                        if game.storage_filter_mode == "":
+                            game.storage_filter_mode = "appearance"
 
-                    if game.management_mechanisms_tab_rect.collidepoint(event.pos) and game.storage_filter_mode == "":
-                        game.storage_filter_mode = "management mechanisms"
-
-                    if game.salon_tab_rect.collidepoint(event.pos) and game.storage_filter_mode == "":
-                        game.storage_filter_mode = "salon"
-
-                    if game.transmission_tab_rect.collidepoint(event.pos) and game.storage_filter_mode == "":
-                        game.storage_filter_mode = "transmission"
-
-                    if game.transmission_tab_rect.collidepoint(event.pos) or game.salon_tab_rect.collidepoint(
-                        event.pos) or game.management_mechanisms_tab_rect.collidepoint(
-                        event.pos) or game.appearance_button_rect.collidepoint(event.pos):
-
-                        if game.storage_filter_mode != "":
+                        else:
                             game.storage_filter_mode = ""
+                            print("1")
+
+                    elif game.management_mechanisms_tab_rect.collidepoint(event.pos):
+                        if game.storage_filter_mode == "":
+                            game.storage_filter_mode = "management mechanisms"
+
+                        else:
+                            game.storage_filter_mode = ""
+                            print("1")
+
+                    elif game.salon_tab_rect.collidepoint(event.pos):
+                        if game.storage_filter_mode == "":
+                            game.storage_filter_mode = "salon"
+
+                        else:
+
+                            game.storage_filter_mode = ""
+
+                            print("1")
+
+                    elif game.transmission_tab_rect.collidepoint(event.pos):
+                        if game.storage_filter_mode == "":
+                            game.storage_filter_mode = "transmission"
+
+                        else:
+
+                            game.storage_filter_mode = ""
+
+                            print("1")
 
                 if event.type == pg.MOUSEBUTTONDOWN and game.storage_button_rect.collidepoint(event.pos):
                     mouse_pressed = pg.mouse.get_pressed()
