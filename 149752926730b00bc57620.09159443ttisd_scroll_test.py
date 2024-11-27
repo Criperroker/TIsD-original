@@ -112,7 +112,9 @@ shop_items = {
                     "quality": 50,
                     "category": "appearance",
                     "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
-                    "account": 0
+                    "account": 0,
+                    "compatibility": {"Carbon fiber cladding": True}
+
                 },
         },
     "transmission":
@@ -969,26 +971,25 @@ class Game:
             self.show_storage_window = not self.show_storage_window
 
     def draw_storage_window(self):
-        padding = 80
-        x_position = 490
+        padding = 85
 
-        # Параметры окна склада
+        # Параметры окна склада (без изменений)
         storage_window_x = 500
         storage_window_y = 97
         storage_window_width = 520
         storage_window_height = 450
 
         # Параметры области отображения предметов
-        items_display_x = storage_window_x + 15  # Смещение вправо внутри окна склада
-        items_display_y = storage_window_y + 140  # Смещаем ниже верхних элементов
-        items_display_width = storage_window_width - 30  # Учитываем отступы с обеих сторон
-        items_display_height = 290  # Высота области отображения предметов
+        items_display_x = storage_window_x + 15
+        items_display_y = storage_window_y + 10
+        items_display_width = storage_window_width / 2 + 20
+        items_display_height = storage_window_height
 
+        # Загрузка и отрисовка окна склада
         self.windowGUIStorage = load_image("Game_ind/GUI/Storage_GUI/window_storage.png", storage_window_width,
-                                           storage_window_height)
+                                           storage_window_height + 120)
         screen.blit(self.windowGUIStorage, (storage_window_x, storage_window_y))
         levelup = f"Level {self.storage.level}"
-        not_item = "There is nothing"
 
         # Отрисовка вкладок
         self.appearance_button_rect = get_non_transparent_rect(self.appearance_button_image).move(814, 328)
@@ -1008,56 +1009,64 @@ class Game:
         screen.blit(font.render(levelup, True, BLACK), (707, 130))
         screen.blit(self.button_next_image, (880, 112))
 
-        # Создаем поверхность контента
-        content_items = [item for item in self.items_all if item.account > 0 and
-                         (item.category == self.storage_filter_mode or self.storage_filter_mode == "")]
-        content_height = len(content_items) * padding
+        # Создаем список предметов для отображения
+        content_items = [item for item in self.items_all if item.account > 0 and (
+                    item.category == self.storage_filter_mode or self.storage_filter_mode == "")]
 
-        # Вычисляем максимальное смещение прокрутки
-        self.storage_max_scroll = max(0, content_height - items_display_height)
+        if len(content_items) != 0:
+            # content_height = len(content_items) * padding + self.showcase_of_products.get_height() - 225 # Рабочая
+            content_height = len(content_items) * padding + self.showcase_of_products.get_height() - 145
+            print(content_height)
+        else:
+            content_height = 0
 
-        # Создаем поверхность для контента с нужной высотой
-        content_surface = pg.Surface((items_display_width, content_height), pg.SRCALPHA)
-        content_surface.fill((255, 255, 255, 255))  # Прозрачный фон
+        # Обновляем максимальное смещение прокрутки
+        # self.storage_max_scroll = max(0, content_height - self.showcase_of_products.get_height() - 200)  # Рабочая, но большая
+        self.storage_max_scroll = max(0, content_height - self.showcase_of_products.get_height() - 200)  # Рабочая, но не влезает
+
+        # Создаем поверхность для контента с обновленной высотой
+        # content_surface = pg.Surface((items_display_width, content_height), pg.SRCALPHA) # Рабочая, но большая
+        if content_height > 85:
+            content_surface = pg.Surface((items_display_width, content_height - 85), pg.SRCALPHA) # Рабочая, но не влезает
+            # print(content_height)
+            content_surface.fill((0, 0, 0, 0))  # Прозрачный фон
+        elif content_height <= 85:
+            content_surface = pg.Surface((0, 0),
+                                         pg.SRCALPHA)  # Рабочая, но не влезает
+            # print(content_height)
+            content_surface.fill((0, 0, 0, 0))  # Прозрачный фон
 
         y_start = 0
         for item in content_items:
             item_y_position = y_start
-            # Отрисовка витрины
-            content_surface.blit(self.showcase_of_products, (0, item_y_position))
-            # Отрисовка изображения
-            content_surface.blit(item.image, (15, item_y_position + 100))
 
-            # Отрисовка текста с корректировкой позиций
-            storage_name = f"{item.name}"
-            storage_description = f"{item.description}"
-            storage_account = f"Quantity: {item.account}"
+            # Отрисовка масштабированного изображения витрины
+            content_surface.blit(self.showcase_of_products, (0, item_y_position - 85))
+            # print(item_y_position)
 
-            text_x_offset = 100  # Смещение текста по X относительно начала витрины
-            text_name_y_offset = 110  # Смещение названия по Y относительно начала витрины
-            text_description_y_offset = 130  # Смещение описания по Y относительно начала витрины
-            text_account_y_offset = 150  # Смещение количества по Y относительно начала витрины
+            # Корректируем позиции для изображения товара и текста
+            image_x = 15
+            image_y = item_y_position + 15  # Размещаем изображение товара в верхней части витрины
+            scaled_item_image = pg.transform.scale(item.image, (64, 64))  # При необходимости изменяем размер
+            content_surface.blit(scaled_item_image, (image_x, image_y))
 
-            # Отрисовка названия предмета
-            content_surface.blit(font_mini.render(storage_name, True, BLACK),
-                                 (text_x_offset, item_y_position + text_name_y_offset))
-            # Отрисовка описания предмета
-            content_surface.blit(font_description.render(storage_description, True, BLACK),
-                                 (text_x_offset, item_y_position + text_description_y_offset))
-            # Отрисовка количества предмета
-            content_surface.blit(font_description.render(storage_account, True, BLACK),
-                                 (text_x_offset, item_y_position + text_account_y_offset))
+            # Позиции текста
+            text_x_offset = 100
+            text_start_y = image_y + 15
 
-            y_start += padding
+            # Отрисовка текста
+            content_surface.blit(font_mini.render(item.name, True, BLACK), (text_x_offset, text_start_y))
+            content_surface.blit(font_description.render(item.description, True, BLACK),
+                                 (text_x_offset, text_start_y + 15))
+            content_surface.blit(font_description.render(f"Количество: {item.account}", True, BLACK),
+                                 (text_x_offset, text_start_y + 30))
 
+            y_start += padding  # Переходим к позиции следующего элемента
 
-        # Определяем область контента, которую нужно отобразить
+        # Отображаем поверхность контента на экране с учетом прокрутки
         viewport_rect = pg.Rect(0, self.storage_scroll_offset, items_display_width, items_display_height)
-
-        # Отображаем часть контента на экране в заданной позиции
-        screen.blit(content_surface, (items_display_x, items_display_y), area=viewport_rect)
-
-        screen.blit(self.description_level_storage_image, self.description_level_storage_rect)
+        pg.draw.rect(screen, "Red", viewport_rect, 2)
+        screen.blit(content_surface, (items_display_x + 10, items_display_y + 75), area=viewport_rect)
 
     def process_orders(self):
         for order in self.orders:

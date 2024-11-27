@@ -8,7 +8,7 @@ import random
 pg.init()
 
 # Размеры экрана
-screen_width = 1200
+screen_width = 1400
 screen_height = 720
 
 # Создание экрана
@@ -38,6 +38,7 @@ pg.time.set_timer(PANKROT_EVENT, 5000)
 pg.time.set_timer(INCREASE_MONEY, 1000)
 
 font = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 20)
+font_medium = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 15)
 font_mini = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 10)
 font_description = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 8)
 
@@ -55,6 +56,48 @@ surnames = ["Barnett", "Hammond", "Tings", "Richards", "Malone", "Wheeler", "Hun
             "Bird", "Ruiz", "Brown", "Rice", "Munoz", "Ramos", "Mitchell", "Hundred", "Berry", "Wheeler", "George",
             "Bishop", "Stokes", "Burrows", "Hicks", "Rhodes", "Tate", "Hargraves", "Simmons", "Cantrell", "Eland",
             "Jensen", "Stevens", "Woolridge", "Garraway", "Cook", "Nicholas", "Smart", "Schmidt", "Anchondo", "Fabela"]
+
+empty_model = {
+    "name": "",
+    "appearance_items": [],
+    "salon_items": [],
+    "transmission": [],
+    "management mechanisms": []
+}
+
+model_machine = {
+    "Light model":
+        {
+            "category": "Light model",
+            "speed": 100,
+            "power": 130,
+            "quality": 10,
+            "production_cost": 5,
+            "image": "Game_ind/GUI/Storage_GUI/Light_model.png",
+            "base_price": 150
+        },
+    "Medium model":
+        {
+            "category": "Medium model",
+            "speed": 80,
+            "power": 180,
+            "quality": 10,
+            "production_cost": 15,
+            "image": "Game_ind/GUI/Storage_GUI/Light_model.png",
+            "base_price": 200
+
+        },
+    "Heavy model":
+        {
+            "category": "Heavy model",
+            "speed": 60,
+            "power": 200,
+            "quality": 10,
+            "production_cost": 25,
+            "image": "Game_ind/GUI/Storage_GUI/Light_model.png",
+            "base_price": 350
+        }
+}
 
 shop_items = {
     "appearance":
@@ -293,6 +336,36 @@ def wrap_text(text, font, max_width):
     return wrapped_lines
 
 
+# def get_non_transparent_rect(image):
+#     # Загружаем изображение с поддержкой альфа-канала
+#     image = image.convert_alpha()
+#
+#     # Получаем размеры изображения
+#     width, height = image.get_size()
+#
+#     # Инициализируем границы непрозрачных пикселей
+#     min_x, min_y = width, height
+#     max_x, max_y = 0, 0
+#
+#     # Перебираем все пиксели изображения
+#     for y in range(height):
+#         for x in range(width):
+#             # Получаем цвет пикселя (RGBA)
+#             r, g, b, a = image.get_at((x, y))
+#             if a != 0:  # Если пиксель непрозрачный
+#                 # Обновляем границы
+#                 min_x = min(min_x, x)
+#                 min_y = min(min_y, y)
+#                 max_x = max(max_x, x)
+#                 max_y = max(max_y, y)
+#
+#     # Создаем прямоугольник, охватывающий все непрозрачные пиксели
+#     if min_x <= max_x and min_y <= max_y:
+#         return pg.Rect(min_x, min_y, max_x - min_x + 1, max_y - min_y + 1)
+#     else:
+#         # Если все пиксели прозрачны, возвращаем пустой прямоугольник
+#         return pg.Rect(0, 0, 0, 0)
+
 def get_non_transparent_rect(image):
     mask = pg.mask.from_surface(image)
     rect = mask.get_bounding_rects()
@@ -300,11 +373,6 @@ def get_non_transparent_rect(image):
         return rect[0]
     else:
         return pg.Rect(0, 0, 0, 0)
-
-
-def handle_produce_button_click(game):
-    game.conveyor.produce_vehicle(LightVehicle())
-    print("Производство машины запущено")
 
 
 def load_image(file, width=None, height=None):
@@ -381,6 +449,22 @@ def generate_random_orders(n, orders, order_index=None):
             orders[order_index] = Order(vehicle_type, quality, price, deadline, name, surname, description, popularity)
 
     return orders, buttons, order_image
+
+
+def generate_create_window(Vichile_model):
+    models = []
+    for name, property in model_machine.items():
+        quality = property['quality']
+        speed = property['speed']
+        production_cost = property['production_cost']
+        power = property['power']
+        category = property['category']
+        image = property.get("image")
+        base_price = property['base_price']
+        models.append(
+            Vehicle(quality=quality, speed=speed, production_cost=production_cost, power=power, category=category,
+                    image=image, base_price=base_price))
+    return models
 
 
 def generate_shop_window(shop_items):
@@ -623,11 +707,11 @@ class Shop:
 
         if image:
             # Загрузка и масштабирование изображения только один раз
-            self.original_image = load_image(image, 278, 71)
-            self.image = pg.transform.scale(self.original_image, (64, 64))  # Масштабируем сразу
+            self.original_image = load_image(image, 128, 200)
+            self.image = pg.transform.scale(self.original_image, (70, 70))  # Масштабируем сразу
             self.rect = get_non_transparent_rect(self.image)
         else:
-            self.image = pg.Surface((96, 96), pg.SRCALPHA)
+            self.image = pg.Surface((200, 200), pg.SRCALPHA)
             self.rect = self.image.get_rect()
 
     def draw(self, screen, x, y):
@@ -644,36 +728,37 @@ class Storage:
 
 
 class Vehicle:
-    def __init__(self, speed, power, mass):
+    def __init__(self, quality, speed, power, production_cost, category, image=None, base_price=None):
         self.speed = speed
         self.power = power
-        self.mass = mass
-        self.quality = 20
+        self.quality = quality
+        self.production_cost = production_cost
+        self.category = category
+        self.base_price = base_price
 
+        if image:
+            # Загрузка и масштабирование изображения только один раз
+            self.original_image = load_image(image, 278, 71)
+            self.image = pg.transform.scale(self.original_image, (150, 200))  # Масштабируем сразу
+            self.rect = get_non_transparent_rect(self.image)
+        else:
+            self.image = pg.Surface((96, 96), pg.SRCALPHA)
+            self.rect = self.image.get_rect()
 
-class LightVehicle(Vehicle):
-    def __init__(self):
-        super().__init__(speed=60, power=50, mass=40)
-
-
-class MediumVehicle(Vehicle):
-    def __init__(self):
-        super().__init__(speed=60, power=200, mass=60)
-
-
-class HardVehicle(Vehicle):
-    def __init__(self):
-        super().__init__(speed=50, power=250, mass=70)
+    def draw(self, screen, x, y):
+        # Отрисовываем изображение без повторной трансформации
+        print()
+        screen.blit(self.image, (x, y))
 
 
 class Game:
     def __init__(self):
-        self.money = 10000
         self.popularity = 100
         self.money_sec = 1
         self.chance_of_orders = 10
         self.orders = []
         self.items_all = generate_shop_window(shop_items)
+        self.model = generate_create_window(model_machine)
         self.conveyor = Conveyor()
         self.day = 0
         self.selected_order = None
@@ -681,6 +766,7 @@ class Game:
         self.storage = Storage(1)
         self.pankrot_mode = True
         self.in_storage = False
+        self.flag_model_mode = 1
 
         self.accept_order = "Game_ind/GUI/Order_GUI/window_order_open/accept_order_button.png"
         self.reject_button_rect = None
@@ -697,15 +783,40 @@ class Game:
         self.description_level_storage_image = load_image(self.description_level_storage, 150, 150).convert_alpha()
         self.description_level_storage_rect = get_non_transparent_rect(self.description_level_storage_image).move(685,
                                                                                                                   73)
+        self.occupy_button = "Game_ind/GUI/Base_GUI/Button_GUI/Button.png"
+        self.occupy_button_text = "Occupy 1000$"
+        self.occupy_button_image = load_image(self.occupy_button, 200, 150)
+        self.occupy_button_rect = get_non_transparent_rect(self.occupy_button_image).move(470, 478)
+        self.credit_button_image = load_image(self.occupy_button, 125, 150)
 
-        self.only_storage = ""
+        self.give_button = "Game_ind/GUI/Base_GUI/Button_GUI/Button.png"
+        self.give_button_text = "Give 1000$"
+        self.give_button_image = load_image(self.give_button, 200, 150)
+        self.give_button_rect = get_non_transparent_rect(self.give_button_image).move(820, 478)
 
-        self.accept_button_rect = get_non_transparent_rect(accept_order_image)
-        self.reject_button_rect = get_non_transparent_rect(reject_order_image)
+        self.credit = 10000
+        self.credit_mode = True
+
+        self.expenses_full = 0
+
+        self.expenses_of_buy_item = 0
+
+        self.expenses_dont_orders = 0
+
+        self.payment_of_credit = 0
+
+        self.percent_for_credit = 100
+
+        self.money = 1000 + self.credit
 
         self.shop_mode = "appearance"
         self.storage_filter_mode = ""
+        self.model_mode = "Light model"
+        self.light_model_image = load_image("Game_ind/GUI/Storage_GUI/Light_model.png", 128, 200)
         self.shop_rects = []
+
+        self.storage_window_x = 500
+        self.storage_window_y = 97
 
         self.reload_limits = 5
         self.save_days = 0
@@ -729,30 +840,58 @@ class Game:
         self.info_window_x = 50  # Начальная X-координата для окна информации
         self.info_window_y = 0  # Начальная Y-координата для окна информации
 
+        self.accept_button_rect = get_non_transparent_rect(accept_order_image).move(self.info_window_x + 20,
+                                                                                    self.info_window_y + 328)
+        self.reject_button_rect = get_non_transparent_rect(reject_order_image)
+
         self.info_window_image = load_image("Game_ind/GUI/Order_GUI/window_order_open/window_order_open.png",
                                             self.info_window_width, self.info_window_height)
+
+        self.Button_closed_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button_closed.png", 40, 40)
+        self.Button_closed_rect = get_non_transparent_rect(self.Button_closed_image).move(self.storage_window_x + 690,
+                                                                                          self.storage_window_y + 35)
 
         self.conveyor_image = load_image(
             "Game_ind/Base/conveir_all/conveir_up/1c/conveir_up_64x64.png", 400, 700)
         self.money_image = load_image("Game_ind/GUI/Base_GUI/money/money_64x64.png", 64, 64)
-        self.money_image_rect = get_non_transparent_rect(self.money_image).move((screen_width / 15, 40))
+        self.money_image_rect = get_non_transparent_rect(self.money_image).move((screen_width / 30, 40))
         self.accept_order_image = load_image(self.accept_order, 100, 100)
         self.reject_order_image = load_image(self.reject_order, 100, 100)
 
         self.popularity_image = load_image("Game_ind/GUI/Base_GUI/Popularity/100%/popularity100_64x64.png", 64, 64)
-        self.popularity_image_rect = get_non_transparent_rect(self.popularity_image).move((screen_width / 15, 120))
+        self.popularity_image_rect = get_non_transparent_rect(self.popularity_image).move((screen_width / 30, 120))
 
         self.windowGUIorder = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 460, 440)
         self.windowGUIorder_image_rect = get_non_transparent_rect(self.popularity_image)
+        self.day_image = load_image("Game_ind/GUI/Base_GUI/Day/Day.png", 64, 64)
+        self.day_image_rect = get_non_transparent_rect(self.day_image).move((screen_width / 30, 190))
+
+        self.creater_button_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button.png", 120, 120)
+        self.creater_toggle = False
 
         self.appearance_button_image = load_image("Game_ind/GUI/Shop_GUI/appearance_tab.png", 90, 90)
         self.salon_tab_image = load_image("Game_ind/GUI/Shop_GUI/salon_tab.png", 89, 89)
         self.transmission_tab_image = load_image("Game_ind/GUI/Shop_GUI/transmission_tab.png", 88, 88)
         self.management_mechanisms_tab_image = load_image("Game_ind/GUI/Shop_GUI/management_mechanisms_tab.png", 88, 88)
 
-        self.button_next_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button_next.png", 64, 64)
+        self.button_next_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button_next.png", 40, 40)
+        self.button_after_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button_after.png", 40, 40)
+
+        self.button_model_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button.png", 120, 100)
+        self.button_accept_model_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button.png", 120, 100)
+
+        self.appearance_bar_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button.png", 150, 100)
+        self.management_mechanisms_bar_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button.png", 180, 100)
+        self.transmission_bar_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button.png", 150, 100)
+        self.salon_bar_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button.png", 150, 100)
+
+        self.button_next_rect = get_non_transparent_rect(self.button_next_image).move(self.storage_window_x + 475,
+                                                                                      self.storage_window_y + 245)
+        self.button_after_rect = get_non_transparent_rect(self.button_after_image).move(self.storage_window_x + 300,
+                                                                                        self.storage_window_y + 245)
 
         self.in_storage_image = load_image("Game_ind/GUI/Shop_GUI/in_storage.png", 32, 32)
+        self.in_storage_rect = get_non_transparent_rect(self.in_storage_image).move(765, 120)
 
         self.ButtonGuiOrder = Button("Orders", 650, 20, total_width=120, total_height=120,
                                      func=self.toggle_orders_window)
@@ -761,7 +900,11 @@ class Game:
 
         self.ButtonGuiWarehouse = Button("Storage", 930, 20, total_width=120, total_height=120,
                                          func=self.toggle_storage_window)
-        self.main_buttons = [self.ButtonGuiShop, self.ButtonGuiWarehouse, self.ButtonGuiOrder]
+
+        self.ButtonGuiFinance = Button("Finance", 1070, 20, total_width=120, total_height=120,
+                                       func=self.toggle_finance_window)
+
+        self.main_buttons = [self.ButtonGuiShop, self.ButtonGuiWarehouse, self.ButtonGuiOrder, self.ButtonGuiFinance]
 
         self.OrderGui = load_image("Game_ind/GUI/Order_GUI/order_mini/order_mini.png", 346, 256)
         self.OrderGui_image_rect = get_non_transparent_rect(self.OrderGui)
@@ -789,8 +932,11 @@ class Game:
         self.show_orders_window = False  # Флаг для отображения окна заказов
         self.show_shop_window = False
         self.show_storage_window = False
+        self.show_finance_window = False
+
         self.orders_button_rect = pg.Rect(self.ButtonGuiOrder.rect)  # Позиция и размеры кнопки "Заказы"
         self.storage_button_rect = pg.Rect(self.ButtonGuiWarehouse.rect)  # Позиция и размеры кнопки "Склад"
+        self.finance_button_rect = pg.Rect(self.ButtonGuiFinance.rect)  # Позиция и размеры кнопки "Финансы"
 
         self.orders, self.reload_buttons, self.orders_images = generate_random_orders(5, self.orders)
 
@@ -810,7 +956,6 @@ class Game:
         self.item_height = 96  # Высота
         self.item_size = (self.item_width, self.item_height)
 
-        # Переменные для прокрутки склада
         self.storage_scroll_offset = 0
         self.storage_scroll_speed = 20
         self.storage_max_scroll = 0
@@ -820,6 +965,7 @@ class Game:
             self.show_orders_window = True
             self.show_shop_window = False
             self.show_storage_window = False
+            self.show_finance_window = False
             if not self.show_orders_window:
                 # Прячем кнопки, не очищая список
                 for button in self.reload_buttons:
@@ -882,6 +1028,7 @@ class Game:
             self.show_shop_window = True
             self.show_orders_window = False
             self.show_storage_window = False
+            self.show_finance_window = False
             for button in self.reload_buttons:
                 button.rect.topleft = (-100, -100)
         elif self.show_shop_window:
@@ -893,7 +1040,8 @@ class Game:
                     button.rect.topleft = (-100, -100)
 
     def draw_shop_window(self, mode):
-        shop_index = 0
+        shop_index_item = 0
+        shop_index_text = 0
         padding = 87
         self.windowGUIshop = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 390, 570)
         screen.blit(self.windowGUIshop, (450, 97))
@@ -916,11 +1064,13 @@ class Game:
         for item in self.items_all:
             if item.category == mode:
                 # Если товар находится в текущей вкладке
-                item_y_position = self.items_start_y + (shop_index * padding)
+                item_y_position = self.items_start_y + (shop_index_item * padding)
 
                 # Отрисовка фона витрины
                 screen.blit(self.showcase_of_products, (self.items_start_x, item_y_position))
                 screen.blit(self.in_storage_image, (765, 120 + item_y_position))
+                self.in_storage_rect = get_non_transparent_rect(self.in_storage_image).move(765, 120 + item_y_position)
+                pg.draw.rect(screen, "Red", self.in_storage_rect, 2)
 
                 # Обновляем Rect витрины только для текущего элемента
                 showcase_rect = self.showcase_of_products_image_rect.move(self.items_start_x, item_y_position)
@@ -934,15 +1084,15 @@ class Game:
 
                 # Отрисовка изображения товара
                 screen.blit(item.image, (image_x, image_y))
-                shop_index += 1
+                shop_index_item += 1
             else:
                 # Перемещаем элементы, которые не принадлежат текущей вкладке, за пределы экрана
                 item.rect.topleft = (-100, -100)
 
         # Отрисовка текста для каждого товара в текущей вкладке
-        y_start = 140
-        for item in self.items_all:
+        for index, item in enumerate(self.items_all):
             if item.category == mode:
+                text_y_position = 128 + (shop_index_text * padding)
                 shop_name = f"{item.name}"
                 shop_price = f"{item.price}$"
                 shop_quality = f"Quality: {item.quality}%"
@@ -950,30 +1100,28 @@ class Game:
                 shop_account = f"{item.account}"
 
                 # Отрисовка текста рядом с товарами
-                screen.blit(font_mini.render(shop_name, True, BLACK), (575, y_start + 11))
-                screen.blit(font_mini.render(shop_price, True, BLACK), (720, y_start + 52))
-                screen.blit(font_mini.render(shop_quality, True, BLACK), (576, y_start + 52))
-                screen.blit(font_description.render(shop_description, True, BLACK), (580, y_start + 30))
-                screen.blit(font.render(shop_account, True, WHITE), (800, y_start + 29))
+                screen.blit(font_mini.render(shop_name, True, BLACK), (575, text_y_position + 17))
+                screen.blit(font_mini.render(shop_price, True, BLACK), (720, text_y_position + 52))
+                screen.blit(font_mini.render(shop_quality, True, BLACK), (576, text_y_position + 52))
+                screen.blit(font_description.render(shop_description, True, BLACK), (580, text_y_position + 33))
+                screen.blit(font.render(shop_account, True, WHITE), (800, text_y_position + 29))
 
-                y_start += 85
+                shop_index_text += 1
 
     def toggle_storage_window(self):
         if not self.show_storage_window:
             self.show_storage_window = True
             self.show_orders_window = False
             self.show_shop_window = False
+            self.show_finance_window = False
             for button in self.reload_buttons:
                 button.rect.topleft = (-100, -100)
         elif self.show_storage_window:
             self.show_storage_window = not self.show_storage_window
 
     def draw_storage_window(self):
-        # Устанавливаем padding в соответствии с высотой витрины
-        padding = self.showcase_of_products.get_height()  # Высота витрины + отступы
-        x_position = 490
-
-        # Параметры окна склада
+        padding = 85
+        # Параметры окна склада (без изменений)
         storage_window_x = 500
         storage_window_y = 97
         storage_window_width = 520
@@ -981,12 +1129,13 @@ class Game:
 
         # Параметры области отображения предметов
         items_display_x = storage_window_x + 15
-        items_display_y = storage_window_y + 10  # Добавляем небольшой отступ сверху
-        items_display_width = storage_window_width - 30
-        items_display_height = storage_window_height  # Регулируем высоту области отображения
+        items_display_y = storage_window_y + 10
+        items_display_width = storage_window_width / 2 + 20
+        items_display_height = storage_window_height
 
+        # Загрузка и отрисовка окна склада
         self.windowGUIStorage = load_image("Game_ind/GUI/Storage_GUI/window_storage.png", storage_window_width,
-                                           storage_window_height)
+                                           storage_window_height + 120)
         screen.blit(self.windowGUIStorage, (storage_window_x, storage_window_y))
         levelup = f"Level {self.storage.level}"
 
@@ -997,77 +1146,165 @@ class Game:
         self.management_mechanisms_tab_rect = get_non_transparent_rect(self.management_mechanisms_tab_image).move(814,
                                                                                                                   355)
 
+        self.creater_button_rect = get_non_transparent_rect(self.creater_button_image).move(839, 270)
+        pg.draw.rect(screen, "RED", self.creater_button_rect)
+
         screen.blit(self.appearance_button_image, (814, 328))
         screen.blit(self.salon_tab_image, (894, 322))
         screen.blit(self.transmission_tab_image, (894, 355))
         screen.blit(self.management_mechanisms_tab_image, (816, 355))
 
-        self.button_next_rect = get_non_transparent_rect(self.button_next_image).move(880, 140)
+        screen.blit(self.creater_button_image, (839, 270))
+        screen.blit(font_mini.render("Creater", True, BLACK), (870, 318))
 
         screen.blit(self.level_buy_storage_image, (685, 73))
         screen.blit(font.render(levelup, True, BLACK), (707, 130))
-        screen.blit(self.button_next_image, (880, 112))
 
         # Создаем список предметов для отображения
-        content_items = [item for item in self.items_all if item.account > 0 and
-                         (item.category == self.storage_filter_mode or self.storage_filter_mode == "")]
-        content_height = len(content_items) * padding
+        content_items = [item for item in self.items_all if item.account > 0 and (
+                item.category == self.storage_filter_mode or self.storage_filter_mode == "")]
 
-        # Вычисляем максимальное смещение прокрутки
-        self.storage_max_scroll = max(0, content_height - items_display_height)
+        if len(content_items) != 0:
+            # content_height = len(content_items) * padding + self.showcase_of_products.get_height() - 225 # Рабочая
+            content_height = len(content_items) * padding + self.showcase_of_products.get_height() - 145
+            print(content_height)
+        else:
+            content_height = 0
 
-        # Создаем поверхность для контента
-        content_surface = pg.Surface((items_display_width, content_height), pg.SRCALPHA)
-        content_surface.fill((0, 0, 0, 0))  # Прозрачный фон
+        # Обновляем максимальное смещение прокрутки
+        self.storage_max_scroll = max(0,
+                                      content_height - self.showcase_of_products.get_height() - 200)  # Рабочая, но не влезает
+
+        # Создаем поверхность для контента с обновленной высотой
+        # content_surface = pg.Surface((items_display_width, content_height), pg.SRCALPHA) # Рабочая, но большая
+        if content_height > 85:
+            content_surface = pg.Surface((items_display_width, content_height - 85),
+                                         pg.SRCALPHA)  # Рабочая, но не влезает
+            # print(content_height)
+            content_surface.fill((0, 0, 0, 0))  # Прозрачный фон
+        elif content_height <= 85:
+            content_surface = pg.Surface((0, 0),
+                                         pg.SRCALPHA)  # Рабочая, но не влезает
+            # print(content_height)
+            content_surface.fill((0, 0, 0, 0))  # Прозрачный фон
 
         y_start = 0
         for item in content_items:
             item_y_position = y_start
-            # Отрисовка витрины
-            content_surface.blit(self.showcase_of_products, (0, item_y_position))
 
-            # Отрисовка изображения предмета
+            # Отрисовка масштабированного изображения витрины
+            content_surface.blit(self.showcase_of_products, (0, item_y_position - 85))
+            # print(item_y_position)
+
+            # Корректируем позиции для изображения товара и текста
             image_x = 15
-            image_y = item_y_position + 100  # Смещение изображения внутри витрины
-            content_surface.blit(item.image, (image_x, image_y))
+            image_y = item_y_position + 15  # Размещаем изображение товара в верхней части витрины
+            scaled_item_image = pg.transform.scale(item.image, (64, 64))  # При необходимости изменяем размер
+            content_surface.blit(scaled_item_image, (image_x, image_y))
 
-            # Отрисовка текста с корректировкой позиций
-            storage_name = f"{item.name}"
-            storage_description = f"{item.description}"
-            storage_account = f"Quantity: {item.account}"
+            # Позиции текста
+            text_x_offset = 100
+            text_start_y = image_y + 15
 
-            text_x_offset = 100  # Смещение текста по X
-            text_start_y = image_y + 10  # Начинаем текст сразу после изображения
+            # Отрисовка текста
+            content_surface.blit(font_mini.render(item.name, True, BLACK), (text_x_offset, text_start_y))
+            content_surface.blit(font_description.render(item.description, True, BLACK),
+                                 (text_x_offset, text_start_y + 15))
+            content_surface.blit(font_description.render(f"Количество: {item.account}", True, BLACK),
+                                 (text_x_offset, text_start_y + 30))
 
-            # Получаем высоту шрифтов для корректного позиционирования
-            name_text_height = font_mini.size(storage_name)[1]
-            description_text_height = font_description.size(storage_description)[1]
-            account_text_height = font_description.size(storage_account)[1]
+            y_start += padding  # Переходим к позиции следующего элемента
 
-            # Отрисовка названия предмета
-            text_name_y = text_start_y
-            content_surface.blit(font_mini.render(storage_name, True, BLACK),
-                                 (text_x_offset, text_name_y))
-
-            # Отрисовка описания предмета
-            text_description_y = text_name_y + name_text_height + 5  # 5 пикселей между строками
-            content_surface.blit(font_description.render(storage_description, True, BLACK),
-                                 (text_x_offset, text_description_y))
-
-            # Отрисовка количества предмета
-            text_account_y = text_description_y + description_text_height + 5
-            content_surface.blit(font_description.render(storage_account, True, BLACK),
-                                 (text_x_offset, text_account_y))
-
-            y_start += padding  # Переходим к следующему элементу
-
-        # Определяем область контента для отображения
+        # Отображаем поверхность контента на экране с учетом прокрутки
         viewport_rect = pg.Rect(0, self.storage_scroll_offset, items_display_width, items_display_height)
+        pg.draw.rect(screen, "Red", viewport_rect, 2)
+        screen.blit(content_surface, (items_display_x + 10, items_display_y + 75), area=viewport_rect)
 
-        # Отображаем часть контента на экране
-        screen.blit(content_surface, (items_display_x, items_display_y), area=viewport_rect)
+        if self.creater_toggle:
+            self.windowGUIcreater = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 500, 570)
+            screen.blit(self.windowGUIcreater, (storage_window_x + 250, storage_window_y + 20))
 
-        screen.blit(self.description_level_storage_image, self.description_level_storage_rect)
+            self.windowGUIcreaterin = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64_white.png", 250,
+                                                 250)
+            self.windowmodel = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64_blue_whitegrid.png", 250,
+                                          250)
+            windowGUIcreaterin_x = 780
+            windowGUIcreaterin_y = 407
+            screen.blit(self.windowmodel, (storage_window_x + 280, storage_window_y + 50))
+            screen.blit(self.windowGUIcreaterin, (windowGUIcreaterin_x, windowGUIcreaterin_y))
+
+            screen.blit(self.Button_closed_image, (storage_window_x + 690, storage_window_y + 35))
+            screen.blit(self.button_next_image, (storage_window_x + 475, storage_window_y + 245))
+            screen.blit(self.button_after_image, (storage_window_x + 300, storage_window_y + 245))
+
+            screen.blit(self.button_model_image, (storage_window_x + 345, storage_window_y + 13))
+            screen.blit(font_mini.render(self.model_mode, True, BLACK), (storage_window_x + 360, storage_window_y + 53))
+
+            screen.blit(self.button_accept_model_image, (storage_window_x + 570, storage_window_y + 500))
+            screen.blit(font_mini.render("Finished", True, BLACK), (storage_window_x + 600, storage_window_y + 540))
+
+            screen.blit(self.appearance_bar_image, (storage_window_x + 560, storage_window_y + 63))
+            screen.blit(font_mini.render("Appearance", True, BLACK), (storage_window_x + 590, storage_window_y + 103))
+            screen.blit(self.management_mechanisms_bar_image, (storage_window_x + 550, storage_window_y + 163))
+            screen.blit(font_mini.render("Management mechanisms", True, BLACK), (storage_window_x + 555, storage_window_y + 203))
+            screen.blit(self.transmission_bar_image, (storage_window_x + 560, storage_window_y + 263))
+            screen.blit(font_mini.render("Transmission", True, BLACK), (storage_window_x + 590, storage_window_y + 303))
+            screen.blit(self.salon_bar_image, (storage_window_x + 560, storage_window_y + 363))
+            screen.blit(font_mini.render("Salon", True, BLACK), (storage_window_x + 610, storage_window_y + 403))
+
+            for model in self.model:
+                if model.category == self.model_mode:
+                    screen.blit(model.image, (storage_window_x + 330, storage_window_y + 82))
+                    screen.blit(font.render("Specifications", True, BLACK),
+                                (windowGUIcreaterin_x + 20, windowGUIcreaterin_y + 20))
+                    screen.blit(font_mini.render(f'Speed: {model.speed}km/h', True, BLACK),
+                                (windowGUIcreaterin_x + 25, windowGUIcreaterin_y + 60))
+                    screen.blit(font_mini.render(f'Quality: {model.quality}%', True, BLACK),
+                                (windowGUIcreaterin_x + 25, windowGUIcreaterin_y + 75))
+                    screen.blit(font_mini.render(f'Power: {model.power} horse/power', True, BLACK),
+                                (windowGUIcreaterin_x + 25, windowGUIcreaterin_y + 90))
+                    screen.blit(font_mini.render(f'Production cost: {model.production_cost} units', True, BLACK),
+                                (windowGUIcreaterin_x + 25, windowGUIcreaterin_y + 105))
+                    screen.blit(font_mini.render(f'Base price: {model.base_price}$', True, BLACK),
+                                (windowGUIcreaterin_x + 25, windowGUIcreaterin_y + 120))
+
+    def toggle_finance_window(self):
+        if not self.show_finance_window:
+            self.show_finance_window = True
+            self.show_storage_window = False
+            self.show_orders_window = False
+            self.show_shop_window = False
+            for button in self.reload_buttons:
+                button.rect.topleft = (-100, -100)
+        elif self.show_finance_window:
+            self.show_finance_window = not self.show_finance_window
+
+    def draw_finance_window(self):
+        self.windowGUIFinace = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64.png", 650, 500)
+        self.windowGUIFinacein = load_image("Game_ind/GUI/Base_GUI/window_GUI/window_gui_64x64_white.png", 550, 350)
+        screen.blit(self.windowGUIFinace, (420, 97))
+
+        screen.blit(self.windowGUIFinacein, (470, 130))
+
+        screen.blit(self.occupy_button_image, (470, 478))
+        screen.blit(font_medium.render(self.occupy_button_text, True, BLACK), (500, 538))
+
+        screen.blit(self.give_button_image, (820, 478))
+        screen.blit(font_medium.render(self.give_button_text, True, BLACK), (860, 538))
+
+        screen.blit(self.credit_button_image, (683, 478))
+        screen.blit(font_medium.render(str(self.credit) + "$", True, BLACK), (710, 538))
+
+        self.expenses_full_text = f"All expenses: {self.expenses_full}"
+        self.expenses_of_buy_item_text = f"Purchase of items: {self.expenses_of_buy_item}"
+        self.expenses_dont_orders_text = f"Unfulfilled orders: {self.expenses_dont_orders}"
+        self.payment_of_credit_text = f"Payment of credit: {self.payment_of_credit}"
+
+        screen.blit(font_medium.render(self.expenses_full_text, True, BLACK), (530, 160))
+        screen.blit(font_medium.render(self.expenses_of_buy_item_text, True, BLACK), (535, 185))
+        screen.blit(font_medium.render(self.expenses_dont_orders_text, True, BLACK), (535, 210))
+        screen.blit(font_medium.render(self.payment_of_credit_text, True, BLACK), (535, 235))
+        print(self.payment_of_credit)
 
     def process_orders(self):
         for order in self.orders:
@@ -1107,9 +1344,11 @@ class Game:
 
     def draw(self):
         screen.blit(self.money_image, self.money_image_rect)
-        screen.blit(text_render(self.money), (screen_width / 15 + 60, 65))
+        screen.blit(text_render(self.money), (screen_width / 15 + 30, 75))
         screen.blit(self.popularity_image, self.popularity_image_rect)
-        screen.blit(text_render(str(self.popularity) + "%"), (screen_width / 15 + 60, 145))
+        screen.blit(text_render(str(self.popularity) + "%"), (screen_width / 15 + 30, 155))
+        screen.blit(self.day_image, self.day_image_rect)
+        screen.blit(text_render(str(self.day) + " " + "Days"), (screen_width / 15 + 30, 240))
 
         self.ButtonGuiOrder.draw(screen)
         self.ButtonGuiShop.draw(screen)
@@ -1123,6 +1362,9 @@ class Game:
 
         if self.show_storage_window:
             self.draw_storage_window()
+
+        if self.show_finance_window:
+            self.draw_finance_window()
 
         if self.selected_order:
             # Загрузка и отрисовка окна информации о заказе
@@ -1169,7 +1411,7 @@ while running:
             if mouse_pressed[0] or mouse_pressed[2]:
                 if game.selected_order and not game.selected_order.rect.collidepoint(
                         event.pos) and not game.accept_button_rect.collidepoint(
-                    event.pos) and not game.reject_button_rect.collidepoint(event.pos):
+                        event.pos) and not game.reject_button_rect.collidepoint(event.pos):
                     game.selected_order = None
 
                 if game.show_orders_window:
@@ -1195,11 +1437,36 @@ while running:
                         game.shop_mode = "transmission"
 
                     for item in game.items_all:
+                        pg.draw.rect(screen, "Red", item.rect, 2)
                         if item.rect.collidepoint(event.pos):
                             if game.money >= item.price:
                                 game.money -= item.price
+                                game.expenses_of_buy_item += item.price
+                                game.expenses_full += item.price
                                 item.account += 1
                                 print(item.name)
+                                break
+                        elif game.in_storage_rect.collidepoint(event.pos) and mouse_pressed[1]:
+                            if game.money >= item.price * 5:
+                                game.money -= item.price * 5
+                                game.expenses_of_buy_item += item.price * 5
+                                game.expenses_full += item.price * 5
+                                item.account += 5
+                                print(item.name)
+                                break
+
+                if game.show_shop_window:
+                    if game.appearance_button_rect.collidepoint(event.pos):
+                        game.shop_mode = "appearance"
+
+                    if game.management_mechanisms_tab_rect.collidepoint(event.pos):
+                        game.shop_mode = "management mechanisms"
+
+                    if game.salon_tab_rect.collidepoint(event.pos):
+                        game.shop_mode = "salon"
+
+                    if game.transmission_tab_rect.collidepoint(event.pos):
+                        game.shop_mode = "transmission"
 
                 if game.show_storage_window:
                     if game.appearance_button_rect.collidepoint(event.pos):
@@ -1234,17 +1501,69 @@ while running:
                             game.storage_filter_mode = ""
                             game.storage_scroll_offset = 0
 
-            if event.type == pg.MOUSEBUTTONDOWN and game.storage_button_rect.collidepoint(event.pos):
-                mouse_pressed = pg.mouse.get_pressed()
-                if mouse_pressed[0]:
-                    game.ButtonGuiWarehouse.is_clicked(event)
+                if game.show_storage_window:
+                    if game.Button_closed_rect.collidepoint(event.pos):
+                        game.creater_toggle = not game.creater_toggle
 
-            if game.accept_button_rect.collidepoint(event.pos):
-                if game.money >= 500:
-                    game.money -= 500
+                    elif game.creater_button_rect.collidepoint(event.pos):
+                        game.creater_toggle = not game.creater_toggle
+
+                    elif game.button_next_rect.collidepoint(event.pos):
+                        if game.model_mode == "Light model":
+                            game.model_mode = "Medium model"
+                            break
+                        elif game.model_mode == "Medium model":
+                            game.model_mode = "Heavy model"
+                            break
+
+                    elif game.button_after_rect.collidepoint(event.pos):
+                        if game.model_mode == "Medium model":
+                            game.model_mode = "Light model"
+                            break
+                        elif game.model_mode == "Heavy model":
+                            game.model_mode = "Medium model"
+                            break
+
+                if event.type == pg.MOUSEBUTTONDOWN and game.storage_button_rect.collidepoint(event.pos):
+                    mouse_pressed = pg.mouse.get_pressed()
+                    if mouse_pressed[0]:
+                        game.ButtonGuiWarehouse.is_clicked(event)
+                        if game.creater_toggle:
+                            game.creater_toggle = False
+
+                if event.type == pg.MOUSEBUTTONDOWN and game.finance_button_rect.collidepoint(event.pos):
+                    mouse_pressed = pg.mouse.get_pressed()
+                    if mouse_pressed[0]:
+                        game.ButtonGuiFinance.is_clicked(event)
+
+                if game.show_finance_window:
+                    if game.occupy_button_rect.collidepoint(event.pos):
+                        if game.credit >= 1000 and game.credit_mode and game.money >= 1000:
+                            game.money -= 1000
+                            game.credit -= 1000
+                            print(game.credit)
+                            if game.credit == 0:
+                                game.credit_mode = False
+
+                    elif game.give_button_rect.collidepoint(event.pos):
+                        if game.credit < 15000:
+                            game.credit_mode = True
+                            game.credit += 1000
+                            game.money += 1000
+                            print(game.credit)
+
+                if game.accept_button_rect.collidepoint(event.pos):
+                    if game.money >= 500:
+                        game.money -= 500
 
         if event.type == DAY_EVENT:
             game.day += 1
+            if game.credit_mode and int(game.day / 2) == float(game.day / 2):
+                game.money -= int(game.credit // game.percent_for_credit * 3)
+                game.expenses_full += int(game.credit // game.percent_for_credit * 3)
+                game.payment_of_credit += int(game.credit // game.percent_for_credit * 3)
+                print(game.payment_of_credit)
+                print(game.credit // game.percent_for_credit * 3)
 
             if game.reload_limits == 0 and game.is_saved_day == False:
                 game.save_days = game.day
@@ -1280,7 +1599,6 @@ while running:
                         print(game.reload_buttons[game.reload_buttons.index(button)])
                         break  # Выходим из цикла, так как заказ найден
 
-        # Обработка прокрутки для склада
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 4:  # Прокрутка вверх
                 if game.show_storage_window:
@@ -1341,3 +1659,5 @@ while running:
 # Завершение PyGame
 pg.quit()
 sys.exit()
+
+# сделать вкладки магазина - доделать полностью функционал магазина. Начать делать концепт склада
