@@ -1073,7 +1073,8 @@ class Game:
                 pg.draw.rect(screen, "Red", self.in_storage_rect, 2)
 
                 # Обновляем Rect витрины только для текущего элемента
-                showcase_rect = self.showcase_of_products_image_rect.move(self.items_start_x, item_y_position)
+                showcase_rect = self.showcase_of_products_image_rect.move(self.items_start_x, item_y_posit
+                ion)
                 item.rect = showcase_rect
                 if item.rect not in self.shop_rects:
                     self.shop_rects.append(item.rect)
