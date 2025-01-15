@@ -64,13 +64,14 @@ empty_model = {
                          "Doors": 0,
                          "Headlights": 0,
                          "Rear view mirrors": 0,
-
+                         "All_items": False
                          },
     "salon_items": {"Radio": 0,
                     "Seat": 0,
                     "Oven": 0,
                     "Conditioner": 0,
-                    "Ventilation": 0
+                    "Ventilation": 0,
+                    "All_items": False
 
                     },
     "transmission_items": {"Gearbox": 0,
@@ -79,11 +80,14 @@ empty_model = {
                            "Main transfer": 0,
                            "Shock absorbers": 0,
                            "Wheels": 0,
+                           "All_items": False
                            },
 
     "management_mechanisms_items": {"Elastic spring": 0,
-                                    "Helm": 0
+                                    "Helm": 0,
+                                    "All_items": False
                                     },
+
 }
 
 models_created = {
@@ -334,7 +338,13 @@ model_machine = {
                                  "Rear view mirrors": 2,
 
                                  },
-            "salon_items": {"Seat": 4},
+            "salon_items": {"Seat": 4,
+                            "Radio": 0,
+                            "Oven": 0,
+                            "Conditioner": 0,
+                            "Carbon fiber cladding": 0,
+                            "Ventilation": 0
+                            },
             "transmission_items": {"Gearbox": 1,
                                    "Engine": 1,
                                    "Clutch": 4,
@@ -343,15 +353,16 @@ model_machine = {
                                    "Wheels": 4,
                                    },
 
-            "management_mechanisms_items": {"Elastic spring": 4,
-                                            "Helm": 1
-                                            },
-            "additional_items": {"Radio": 1,
-                                 "Oven": 1,
-                                 "Conditioner": 1,
-                                 "Ventilation": 1
-                                 }
+            "management_mechanisms_items": {"Helm": 1,
+                                            "Elastic spring": 4,
 
+                                            },
+            "additional_items": {
+                "Radio": 1,
+                "Oven": 1,
+                "Conditioner": 1,
+                "Carbon fiber cladding": 1
+            }
         },
     "Medium model":
         {
@@ -381,12 +392,12 @@ model_machine = {
             "management_mechanisms_items": {"Elastic spring": 4,
                                             "Helm": 1
                                             },
-
-            "additional_items": {"Radio": 1,
-                                 "Oven": 1,
-                                 "Conditioner": 1,
-                                 "Ventilation": 1
-                                 }
+            "additional_items": {
+                "Radio": 1,
+                "Oven": 1,
+                "Conditioner": 1,
+                "Carbon fiber cladding": 1
+            }
 
         },
     "Heavy model":
@@ -417,11 +428,12 @@ model_machine = {
             "management_mechanisms_items": {"Elastic spring": 4,
                                             "Helm": 1
                                             },
-            "additional_items": {"Radio": 1,
-                                 "Oven": 1,
-                                 "Conditioner": 1,
-                                 "Ventilation": 1
-                                 }
+            "additional_items": {
+                "Radio": 1,
+                "Oven": 1,
+                "Conditioner": 1,
+                "Carbon fiber cladding": 1
+            }
         }
 }
 
@@ -438,7 +450,7 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 1
+                    "max_chosen_items_for_model": 2
                 },
             "Glass":
                 {
@@ -521,7 +533,7 @@ shop_items = {
                     "price": 100,
                     "description": "Its shock absorbers",
                     "quality": 50,
-                    "category": "transmission",
+                    "category": "management mechanisms",
                     "image": "Game_ind/Tehnick/Moduls_of_car/Shock absorbers.png",
                     "account": 0,
                     "necessarily": True,
@@ -838,10 +850,12 @@ def generate_create_window(Vichile_model):
         salon_items = property['salon_items']
         transmission_items = property['transmission_items']
         management_mechanisms_items = property['management_mechanisms_items']
+        additional_items = property['additional_items']
         models_property.append(
             Vehicle(quality=quality, speed=speed, production_cost=production_cost, power=power, category=category,
                     image=image, base_price=base_price, appearance_items=appearance_items, salon_items=salon_items,
-                    transmission_items=transmission_items, management_mechanisms_items=management_mechanisms_items))
+                    transmission_items=transmission_items, management_mechanisms_items=management_mechanisms_items,
+                    additional_items=additional_items))
     return models_property
 
 
@@ -1121,7 +1135,8 @@ class Storage:
 
 class Vehicle:
     def __init__(self, quality, speed, power, production_cost, category, image=None, base_price=None,
-                 appearance_items=None, salon_items=None, transmission_items=None, management_mechanisms_items=None):
+                 appearance_items=None, salon_items=None, transmission_items=None, management_mechanisms_items=None,
+                 additional_items=None):
         self.speed = speed
         self.power = power
         self.quality = quality
@@ -1132,6 +1147,7 @@ class Vehicle:
         self.salon_items = salon_items
         self.transmission_items = transmission_items
         self.management_mechanisms_items = management_mechanisms_items
+        self.additional_items = additional_items
 
         if image:
             # Загрузка и масштабирование изображения только один раз
@@ -1205,13 +1221,15 @@ class Game:
 
         self.percent_for_credit = 100
 
-        self.money = 1000 + self.credit
+        self.money = 20000 + self.credit
 
         self.shop_mode = ""
         self.storage_filter_mode = ""
         self.model_mode = "Light model"
         self.light_model_image = load_image("Game_ind/GUI/Storage_GUI/Light_model.png", 128, 200)
         self.shop_rects = []
+
+        self.finished_button = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button.png", 150, 120)
 
         self.storage_window_x = 500
         self.storage_window_y = 97
@@ -1249,12 +1267,16 @@ class Game:
         self.Button_closed_rect = get_non_transparent_rect(self.Button_closed_image).move(self.storage_window_x + 690,
                                                                                           self.storage_window_y + 35)
 
+        self.finished_button_rect = get_non_transparent_rect(self.finished_button).move(780 + 55, 107 + 170)
+
         self.conveyor_image = load_image(
             "Game_ind/Base/conveir_all/conveir_up/1c/conveir_up_64x64.png", 400, 700)
         self.money_image = load_image("Game_ind/GUI/Base_GUI/money/money_64x64.png", 64, 64)
         self.money_image_rect = get_non_transparent_rect(self.money_image).move((screen_width / 30, 40))
         self.accept_order_image = load_image(self.accept_order, 100, 100)
         self.reject_order_image = load_image(self.reject_order, 100, 100)
+
+        self.created_over = False
 
         self.popularity_image = load_image("Game_ind/GUI/Base_GUI/Popularity/100%/popularity100_64x64.png", 64, 64)
         self.popularity_image_rect = get_non_transparent_rect(self.popularity_image).move((screen_width / 30, 120))
@@ -1530,6 +1552,8 @@ class Game:
                                  (text_x_offset, text_start_y + 30))
             content_surface.blit(font_description.render(f"{item.price}$", True, BLACK),
                                  (text_x_offset + 130, text_start_y + 30))
+            content_surface.blit(font_description.render(f"{item.account}", True, BLACK),
+                                 (text_x_offset + 155, text_start_y + 20))
             # pg.draw.rect(screen, "Red", self.showcase_rect, 2)
 
             y_start += padding  # Переходим к позиции следующего элемента
@@ -1692,43 +1716,125 @@ class Game:
 
         for parts_models in self.model:
             for item in self.items_all:
-                if parts_models.category == self.model_mode and item.category == "appearance" and item.chosen_items_for_model > 0:
-                    for item_appear in parts_models.appearance_items.items():
-                        if item_appear[0] == item.name:
-                            if item_appear[1] == item.chosen_items_for_model:
-                                print(item.chosen_items_for_model)
-                                empty_model["appearance_items"][item_appear[0]] = item.chosen_items_for_model
-                                print(empty_model["appearance_items"])
-                            else:
-                                empty_model["appearance_items"][item_appear[0]] = 0
 
-                if parts_models.category == self.model_mode and item.category == "transmission" and item.chosen_items_for_model > 0:
-                    for item_transm in parts_models.transmission_items.items():
-                        if item_transm[0] == item.name:
-                            if item_transm[1] == item.chosen_items_for_model:
-                                empty_model["transmission_items"][item_transm[0]] = item.chosen_items_for_model
-                                # print(empty_model["transmission_items"])
-                            else:
-                                empty_model["transmission_items"][item_transm[0]] = 0
+                if parts_models.category == self.model_mode and item.chosen_items_for_model >= 0:
 
-                if parts_models.category == self.model_mode and item.category == "management mechanisms" and item.chosen_items_for_model > 0:
-                    for item_mmi in parts_models.management_mechanisms_items.items():
-                        if item_mmi[0] == item.name:
-                            if item_mmi[1] == item.chosen_items_for_model:
-                                empty_model["management_mechanisms_items"][item_mmi[0]] = item.chosen_items_for_model
-                                # print(empty_model["management_mechanisms_items"])
-                            elif item_mmi[1] != item.chosen_items_for_model:
-                                empty_model["management_mechanisms_items"][item_mmi[0]] = 0
+                    if item.category == "appearance":
+                        for item_appear in parts_models.appearance_items.items():
+                            # print(parts_models.appearance_items)
+                            if item_appear[0] == item.name and len(empty_model["appearance_items"]) != 0:
+                                if item.chosen_items_for_model >= item_appear[1]:
+                                    empty_model["appearance_items"][item_appear[0]] = item.chosen_items_for_model
+                                    models_created['First model']['appearance_items'][
+                                        item_appear[0]] = item.chosen_items_for_model
+                                    del empty_model["appearance_items"][item_appear[0]]
+                                    print(empty_model["appearance_items"])
+                                else:
+                                    models_created['First model']['appearance_items'][
+                                        item_appear[0]] = 0
+                                    empty_model["appearance_items"][item_appear[0]] = 0
+                                    empty_model['appearance_items']['All_items'] = False
 
-                if parts_models.category == self.model_mode and not item.necessarily and item.chosen_items_for_model > 0:
-                    for item_sln in parts_models.salon_items.items():
-                        # print(item_sln)
-                        if item_sln[0] == item.name:
-                            if item_sln[1] == item.chosen_items_for_model:
-                                empty_model["salon_items"][item_sln[0]] = item.chosen_items_for_model
-                                # print(empty_model["salon_items"])
-                            else:
-                                empty_model["salon_items"][item_sln[0]] = 0
+                            elif len(empty_model['appearance_items']) == 1:
+                                empty_model['appearance_items']['All_items'] = True
+
+                    elif item.category == "transmission":
+                        for item_transm in parts_models.transmission_items.items():
+                            if item_transm[0] == item.name and len(empty_model["transmission_items"]) != 0:
+                                if self.created_over:
+                                    item.chosen_items_for_model -= item_transm[1]
+                                    item.account -= item_transm[1]
+                                    empty_model['transmission_items'][item_transm[0]] = 0
+                                    print(self.created_over, item_transm[0], item_transm[1], item.chosen_items_for_model)
+                                    if len(empty_model['transmission_items']) == 0:
+                                        self.created_over = False
+                                if item.chosen_items_for_model >= item_transm[1]:
+                                    empty_model["transmission_items"][item_transm[0]] = item.chosen_items_for_model
+                                    models_created['First model']['transmission_items'][
+                                        item_transm[0]] = item.chosen_items_for_model
+                                    del empty_model["transmission_items"][item_transm[0]]
+                                    print(empty_model["transmission_items"])
+                                else:
+                                    empty_model['transmission_items']['All_items'] = False
+                                    models_created['First model']['transmission_items'][
+                                        item_transm[0]] = 0
+                                    empty_model["transmission_items"][item_transm[0]] = 0
+
+                            elif len(empty_model['transmission_items']) == 1:
+                                empty_model['transmission_items']['All_items'] = True
+
+                    elif item.category == "management mechanisms":
+                        for item_mmi in parts_models.management_mechanisms_items.items():
+                            if item_mmi[0] == item.name and len(empty_model["management_mechanisms_items"]) != 0:
+                                if item.chosen_items_for_model >= item_mmi[1]:
+                                    empty_model["management_mechanisms_items"][
+                                        item_mmi[0]] = item.chosen_items_for_model
+                                    models_created['First model']['management_mechanisms_items'][
+                                        item_mmi[0]] = item.chosen_items_for_model
+                                    del empty_model["management_mechanisms_items"][item_mmi[0]]
+                                    print(empty_model["management_mechanisms_items"])
+                                else:
+                                    models_created['First model']['management_mechanisms_items'][
+                                        item_mmi[0]] = 0
+                                    empty_model["management_mechanisms_items"][item_mmi[0]] = 0
+                                    empty_model['management_mechanisms_items']['All_items'] = False
+
+                            elif len(empty_model['management_mechanisms_items']) == 1:
+                                # print(item_appear[0], item_appear[1], item.chosen_items_for_model)
+                                empty_model['management_mechanisms_items']['All_items'] = True
+
+                    elif item.category == "salon":
+                        for item_sln in parts_models.salon_items.items():
+                            if item_sln[0] == item.name and len(empty_model["salon_items"]) != 0:
+                                if self.created_over:
+                                    item.chosen_items_for_model -= item_sln[1]
+                                    item.account -= item_sln[1]
+                                    empty_model['salon_items'][item_sln[0]] = 0
+                                    print(self.created_over, item_sln[0], item_sln[1], item.chosen_items_for_model)
+                                    if len(empty_model['salon_items']) == 0:
+                                        self.created_over = False
+                                if item.chosen_items_for_model >= item_sln[1]:
+                                    empty_model['salon_items'][item_sln[0]] = item.chosen_items_for_model
+                                    models_created['First model']['salon_items'][
+                                        item_sln[0]] = item.chosen_items_for_model
+                                    del empty_model["salon_items"][item_sln[0]]
+                                    print(empty_model["salon_items"])
+                                else:
+                                    models_created['First model']['salon_items'][
+                                        item_sln[0]] = 0
+                                    empty_model["salon_items"][item_sln[0]] = 0
+                                    empty_model['salon_items']['All_items'] = False
+
+                            elif len(empty_model['salon_items']) == 1:
+                                # print(item_appear[0], item_appear[1], item.chosen_items_for_model)
+                                empty_model['salon_items']['All_items'] = True
+
+                    elif item.category == "additional_items":
+                        for item_add in parts_models.additional_items.items():
+                            print(item.category)
+                            if item_add[0] in item.category:
+                                print(item.name)
+                                if item.chosen_items_for_model > 0:
+                                    if item.category == "salon_items":
+                                        print("salon")
+                                        empty_model["salon_items"][item_add[0]] = item.chosen_items_for_model
+                                        print(empty_model["salon_items"])
+                                    else:
+                                        print("empty")
+                                        empty_model["salon_items"][item_add[0]] = 0
+
+                                    if item.category == "appearance":
+                                        empty_model["appearance"][item_add[0]] = item.chosen_items_for_model
+                                        print(empty_model["appearance"])
+                                    else:
+                                        empty_model["appearance"][item_add[0]] = 0
+
+                if empty_model['appearance_items']['All_items'] and empty_model['transmission_items']['All_items'] and \
+                        empty_model['management_mechanisms_items']['All_items'] and empty_model['salon_items'][
+                    'All_items']:
+                    screen.blit(self.finished_button, (windowGUIcreaterin_x + 55, windowGUIcreaterin_y + 180))
+                    self.created_over = True
+                    print(self.created_over)
 
         for model in self.model:
             if model.category == self.model_mode:

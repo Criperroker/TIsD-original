@@ -343,15 +343,10 @@ model_machine = {
                                    "Wheels": 4,
                                    },
 
-            "management_mechanisms_items": {"Elastic spring": 4,
-                                            "Helm": 1
-                                            },
-            "additional_items": {"Radio": 1,
-                                 "Oven": 1,
-                                 "Conditioner": 1,
-                                 "Ventilation": 1
-                                 }
+            "management_mechanisms_items": {"Helm": 1,
+                                            "Elastic spring": 4,
 
+                                            },
         },
     "Medium model":
         {
@@ -382,12 +377,6 @@ model_machine = {
                                             "Helm": 1
                                             },
 
-            "additional_items": {"Radio": 1,
-                                 "Oven": 1,
-                                 "Conditioner": 1,
-                                 "Ventilation": 1
-                                 }
-
         },
     "Heavy model":
         {
@@ -417,11 +406,6 @@ model_machine = {
             "management_mechanisms_items": {"Elastic spring": 4,
                                             "Helm": 1
                                             },
-            "additional_items": {"Radio": 1,
-                                 "Oven": 1,
-                                 "Conditioner": 1,
-                                 "Ventilation": 1
-                                 }
         }
 }
 
@@ -521,7 +505,7 @@ shop_items = {
                     "price": 100,
                     "description": "Its shock absorbers",
                     "quality": 50,
-                    "category": "transmission",
+                    "category": "management mechanisms",
                     "image": "Game_ind/Tehnick/Moduls_of_car/Shock absorbers.png",
                     "account": 0,
                     "necessarily": True,
@@ -1692,43 +1676,45 @@ class Game:
 
         for parts_models in self.model:
             for item in self.items_all:
-                if parts_models.category == self.model_mode and item.category == "appearance" and item.chosen_items_for_model > 0:
-                    for item_appear in parts_models.appearance_items.items():
-                        if item_appear[0] == item.name:
-                            if item_appear[1] == item.chosen_items_for_model:
-                                print(item.chosen_items_for_model)
-                                empty_model["appearance_items"][item_appear[0]] = item.chosen_items_for_model
-                                print(empty_model["appearance_items"])
-                            else:
-                                empty_model["appearance_items"][item_appear[0]] = 0
+                if parts_models.category == self.model_mode and item.chosen_items_for_model >= 0:
+                    if item.category == "appearance":
+                        for item_appear in parts_models.appearance_items.items():
+                            if item_appear[0] == item.name:
+                                if item.chosen_items_for_model > item_appear[1]:
+                                    empty_model["appearance_items"][item_appear[0]] = item.chosen_items_for_model
+                                    print(empty_model["appearance_items"])
+                                else:
+                                    empty_model["appearance_items"][item_appear[0]] = 0
 
-                if parts_models.category == self.model_mode and item.category == "transmission" and item.chosen_items_for_model > 0:
-                    for item_transm in parts_models.transmission_items.items():
-                        if item_transm[0] == item.name:
-                            if item_transm[1] == item.chosen_items_for_model:
-                                empty_model["transmission_items"][item_transm[0]] = item.chosen_items_for_model
-                                # print(empty_model["transmission_items"])
-                            else:
-                                empty_model["transmission_items"][item_transm[0]] = 0
 
-                if parts_models.category == self.model_mode and item.category == "management mechanisms" and item.chosen_items_for_model > 0:
-                    for item_mmi in parts_models.management_mechanisms_items.items():
-                        if item_mmi[0] == item.name:
-                            if item_mmi[1] == item.chosen_items_for_model:
-                                empty_model["management_mechanisms_items"][item_mmi[0]] = item.chosen_items_for_model
-                                # print(empty_model["management_mechanisms_items"])
-                            elif item_mmi[1] != item.chosen_items_for_model:
-                                empty_model["management_mechanisms_items"][item_mmi[0]] = 0
+                    elif item.category == "transmission":
+                        for item_transm in parts_models.transmission_items.items():
+                            if item_transm[0] == item.name:
+                                if item.chosen_items_for_model > 0:
+                                    empty_model["transmission_items"][item_transm[0]] = item.chosen_items_for_model
+                                    print(empty_model["transmission_items"])
+                                else:
+                                    empty_model["transmission_items"][item_transm[0]] = 0
 
-                if parts_models.category == self.model_mode and not item.necessarily and item.chosen_items_for_model > 0:
-                    for item_sln in parts_models.salon_items.items():
-                        # print(item_sln)
-                        if item_sln[0] == item.name:
-                            if item_sln[1] == item.chosen_items_for_model:
-                                empty_model["salon_items"][item_sln[0]] = item.chosen_items_for_model
-                                # print(empty_model["salon_items"])
-                            else:
-                                empty_model["salon_items"][item_sln[0]] = 0
+
+                    elif item.category == "management mechanisms":
+                        for item_mmi in parts_models.management_mechanisms_items.items():
+                            if item_mmi[0] == item.name:
+                                if item.chosen_items_for_model > 0:
+                                    empty_model["management_mechanisms_items"][item_mmi[0]] = item.chosen_items_for_model
+                                    print(empty_model["management_mechanisms_items"])
+                                else:
+                                    empty_model["management_mechanisms_items"][item_mmi[0]] = 0
+
+
+                    elif item.category == "salon":
+                        for item_sln in parts_models.salon_items.items():
+                            if item_sln[0] == item.name:
+                                if item.chosen_items_for_model > 0:
+                                    empty_model["salon_items"][item_sln[0]] = item.chosen_items_for_model
+                                    print(empty_model["salon_items"])
+                                else:
+                                    empty_model["salon_items"][item_sln[0]] = 0
 
         for model in self.model:
             if model.category == self.model_mode:
