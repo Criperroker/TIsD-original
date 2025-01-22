@@ -66,14 +66,11 @@ empty_model = {
                          "Rear view mirrors": 0,
                          "All_items": False
                          },
-    "salon_items": {"Radio": 0,
-                    "Seat": 0,
-                    "Oven": 0,
-                    "Conditioner": 0,
-                    "Ventilation": 0,
-                    "All_items": False
 
+    "salon_items": {"Seat": 0,
+                    "All_items": False
                     },
+
     "transmission_items": {"Gearbox": 0,
                            "Engine": 0,
                            "Clutch": 0,
@@ -88,6 +85,17 @@ empty_model = {
                                     "All_items": False
                                     },
 
+    "additional_items": {"Carbon fiber cladding": 0,
+                         "Oven": 0,
+                         "Conditioner": 0,
+                         "Ventilation": 0,
+                         "Radio": 0
+                         },
+
+    "category_model": {"Light_model": False,
+                       "Medium_model": False,
+                       "Havy_model": False},
+
 }
 
 models_created = {
@@ -100,12 +108,7 @@ models_created = {
                              "Rear view mirrors": 0,
 
                              },
-        "salon_items": {"Radio": 0,
-                        "Seat": 0,
-                        "Oven": 0,
-                        "Conditioner": 0,
-                        "Ventilation": 0
-
+        "salon_items": {"Seat": 0,
                         },
         "transmission_items": {"Gearbox": 0,
                                "Engine": 0,
@@ -118,6 +121,19 @@ models_created = {
         "management_mechanisms_items": {"Elastic spring": 0,
                                         "Helm": 0
                                         },
+
+        "additional_items": {"Carbon fiber cladding": 0,
+                             "Oven": 0,
+                             "Conditioner": 0,
+                             "Ventilation": 0,
+                             "Radio": 0
+                             },
+
+        "category_model": {"Light_model": False,
+                           "Medium_model": False,
+                           "Havy_model": False},
+
+        "full": False
     },
     "Second model": {
         "name": "",
@@ -128,13 +144,9 @@ models_created = {
                              "Rear view mirrors": 0,
 
                              },
-        "salon_items": {"Radio": 0,
-                        "Seat": 0,
-                        "Oven": 0,
-                        "Conditioner": 0,
-                        "Ventilation": 0
-
+        "salon_items": {"Seat": 0,
                         },
+
         "transmission_items": {"Gearbox": 0,
                                "Engine": 0,
                                "Clutch": 0,
@@ -146,6 +158,18 @@ models_created = {
         "management_mechanisms_items": {"Elastic spring": 0,
                                         "Helm": 0
                                         },
+        "additional_items": {"Carbon fiber cladding": 0,
+                             "Oven": 0,
+                             "Conditioner": 0,
+                             "Ventilation": 0,
+                             "Radio": 0
+                             },
+
+        "category_model": {"Light_model": False,
+                           "Medium_model": False,
+                           "Havy_model": False},
+
+        "full": False
     },
     "Third model": {
         "name": "",
@@ -156,13 +180,9 @@ models_created = {
                              "Rear view mirrors": 0,
 
                              },
-        "salon_items": {"Radio": 0,
-                        "Seat": 0,
-                        "Oven": 0,
-                        "Conditioner": 0,
-                        "Ventilation": 0
-
+        "salon_items": {"Seat": 0,
                         },
+
         "transmission_items": {"Gearbox": 0,
                                "Engine": 0,
                                "Clutch": 0,
@@ -174,23 +194,32 @@ models_created = {
         "management_mechanisms_items": {"Elastic spring": 0,
                                         "Helm": 0
                                         },
+
+        "additional_items": {"Carbon fiber cladding": 0,
+                             "Oven": 0,
+                             "Conditioner": 0,
+                             "Ventilation": 0,
+                             "Radio": 0
+                             },
+
+        "category_model": {"Light_model": False,
+                           "Medium_model": False,
+                           "Havy_model": False},
+
+        "full": False
     },
     "Fourth model": {
         "name": "",
-        "appearance_items": {"Glass": 0,
+                "appearance_items": {"Glass": 0,
                              "Bumper": 0,
                              "Doors": 0,
                              "Headlights": 0,
                              "Rear view mirrors": 0,
 
                              },
-        "salon_items": {"Radio": 0,
-                        "Seat": 0,
-                        "Oven": 0,
-                        "Conditioner": 0,
-                        "Ventilation": 0
-
+        "salon_items": {"Seat": 0,
                         },
+
         "transmission_items": {"Gearbox": 0,
                                "Engine": 0,
                                "Clutch": 0,
@@ -202,6 +231,19 @@ models_created = {
         "management_mechanisms_items": {"Elastic spring": 0,
                                         "Helm": 0
                                         },
+
+        "additional_items": {"Carbon fiber cladding": 0,
+                             "Oven": 0,
+                             "Conditioner": 0,
+                             "Ventilation": 0,
+                             "Radio": 0
+                             },
+
+        "category_model": {"Light_model": False,
+                           "Medium_model": False,
+                           "Havy_model": False},
+
+        "full": False
     },
     "Fifth model": {
         "name": "",
@@ -212,13 +254,9 @@ models_created = {
                              "Rear view mirrors": 0,
 
                              },
-        "salon_items": {"Radio": 0,
-                        "Seat": 0,
-                        "Oven": 0,
-                        "Conditioner": 0,
-                        "Ventilation": 0
-
+        "salon_items": {"Seat": 0,
                         },
+
         "transmission_items": {"Gearbox": 0,
                                "Engine": 0,
                                "Clutch": 0,
@@ -230,24 +268,32 @@ models_created = {
         "management_mechanisms_items": {"Elastic spring": 0,
                                         "Helm": 0
                                         },
+
+        "additional_items": {"Carbon fiber cladding": 0,
+                             "Oven": 0,
+                             "Conditioner": 0,
+                             "Ventilation": 0,
+                             "Radio": 0
+                             },
+
+        "category_model": {"Light_model": False,
+                           "Medium_model": False,
+                           "Havy_model": False},
+
         "full": False
     },
     "Sixth model": {
         "name": "",
-        "appearance_items": {"Glass": 0,
+                "appearance_items": {"Glass": 0,
                              "Bumper": 0,
                              "Doors": 0,
                              "Headlights": 0,
                              "Rear view mirrors": 0,
 
                              },
-        "salon_items": {"Radio": 0,
-                        "Seat": 0,
-                        "Oven": 0,
-                        "Conditioner": 0,
-                        "Ventilation": 0
-
+        "salon_items": {"Seat": 0,
                         },
+
         "transmission_items": {"Gearbox": 0,
                                "Engine": 0,
                                "Clutch": 0,
@@ -259,24 +305,33 @@ models_created = {
         "management_mechanisms_items": {"Elastic spring": 0,
                                         "Helm": 0
                                         },
+
+        "additional_items": {"Carbon fiber cladding": 0,
+                             "Oven": 0,
+                             "Conditioner": 0,
+                             "Ventilation": 0,
+                             "Radio": 0
+                             },
+
+        "category_model": {"Light_model": False,
+                           "Medium_model": False,
+                           "Havy_model": False},
+
         "full": False
+
     },
     "Eleventh model": {
         "name": "",
-        "appearance_items": {"Glass": 0,
+                "appearance_items": {"Glass": 0,
                              "Bumper": 0,
                              "Doors": 0,
                              "Headlights": 0,
                              "Rear view mirrors": 0,
 
                              },
-        "salon_items": {"Radio": 0,
-                        "Seat": 0,
-                        "Oven": 0,
-                        "Conditioner": 0,
-                        "Ventilation": 0
-
+        "salon_items": {"Seat": 0,
                         },
+
         "transmission_items": {"Gearbox": 0,
                                "Engine": 0,
                                "Clutch": 0,
@@ -288,24 +343,32 @@ models_created = {
         "management_mechanisms_items": {"Elastic spring": 0,
                                         "Helm": 0
                                         },
+
+        "additional_items": {"Carbon fiber cladding": 0,
+                             "Oven": 0,
+                             "Conditioner": 0,
+                             "Ventilation": 0,
+                             "Radio": 0
+                             },
+
+        "category_model": {"Light_model": False,
+                           "Medium_model": False,
+                           "Havy_model": False},
+
         "full": False
     },
     "Eighth model": {
         "name": "",
-        "appearance_items": {"Glass": 0,
+                "appearance_items": {"Glass": 0,
                              "Bumper": 0,
                              "Doors": 0,
                              "Headlights": 0,
                              "Rear view mirrors": 0,
 
                              },
-        "salon_items": {"Radio": 0,
-                        "Seat": 0,
-                        "Oven": 0,
-                        "Conditioner": 0,
-                        "Ventilation": 0
-
+        "salon_items": {"Seat": 0,
                         },
+
         "transmission_items": {"Gearbox": 0,
                                "Engine": 0,
                                "Clutch": 0,
@@ -317,7 +380,20 @@ models_created = {
         "management_mechanisms_items": {"Elastic spring": 0,
                                         "Helm": 0
                                         },
+
+        "additional_items": {"Carbon fiber cladding": 0,
+                             "Oven": 0,
+                             "Conditioner": 0,
+                             "Ventilation": 0,
+                             "Radio": 0
+                             },
+
+        "category_model": {"Light_model": False,
+                           "Medium_model": False,
+                           "Havy_model": False},
+
         "full": False
+
     },
 }
 
@@ -450,7 +526,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 2
                 },
             "Glass":
                 {
@@ -462,7 +537,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 20
                 },
             "Bumper":
                 {
@@ -474,7 +548,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 1
 
                 },
             "Doors":
@@ -487,7 +560,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 4
                 },
             "Headlights":
                 {
@@ -499,7 +571,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 8
                 },
             "Rear view mirrors":
                 {
@@ -511,7 +582,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 2
                 },
         },
     "transmission":
@@ -526,7 +596,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 1
                 },
             "Shock absorbers":
                 {
@@ -538,7 +607,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 8
                 },
             "Engine":
                 {
@@ -550,7 +618,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 1
                 },
             "Clutch":
                 {
@@ -562,7 +629,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 4
                 },
             "Main transfer":
                 {
@@ -574,7 +640,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 1
 
                 },
             "Wheels":
@@ -587,7 +652,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 8
                 },
         },
     "management mechanisms":
@@ -602,7 +666,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 8
                 },
 
             "Elastic spring":
@@ -615,7 +678,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 4
 
                 },
         },
@@ -631,7 +693,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": False,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 1
                 },
             "Seat":
                 {
@@ -643,7 +704,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": True,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 8
                 },
             "Oven":
                 {
@@ -654,9 +714,7 @@ shop_items = {
                     "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
                     "account": 0,
                     "necessarily": False,
-
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 1
                 },
             "Conditioner":
                 {
@@ -669,7 +727,6 @@ shop_items = {
                     "necessarily": False,
 
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 1
                 },
             "Ventilation":
                 {
@@ -681,35 +738,6 @@ shop_items = {
                     "account": 0,
                     "necessarily": False,
                     "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 10
-                }
-        },
-    "maintenance":
-        {
-            "Gas":
-                {
-                    "price": 100,
-                    "description": "Its oil",
-                    "quality": 50,
-                    "category": "Maintenance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
-                    "account": 0,
-                    "necessarily": False,
-                    "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 10
-                },
-
-            "Oil":
-                {
-                    "price": 100,
-                    "description": "Its oil",
-                    "quality": 50,
-                    "category": "Maintenance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/not_image.png",
-                    "account": 0,
-                    "necessarily": False,
-                    "chosen_items_for_model": 0,
-                    "max_chosen_items_for_model": 10
                 }
         },
 
@@ -870,11 +898,9 @@ def generate_shop_window(shop_items):
             account = details['account']
             necessarily = details['necessarily']
             chosen_items_for_model = details['chosen_items_for_model']
-            max_chosen_items_for_model = details['max_chosen_items_for_model']
             items_all.append(
                 Shop(price=price, quality=quality, category=category, name=name, description=description, image=image,
-                     account=account, necessarily=necessarily, chosen_items_for_model=chosen_items_for_model,
-                     max_chosen_items_for_model=max_chosen_items_for_model))
+                     account=account, necessarily=necessarily, chosen_items_for_model=chosen_items_for_model))
     return items_all
 
 
@@ -1094,7 +1120,7 @@ class Order:
 
 class Shop:
     def __init__(self, price, quality, category, name, description, image=None, account=None, necessarily=None,
-                 chosen_items_for_model=None, max_chosen_items_for_model=None):
+                 chosen_items_for_model=None):
         self.price = price
         self.quality = quality
         self.name = name
@@ -1103,7 +1129,6 @@ class Shop:
         self.account = account
         self.necessarily = necessarily
         self.chosen_items_for_model = chosen_items_for_model
-        self.max_chosen_items_for_model = max_chosen_items_for_model
 
         if image:
             # Загрузка и масштабирование изображения только один раз
@@ -1267,7 +1292,7 @@ class Game:
         self.Button_closed_rect = get_non_transparent_rect(self.Button_closed_image).move(self.storage_window_x + 690,
                                                                                           self.storage_window_y + 35)
 
-        self.finished_button_rect = get_non_transparent_rect(self.finished_button).move(780 + 55, 107 + 170)
+        self.finished_button_rect = get_non_transparent_rect(self.finished_button).move(780 + 55, 407 + 180)
 
         self.conveyor_image = load_image(
             "Game_ind/Base/conveir_all/conveir_up/1c/conveir_up_64x64.png", 400, 700)
@@ -1718,11 +1743,43 @@ class Game:
             for item in self.items_all:
 
                 if parts_models.category == self.model_mode and item.chosen_items_for_model >= 0:
+                    if not item.necessarily:
+                        for item_add in parts_models.additional_items.items():
+
+                            print(item.chosen_items_for_model, item_add[0], item.category)
+
+                            if item.name == item_add[0] and item.chosen_items_for_model > 0:
+                                print(item_add[0], item.name)
+                                # if self.created_over and item.chosen_items_for_model > 0:
+                                #     item.chosen_items_for_model -= item_add[1]
+                                #     item.account -= item_add[1]
+                                #     empty_model['additional_items'][item_add[0]] = 0
+                                #     print(self.created_over, item_add[0], item_add[1], item.chosen_items_for_model)
+                                #     if len(empty_model['salon_items']) == 0:
+                                #         self.created_over = False
+
+                                if item.name == item_add[0]:
+
+                                    print(empty_model['additional_items'][item_add[0]],
+                                          empty_model['additional_items'][item_add[1]])
+                                    empty_model["additional_items"][item_add[0]] = item.chosen_items_for_model
+                                    print(empty_model["additional_items"])
+                                else:
+                                    print("empty")
+                                    empty_model["additional_items"][item_add[0]] = 0
 
                     if item.category == "appearance":
                         for item_appear in parts_models.appearance_items.items():
                             # print(parts_models.appearance_items)
                             if item_appear[0] == item.name and len(empty_model["appearance_items"]) != 0:
+                                if self.created_over and item.chosen_items_for_model > 0:
+                                    item.chosen_items_for_model -= item_appear[1]
+                                    item.account -= item_appear[1]
+                                    empty_model['management_mechanisms_items'][item_appear[0]] = 0
+                                    print(self.created_over, item_appear[0], item_appear[1],
+                                          item.chosen_items_for_model)
+                                    if len(empty_model['appearance_items']) == 0:
+                                        self.created_over = False
                                 if item.chosen_items_for_model >= item_appear[1]:
                                     empty_model["appearance_items"][item_appear[0]] = item.chosen_items_for_model
                                     models_created['First model']['appearance_items'][
@@ -1741,11 +1798,12 @@ class Game:
                     elif item.category == "transmission":
                         for item_transm in parts_models.transmission_items.items():
                             if item_transm[0] == item.name and len(empty_model["transmission_items"]) != 0:
-                                if self.created_over:
+                                if self.created_over and item.chosen_items_for_model > 0:
                                     item.chosen_items_for_model -= item_transm[1]
                                     item.account -= item_transm[1]
                                     empty_model['transmission_items'][item_transm[0]] = 0
-                                    print(self.created_over, item_transm[0], item_transm[1], item.chosen_items_for_model)
+                                    print(self.created_over, item_transm[0], item_transm[1],
+                                          item.chosen_items_for_model)
                                     if len(empty_model['transmission_items']) == 0:
                                         self.created_over = False
                                 if item.chosen_items_for_model >= item_transm[1]:
@@ -1766,6 +1824,13 @@ class Game:
                     elif item.category == "management mechanisms":
                         for item_mmi in parts_models.management_mechanisms_items.items():
                             if item_mmi[0] == item.name and len(empty_model["management_mechanisms_items"]) != 0:
+                                if self.created_over and item.chosen_items_for_model > 0:
+                                    item.chosen_items_for_model -= item_mmi[1]
+                                    item.account -= item_mmi[1]
+                                    empty_model['management_mechanisms_items'][item_mmi[0]] = 0
+                                    print(self.created_over, item_mmi[0], item_mmi[1], item.chosen_items_for_model)
+                                    if len(empty_model['management_mechanisms_items']) == 0:
+                                        self.created_over = False
                                 if item.chosen_items_for_model >= item_mmi[1]:
                                     empty_model["management_mechanisms_items"][
                                         item_mmi[0]] = item.chosen_items_for_model
@@ -1786,11 +1851,10 @@ class Game:
                     elif item.category == "salon":
                         for item_sln in parts_models.salon_items.items():
                             if item_sln[0] == item.name and len(empty_model["salon_items"]) != 0:
-                                if self.created_over:
+                                if self.created_over and item.chosen_items_for_model > 0:
                                     item.chosen_items_for_model -= item_sln[1]
                                     item.account -= item_sln[1]
                                     empty_model['salon_items'][item_sln[0]] = 0
-                                    print(self.created_over, item_sln[0], item_sln[1], item.chosen_items_for_model)
                                     if len(empty_model['salon_items']) == 0:
                                         self.created_over = False
                                 if item.chosen_items_for_model >= item_sln[1]:
@@ -1798,7 +1862,6 @@ class Game:
                                     models_created['First model']['salon_items'][
                                         item_sln[0]] = item.chosen_items_for_model
                                     del empty_model["salon_items"][item_sln[0]]
-                                    print(empty_model["salon_items"])
                                 else:
                                     models_created['First model']['salon_items'][
                                         item_sln[0]] = 0
@@ -1809,32 +1872,13 @@ class Game:
                                 # print(item_appear[0], item_appear[1], item.chosen_items_for_model)
                                 empty_model['salon_items']['All_items'] = True
 
-                    elif item.category == "additional_items":
-                        for item_add in parts_models.additional_items.items():
-                            print(item.category)
-                            if item_add[0] in item.category:
-                                print(item.name)
-                                if item.chosen_items_for_model > 0:
-                                    if item.category == "salon_items":
-                                        print("salon")
-                                        empty_model["salon_items"][item_add[0]] = item.chosen_items_for_model
-                                        print(empty_model["salon_items"])
-                                    else:
-                                        print("empty")
-                                        empty_model["salon_items"][item_add[0]] = 0
-
-                                    if item.category == "appearance":
-                                        empty_model["appearance"][item_add[0]] = item.chosen_items_for_model
-                                        print(empty_model["appearance"])
-                                    else:
-                                        empty_model["appearance"][item_add[0]] = 0
-
                 if empty_model['appearance_items']['All_items'] and empty_model['transmission_items']['All_items'] and \
                         empty_model['management_mechanisms_items']['All_items'] and empty_model['salon_items'][
                     'All_items']:
                     screen.blit(self.finished_button, (windowGUIcreaterin_x + 55, windowGUIcreaterin_y + 180))
-                    self.created_over = True
-                    print(self.created_over)
+                    screen.blit(font_medium.render("Create", True, BLACK),
+                                (windowGUIcreaterin_x + 85, windowGUIcreaterin_y + 215))
+                    # pg.draw.rect(screen, "RED", self.finished_button_rect)
 
         for model in self.model:
             if model.category == self.model_mode:
@@ -2023,7 +2067,7 @@ while running:
 
                 if game.show_shop_window:
                     if game.appearance_button_rect1.collidepoint(event.pos):
-                        if game.shop_mode == "":
+                        if game.shop_mode == "transmission" or game.shop_mode == "salon" or game.shop_mode == "management mechanisms" or game.shop_mode == "":
                             game.shop_mode = "appearance"
                             game.shop_scroll_offset = 0
                             print("appearance")
@@ -2033,7 +2077,7 @@ while running:
                             game.shop_scroll_offset = 0
 
                     elif game.management_mechanisms_tab_rect1.collidepoint(event.pos):
-                        if game.shop_mode == "":
+                        if game.shop_mode == "appearance" or game.shop_mode == "salon" or game.shop_mode == "transmission" or game.shop_mode == "":
                             game.shop_mode = "management mechanisms"
                             game.shop_scroll_offset = 0
                             print("management mechanisms")
@@ -2043,7 +2087,7 @@ while running:
                             game.shop_scroll_offset = 0
 
                     elif game.salon_tab_rect1.collidepoint(event.pos):
-                        if game.shop_mode == "":
+                        if game.shop_mode == "appearance" or game.shop_mode == "transmission" or game.shop_mode == "management mechanisms" or game.shop_mode == "":
                             game.shop_mode = "salon"
                             game.shop_scroll_offset = 0
                             print("salon")
@@ -2053,7 +2097,7 @@ while running:
                             game.shop_scroll_offset = 0
 
                     elif game.transmission_tab_rect1.collidepoint(event.pos):
-                        if game.shop_mode == "":
+                        if game.shop_mode == "appearance" or game.shop_mode == "salon" or game.shop_mode == "management mechanisms" or game.shop_mode == "":
                             game.shop_mode = "transmission"
                             game.shop_scroll_offset = 0
                             print("transmission")
@@ -2064,7 +2108,7 @@ while running:
 
                 if game.show_storage_window:
                     if game.appearance_button_rect.collidepoint(event.pos):
-                        if game.storage_filter_mode == "":
+                        if game.storage_filter_mode == "management mechanisms" or game.storage_filter_mode == "transmission" or game.storage_filter_mode == "salon" or game.storage_filter_mode == "":
                             game.storage_filter_mode = "appearance"
                             game.storage_scroll_offset = 0
                         else:
@@ -2072,7 +2116,7 @@ while running:
                             game.storage_scroll_offset = 0
 
                     elif game.management_mechanisms_tab_rect.collidepoint(event.pos):
-                        if game.storage_filter_mode == "":
+                        if game.storage_filter_mode == "appearance" or game.storage_filter_mode == "transmission" or game.storage_filter_mode == "salon" or game.storage_filter_mode == "":
                             game.storage_filter_mode = "management mechanisms"
                             game.storage_scroll_offset = 0
                         else:
@@ -2080,7 +2124,7 @@ while running:
                             game.storage_scroll_offset = 0
 
                     elif game.salon_tab_rect.collidepoint(event.pos):
-                        if game.storage_filter_mode == "":
+                        if game.storage_filter_mode == "appearance" or game.storage_filter_mode == "transmission" or game.storage_filter_mode == "management mechanisms" or game.storage_filter_mode == "":
                             game.storage_filter_mode = "salon"
                             game.storage_scroll_offset = 0
                         else:
@@ -2088,7 +2132,7 @@ while running:
                             game.storage_scroll_offset = 0
 
                     elif game.transmission_tab_rect.collidepoint(event.pos):
-                        if game.storage_filter_mode == "":
+                        if game.storage_filter_mode == "appearance" or game.storage_filter_mode == "salon" or game.storage_filter_mode == "management mechanisms" or game.storage_filter_mode == "":
                             game.storage_filter_mode = "transmission"
                             game.storage_scroll_offset = 0
                         else:
@@ -2120,8 +2164,16 @@ while running:
 
                         if mouse_pressed[0]:
                             if item.rect.collidepoint(
-                                    event.pos) and item.chosen_items_for_model <= item.max_chosen_items_for_model and item.chosen_items_for_model < item.account:
+                                    event.pos) and item.chosen_items_for_model < item.account:
                                 item.chosen_items_for_model += 1
+                                print("Предмет Выбран")
+
+                        if game.finished_button_rect.collidepoint(event.pos) and mouse_pressed[0]:
+                            if empty_model['appearance_items']['All_items'] and empty_model['transmission_items'][
+                                'All_items'] and \
+                                    empty_model['management_mechanisms_items']['All_items'] and \
+                                    empty_model['salon_items']['All_items']:
+                                game.created_over = True
 
                 if event.type == pg.MOUSEBUTTONDOWN and game.storage_button_rect.collidepoint(event.pos):
                     mouse_pressed = pg.mouse.get_pressed()
