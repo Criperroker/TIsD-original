@@ -40,7 +40,9 @@ pg.time.set_timer(INCREASE_MONEY, 1000)
 font = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 20)
 font_medium = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 15)
 font_mini = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 10)
+
 font_description = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 8)
+
 
 names = ["Walton", "Bennett", "Paul", "Andrea", "Stewart", "Stefan", "Lee", "Sally", "Wade", "Ava", "Abby", "Dwight",
          "Goodwin", "Don", "Valerie", "Zach", "Leonard", "Gregory", "Lane", "Jaylee", "Alvin", "Alina", "Margaret",
@@ -158,6 +160,7 @@ models_created = {
         "management_mechanisms_items": {"Elastic spring": 0,
                                         "Helm": 0
                                         },
+
         "additional_items": {"Carbon fiber cladding": 0,
                              "Oven": 0,
                              "Conditioner": 0,
@@ -210,7 +213,7 @@ models_created = {
     },
     "Fourth model": {
         "name": "",
-                "appearance_items": {"Glass": 0,
+        "appearance_items": {"Glass": 0,
                              "Bumper": 0,
                              "Doors": 0,
                              "Headlights": 0,
@@ -284,7 +287,7 @@ models_created = {
     },
     "Sixth model": {
         "name": "",
-                "appearance_items": {"Glass": 0,
+        "appearance_items": {"Glass": 0,
                              "Bumper": 0,
                              "Doors": 0,
                              "Headlights": 0,
@@ -322,7 +325,7 @@ models_created = {
     },
     "Eleventh model": {
         "name": "",
-                "appearance_items": {"Glass": 0,
+        "appearance_items": {"Glass": 0,
                              "Bumper": 0,
                              "Doors": 0,
                              "Headlights": 0,
@@ -359,7 +362,7 @@ models_created = {
     },
     "Eighth model": {
         "name": "",
-                "appearance_items": {"Glass": 0,
+        "appearance_items": {"Glass": 0,
                              "Bumper": 0,
                              "Doors": 0,
                              "Headlights": 0,
@@ -437,7 +440,8 @@ model_machine = {
                 "Radio": 1,
                 "Oven": 1,
                 "Conditioner": 1,
-                "Carbon fiber cladding": 1
+                "Carbon fiber cladding": 1,
+                "Ventilation": 1,
             }
         },
     "Medium model":
@@ -472,7 +476,8 @@ model_machine = {
                 "Radio": 1,
                 "Oven": 1,
                 "Conditioner": 1,
-                "Carbon fiber cladding": 1
+                "Carbon fiber cladding": 1,
+                "Ventilation": 1,
             }
 
         },
@@ -508,7 +513,8 @@ model_machine = {
                 "Radio": 1,
                 "Oven": 1,
                 "Conditioner": 1,
-                "Carbon fiber cladding": 1
+                "Carbon fiber cladding": 1,
+                "Ventilation": 1,
             }
         }
 }
@@ -516,17 +522,6 @@ model_machine = {
 shop_items = {
     "appearance":
         {
-            "Carbon fiber cladding":
-                {
-                    "price": 500,
-                    "description": "Its carbon fiber cladding",
-                    "quality": 50,
-                    "category": "appearance",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/Carbon fiber cladding.png",
-                    "account": 0,
-                    "necessarily": True,
-                    "chosen_items_for_model": 0,
-                },
             "Glass":
                 {
                     "price": 50,
@@ -683,17 +678,6 @@ shop_items = {
         },
     "salon":
         {
-            "Radio":
-                {
-                    "price": 100,
-                    "description": "Its radio",
-                    "quality": 50,
-                    "category": "salon",
-                    "image": "Game_ind/Tehnick/Moduls_of_car/radio.png",
-                    "account": 0,
-                    "necessarily": False,
-                    "chosen_items_for_model": 0,
-                },
             "Seat":
                 {
                     "price": 100,
@@ -705,6 +689,21 @@ shop_items = {
                     "necessarily": True,
                     "chosen_items_for_model": 0,
                 },
+        },
+    "additional":
+        {
+            "Radio":
+                {
+                    "price": 100,
+                    "description": "Its radio",
+                    "quality": 50,
+                    "category": "salon",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/radio.png",
+                    "account": 0,
+                    "necessarily": False,
+                    "chosen_items_for_model": 0,
+                },
+
             "Oven":
                 {
                     "price": 100,
@@ -738,7 +737,18 @@ shop_items = {
                     "account": 0,
                     "necessarily": False,
                     "chosen_items_for_model": 0,
-                }
+                },
+            "Carbon fiber cladding":
+                {
+                    "price": 500,
+                    "description": "Its carbon fiber cladding",
+                    "quality": 50,
+                    "category": "appearance",
+                    "image": "Game_ind/Tehnick/Moduls_of_car/Carbon fiber cladding.png",
+                    "account": 0,
+                    "necessarily": True,
+                    "chosen_items_for_model": 0,
+                },
         },
 
 }
@@ -748,19 +758,19 @@ def wrap_text(text, font, max_width):
     """
     Обертка текста с переносом строк для вмещения в заданную ширину.
     """
-    words = text.split(' ')
+    words = text.split('\n')
     wrapped_lines = []
     current_line = ""
     for word in words:
         # Проверяем, не превысит ли добавление слова максимальную ширину
-        test_line = current_line + word + " "
-        # Получаем размер предполагаемой строки
-        line_width, line_height = font.size(test_line)
-        if line_width <= max_width:
-            # Если предполагаемая строка подходит, добавляем слово к текущей строке
-            current_line += word + " "
-        else:
-            # Если строка слишком длинная, добавляем текущую строку в список и начинаем новую
+        # test_line = current_line + word + " "
+        # # Получаем размер предполагаемой строки
+        # line_width, line_height = font.size(test_line)
+        # if line_width <= max_width:
+        #     # Если предполагаемая строка подходит, добавляем слово к текущей строке
+        #     current_line += word + " "
+        # else:
+        #     # Если строка слишком длинная, добавляем текущую строку в список и начинаем новую
             wrapped_lines.append(current_line)
             current_line = word + " "
     # Добавляем последнюю строку
@@ -805,20 +815,45 @@ def text_render(text):
 
 def generate_description(vehicle_type):
     # Словарь характеристик для разных типов транспорта
-    selected_unnecessarily_items = []
-
-    for unnes_items in shop_items.keys():
-        for item in shop_items[unnes_items].keys():
-            if not shop_items[unnes_items][item]['necessarily']:
-                selected_unnecessarily_items.append(item)
+    selected_add_items = \
+        {
+            "Radio": {
+                "count": 0,
+                "max_items": 1
+            },
+            "Ventilation": {
+                "count": 0,
+                "max_items": 5
+            },
+            "Oven": {
+                "count": 0,
+                "max_items": 3
+            },
+            "Conditioner": {
+                "count": 0,
+                "max_items": 2
+            },
+            "Carbon fiber cladding": {
+                "count": 0,
+                "max_items": 10
+            },
+        }
 
     # Выбираем случайное общее свойство
-    selected_property = random.choice(selected_unnecessarily_items)
+    selected_random_count = 0
+    selected_property = ""
+    full_description = f"I would like {vehicle_type} model"
+    for add in range(len(selected_add_items)):
+        random_keys = random.choice(list(selected_add_items.keys()))  # Имя предмета рандомно
+        selected_random_count = random.randint(0, selected_add_items.get(random_keys).get('max_items'))
+        selected_add_items[random_keys]['count'] = selected_random_count
+        selected_property = random_keys  # Имя предмета
+        if selected_random_count != 0 and add == 0:
+            full_description += f' with:\n- {selected_random_count} {selected_property}'
+        elif selected_random_count != 0 and random_keys not in full_description:
+            full_description += f'\n- {selected_random_count} {selected_property} '
 
-    # Формируем полное описание
-    full_description = f"I would like {vehicle_type} model with {selected_property}."
     return full_description
-
 
 def generate_random_orders(n, orders, order_index=None):
     orders = orders
@@ -1743,30 +1778,30 @@ class Game:
             for item in self.items_all:
 
                 if parts_models.category == self.model_mode and item.chosen_items_for_model >= 0:
-                    if not item.necessarily:
+                    if item.category == "additional":
                         for item_add in parts_models.additional_items.items():
-
-                            print(item.chosen_items_for_model, item_add[0], item.category)
-
-                            if item.name == item_add[0] and item.chosen_items_for_model > 0:
-                                print(item_add[0], item.name)
-                                # if self.created_over and item.chosen_items_for_model > 0:
-                                #     item.chosen_items_for_model -= item_add[1]
-                                #     item.account -= item_add[1]
-                                #     empty_model['additional_items'][item_add[0]] = 0
-                                #     print(self.created_over, item_add[0], item_add[1], item.chosen_items_for_model)
-                                #     if len(empty_model['salon_items']) == 0:
-                                #         self.created_over = False
-
-                                if item.name == item_add[0]:
-
-                                    print(empty_model['additional_items'][item_add[0]],
-                                          empty_model['additional_items'][item_add[1]])
+                            if item_add[0] == item.name and len(empty_model["additional_items"]) != 0:
+                                if item.chosen_items_for_model > 0:
                                     empty_model["additional_items"][item_add[0]] = item.chosen_items_for_model
-                                    print(empty_model["additional_items"])
+                                    print(models_created['First model']['additional_items'])
+                                    models_created['First model']['additional_items'][
+                                        item_add[0]] = item.chosen_items_for_model
+                                    if self.created_over:
+                                        del empty_model["additional_items"][item_add[0]]
+                                        print(empty_model["additional_items"])
                                 else:
-                                    print("empty")
+                                    models_created['First model']['additional_items'][
+                                        item_add[0]] = 0
                                     empty_model["additional_items"][item_add[0]] = 0
+
+                                if self.created_over and item.chosen_items_for_model > 0:
+                                    item.chosen_items_for_model -= item_add[1]
+                                    item.account -= item_add[1]
+                                    empty_model['additional_items'][item_add[0]] = 0
+                                    print(self.created_over, item_add[0], item_add[1],
+                                          item.chosen_items_for_model)
+                                    if len(empty_model['additional_items']) == 0:
+                                        self.created_over = False
 
                     if item.category == "appearance":
                         for item_appear in parts_models.appearance_items.items():
@@ -1775,7 +1810,7 @@ class Game:
                                 if self.created_over and item.chosen_items_for_model > 0:
                                     item.chosen_items_for_model -= item_appear[1]
                                     item.account -= item_appear[1]
-                                    empty_model['management_mechanisms_items'][item_appear[0]] = 0
+                                    empty_model['appearance_items'][item_appear[0]] = 0
                                     print(self.created_over, item_appear[0], item_appear[1],
                                           item.chosen_items_for_model)
                                     if len(empty_model['appearance_items']) == 0:
@@ -1879,6 +1914,11 @@ class Game:
                     screen.blit(font_medium.render("Create", True, BLACK),
                                 (windowGUIcreaterin_x + 85, windowGUIcreaterin_y + 215))
                     # pg.draw.rect(screen, "RED", self.finished_button_rect)
+                    print(models_created['First model']['appearance_items'])
+                    print(models_created['First model']['salon_items'])
+                    print(models_created['First model']['management_mechanisms_items'])
+                    print(models_created['First model']['additional_items'])
+                    print(models_created['First model']['transmission_items'])
 
         for model in self.model:
             if model.category == self.model_mode:
