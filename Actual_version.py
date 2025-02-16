@@ -30,11 +30,8 @@ last_update = pg.time.get_ticks()
 current_image = 0
 
 DAY_EVENT = pg.USEREVENT + 1
-pg.time.set_timer(DAY_EVENT, 3000)
-
 INCREASE_MONEY = pg.USEREVENT + 2
-PANKROT_EVENT = pg.USEREVENT + 1
-pg.time.set_timer(PANKROT_EVENT, 5000)
+pg.time.set_timer(DAY_EVENT, 2100)
 pg.time.set_timer(INCREASE_MONEY, 1000)
 
 font = pg.font.Font("Game_ind/Better VCR 6.1.ttf", 20)
@@ -868,8 +865,11 @@ def generate_random_orders(n, orders, order_index=None):
         deadline = random.randint(5, 10)
         description = generate_description(vehicle_type)
         popularity = random.randint(1, 10)
+        max_days_quota = random.randint(5, 10)
+        max_accept_days = max_days_quota + random.randint(10, max_days_quota + 20)
+        max_order_work = random.randint(max_accept_days, max_accept_days + 10)
         if order_index is None:
-            orders.append(Order(vehicle_type, quality, price, deadline, name, surname, description, popularity))
+            orders.append(Order(vehicle_type, quality, price, deadline, name, surname, description, popularity, max_days_quota, max_accept_days, max_order_work))
             # Создаем AnimatedButton только для перезагрузки заказов
             reload_order = AnimatedButton("", x=-100, y=-100, total_width=53, total_height=55, func=None,
                                           images=reload_button_images)
@@ -878,7 +878,7 @@ def generate_random_orders(n, orders, order_index=None):
             buttons.append(reload_order)
             order_image.append(animation_order)
         else:
-            orders[order_index] = Order(vehicle_type, quality, price, deadline, name, surname, description, popularity)
+            orders[order_index] = Order(vehicle_type, quality, price, deadline, name, surname, description, popularity, max_days_quota, max_accept_days, max_order_work)
 
     return orders, buttons, order_image
 
@@ -1129,7 +1129,7 @@ class Conveyor:
 
 
 class Order:
-    def __init__(self, vehicle_type, quality, price, deadline, name, surname, description, popularity):
+    def __init__(self, vehicle_type, quality, price, deadline, name, surname, description, popularity, max_days_quota, max_accept_days, max_order_work):
         self.vehicle_type = vehicle_type
         self.quality = quality
         self.price = price
@@ -1138,6 +1138,9 @@ class Order:
         self.surname = surname
         self.description = description
         self.popularity = popularity
+        self.max_days_quota = max_days_quota
+        self.max_accept_days = max_accept_days
+        self.max_order_work = max_order_work
         self.is_completed = False
         self.rect = pg.Rect(0, 0, 346, 64)
 
@@ -1291,6 +1294,8 @@ class Game:
 
         self.finished_button = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button.png", 150, 120)
 
+        self.is_active = False
+
         self.storage_window_x = 500
         self.storage_window_y = 97
 
@@ -1335,6 +1340,8 @@ class Game:
         self.money_image_rect = get_non_transparent_rect(self.money_image).move((screen_width / 30, 40))
         self.accept_order_image = load_image(self.accept_order, 100, 100)
         self.reject_order_image = load_image(self.reject_order, 100, 100)
+        self.finished_order_image = load_image("Game_ind/GUI/Base_GUI/Button_GUI/Button.png", 130, 100)
+        self.scale_of_days_image = load_image("Game_ind/GUI/Order_GUI/window_order_open/scale_of_days.png", 62, 128)
 
         self.created_over = False
 
@@ -1499,10 +1506,15 @@ class Game:
             order_surname = f"{order.surname}"
             order_text = f"I would like {order.vehicle_type} model with..."
             order_price = f"${order.price}"
+            self.order_price = order.price
+            self.max_accept_days = f"{order.max_accept_days} days"
+            count_limits = f"{self.reload_limits} try"
             screen.blit(font_mini.render(order_name, True, WHITE), (486, y_start))
             screen.blit(font_mini.render(order_surname, True, WHITE), (610, y_start))
             screen.blit(font_mini.render(order_price, True, WHITE), (485, y_start + 45))
             screen.blit(font_mini.render(order_text, True, WHITE), (488, y_start + 28))
+            screen.blit(font_mini.render(self.max_accept_days, True, BLACK), (600, y_start + 45))
+            screen.blit(font_mini.render(count_limits, True, WHITE), (825, y_start + 45))
 
             y_start += 77
 
@@ -1998,7 +2010,6 @@ class Game:
 
     def add_orders(self, order):
         self.orders.append(order)
-
     def spend_money(self, amount):
         if self.money >= amount:
             self.money -= amount
@@ -2042,13 +2053,28 @@ class Game:
             # Загрузка и отрисовка окна информации о заказе
 
             screen.blit(self.info_window_image, (self.info_window_x, self.info_window_y))
-            screen.blit(self.accept_order_image, (self.info_window_x + 20, self.info_window_y + 328))
-            screen.blit(self.reject_order_image, (self.info_window_x + 140, self.info_window_y + 328))
-            self.accept_button_rect = get_non_transparent_rect(self.accept_order_image).move(self.info_window_x + 20,
-                                                                                             self.info_window_y + 328)
+            if not self.is_active:
+                screen.blit(self.accept_order_image, (self.info_window_x + 20, self.info_window_y + 328))
+                screen.blit(self.reject_order_image, (self.info_window_x + 140, self.info_window_y + 328))
+                self.accept_button_rect = get_non_transparent_rect(self.accept_order_image).move(self.info_window_x + 20,
+                                                                                                 self.info_window_y + 328)
 
-            self.reject_button_rect = get_non_transparent_rect(self.reject_order_image).move(self.info_window_x + 140,
-                                                                                             self.info_window_y + 328)
+                self.reject_button_rect = get_non_transparent_rect(self.reject_order_image).move(self.info_window_x + 140,
+                                                                                                 self.info_window_y + 328)
+
+                screen.blit(font_mini.render("Accept", True, WHITE), (self.info_window_x + 46, self.info_window_y + 368))
+                screen.blit(font_mini.render("Reject", True, WHITE), (self.info_window_x + 168, self.info_window_y + 368))
+            else:
+
+                screen.blit(self.finished_order_image, (self.info_window_x + 200, self.info_window_y + 328))
+                screen.blit(self.scale_of_days_image, (self.info_window_x + 440, self.info_window_y + 210))
+                max_days_quota = f"{self.selected_order.max_days_quota} days"
+                if self.selected_order.max_days_quota == 0:
+                    max_days_quota = f"QUOTA IS OVER"
+                max_order_work = f"{self.selected_order.max_order_work} all days"
+                screen.blit(font_mini.render(max_days_quota, True, WHITE), (420, 328))
+                screen.blit(font_mini.render(max_order_work, True, WHITE), (420, 348))
+
             # Отрисовка текста описания заказа
             description_text = font_mini.render(self.selected_order.description, True, WHITE)
 
@@ -2059,12 +2085,9 @@ class Game:
                                   self.info_window_width - 60)  # Уменьшить ширину для отступов
             screen.blit(font_mini.render(self.selected_order.name, True, WHITE), (100, 140))
             screen.blit(font_mini.render(self.selected_order.surname, True, WHITE), (350, 140))
-            screen.blit(font_mini.render("Accept", True, WHITE), (self.info_window_x + 46, self.info_window_y + 368))
-            screen.blit(font_mini.render("Reject", True, WHITE), (self.info_window_x + 168, self.info_window_y + 368))
 
         # Смещение rect на позицию изображения
         rect_with_offset = self.example_image_rect.move(100, 100)
-
 
 # Игровой цикл
 game = Game()
@@ -2089,10 +2112,7 @@ while running:
                 if game.show_orders_window:
                     for order in game.orders:
                         if order.rect.collidepoint(event.pos):
-                            if game.selected_order == order:
-                                game.selected_order = None
-                            else:
-                                game.selected_order = order
+                            game.selected_order = order
                             break
 
                 for item in game.items_all:
@@ -2243,7 +2263,13 @@ while running:
                             game.money += 1000
                             print(game.credit)
 
-                if game.accept_button_rect.collidepoint(event.pos):
+                if game.accept_button_rect.collidepoint(event.pos) and game.selected_order:
+                    if game.money >= 500:
+                        game.money += 500
+                        print(game.selected_order)
+                        game.is_active = True
+
+                if game.reject_button_rect.collidepoint(event.pos):
                     if game.money >= 500:
                         game.money -= 500
 
@@ -2257,13 +2283,26 @@ while running:
             if game.reload_limits == 0 and game.is_saved_day == False:
                 game.save_days = game.day
                 game.is_saved_day = True
-            if game.save_days + 10 == game.day:
+            if game.save_days + 25 == game.day:
                 game.reload_limits = 5
                 game.is_saved_day = False
 
-        if event.type == PANKROT_EVENT:
-            if game.pankrot_mode:
-                game.popularity -= 1
+            for order in game.orders:
+                if game.is_active:
+                    print(game.selected_order.max_order_work)
+                    game.selected_order.max_order_work -= 1
+                    if game.selected_order.max_days_quota > 0:
+                        game.selected_order.max_days_quota -= 1
+                    if game.selected_order.max_order_work == 0:
+                        # order.is_active = False
+                        game.money -= game.selected_order.price // 10
+                        game.popularity -= game.selected_order.popularity
+                elif not game.is_active:
+                    order.max_accept_days -= 1
+
+        # if event.type == PANKROT_EVENT:
+        #     if game.pankrot_mode:
+        #         game.popularity -= 1
 
         if event.type == INCREASE_MONEY:
             game.money += 1
@@ -2279,11 +2318,13 @@ while running:
             if mouse_pressed[0]:
                 for button in game.reload_buttons:
                     if button.rect.collidepoint(event.pos) and game.reload_limits > 0:
-                        game.reload_limits -= 1
                         order_index = game.reload_buttons.index(button)
-                        game.selected_button = button  # Запоминаем выбранный заказ
-                        game.orders[order_index] = generate_random_orders(1, game.orders, order_index=order_index)[0][
-                            order_index]
+                        print(game.orders[order_index].is_active)
+                        if not game.is_active:
+                            game.reload_limits -= 1
+                            game.selected_button = button  # Запоминаем выбранный заказ
+                            game.orders[order_index] = generate_random_orders(1, game.orders, order_index=order_index)[0][
+                                order_index]
                         break  # Выходим из цикла, так как заказ найден
 
         if event.type == pg.MOUSEBUTTONDOWN:
