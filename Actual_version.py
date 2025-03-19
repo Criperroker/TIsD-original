@@ -125,7 +125,7 @@ models_created = {
                              "Oven": 0,
                              "Conditioner": 0,
                              "Ventilation": 0,
-                             "Radio": 0
+                             "Radio": 1
                              },
 
         "category_model": {"Light_model": False,
@@ -837,7 +837,6 @@ def generate_description(vehicle_type):
         }
 
     # Выбираем случайное общее свойство
-    selected_random_count = 0
     selected_property = ""
     full_description = f"I would like {vehicle_type} model"
     for add in range(len(selected_add_items)):
@@ -850,7 +849,7 @@ def generate_description(vehicle_type):
         elif selected_random_count != 0 and random_keys not in full_description:
             full_description += f'\n- {selected_random_count} {selected_property} '
 
-    return full_description
+    return full_description,selected_add_items
 
 def generate_random_orders(n, orders, order_index=None):
     orders = orders
@@ -863,14 +862,18 @@ def generate_random_orders(n, orders, order_index=None):
         quality = random.choice(["Standard", "High", "Premium"])
         price = random.randint(100, 1000)
         deadline = random.randint(5, 10)
-        description = generate_description(vehicle_type)
+        items_and_description = generate_description(vehicle_type)
+        description = items_and_description[0]
+        items_dict = items_and_description[1]
+
+
         popularity = random.randint(1, 10)
         popularity_deleted = random.randint(3, 10)
         max_days_quota = random.randint(5, 10)
         max_accept_days = max_days_quota + random.randint(10, max_days_quota + 20)
         max_order_work = random.randint(max_accept_days, max_accept_days + 10)
         if order_index is None:
-            orders.append(Order(vehicle_type, quality, price, deadline, name, surname, description, popularity, max_days_quota, max_accept_days, max_order_work, popularity_deleted))
+            orders.append(Order(vehicle_type, quality, price, deadline, name, surname, description, popularity, max_days_quota, max_accept_days, max_order_work, popularity_deleted, items_dict))
             # Создаем AnimatedButton только для перезагрузки заказов
             reload_order = AnimatedButton("", x=-100, y=-100, total_width=53, total_height=55, func=None,
                                           images=reload_button_images)
@@ -879,7 +882,7 @@ def generate_random_orders(n, orders, order_index=None):
             buttons.append(reload_order)
             order_image.append(animation_order)
         else:
-            orders[order_index] = Order(vehicle_type, quality, price, deadline, name, surname, description, popularity, max_days_quota, max_accept_days, max_order_work, popularity_deleted)
+            orders[order_index] = Order(vehicle_type, quality, price, deadline, name, surname, description, popularity, max_days_quota, max_accept_days, max_order_work, popularity_deleted, items_dict)
 
     return orders, buttons, order_image
 
@@ -1130,7 +1133,7 @@ class Conveyor:
 
 
 class Order:
-    def __init__(self, vehicle_type, quality, price, deadline, name, surname, description, popularity, max_days_quota, max_accept_days, max_order_work, popularity_deleted):
+    def __init__(self, vehicle_type, quality, price, deadline, name, surname, description, popularity, max_days_quota, max_accept_days, max_order_work, popularity_deleted, items_dict):
         self.vehicle_type = vehicle_type
         self.quality = quality
         self.price = price
@@ -1143,6 +1146,7 @@ class Order:
         self.max_accept_days = max_accept_days
         self.max_order_work = max_order_work
         self.popularity_deleted = popularity_deleted
+        self.items_dict = items_dict
         self.is_active = False
         self.is_rejected = False
         self.is_completed = False
@@ -1397,6 +1401,7 @@ class Game:
 
         self.ButtonGuiFinance = Button("Finance", 1070, 20, total_width=120, total_height=120,
                                        func=self.toggle_finance_window)
+        self.finished_order_rect = get_non_transparent_rect(self.finished_order_image).move(self.info_window_x + 200, self.info_window_y + 328)
 
         self.main_buttons = [self.ButtonGuiShop, self.ButtonGuiWarehouse, self.ButtonGuiOrder, self.ButtonGuiFinance]
 
@@ -2074,6 +2079,14 @@ class Game:
             screen.blit(line_surface, (x, y))
             y += line_height + 10  # Смещаем Y на высоту строки для отрисовки следующей строки
 
+    def order_complited_check(self, order):
+        print("order_complited_check is active")
+        for item_models_name,item_models_value in models_created["First model"]["additional_items"].items():
+            if order.items_dict.get(item_models_name) == item_models_value:
+                del models_created["First model"]["additional_items"][0]
+            if len(models_created["First model"]["additional_items"]) == 0:
+                self.comlited_order = True
+
     def draw(self):
         screen.blit(self.money_image, self.money_image_rect)
         screen.blit(text_render(self.money), (screen_width / 15 + 30, 75))
@@ -2112,11 +2125,13 @@ class Game:
 
                 self.reject_button_rect = get_non_transparent_rect(self.reject_order_image).move(self.info_window_x + 140,
                                                                                                  self.info_window_y + 328)
+                print('1')
 
                 screen.blit(font_mini.render("Accept", True, WHITE), (self.info_window_x + 46, self.info_window_y + 368))
                 screen.blit(font_mini.render("Reject", True, WHITE), (self.info_window_x + 168, self.info_window_y + 368))
             elif self.selected_order.is_active and not self.selected_order.is_rejected:
                 screen.blit(self.finished_order_image, (self.info_window_x + 200, self.info_window_y + 328))
+                self.finished_order_rect = get_non_transparent_rect(self.finished_order_image).move(self.info_window_x + 200, self.info_window_y + 328)
                 screen.blit(self.scale_of_days_image, (self.info_window_x + 440, self.info_window_y + 210))
                 max_days_quota = f"{self.selected_order.max_days_quota} days"
                 if self.selected_order.max_days_quota == 0:
@@ -2156,7 +2171,7 @@ while running:
             if mouse_pressed[0] or mouse_pressed[2]:
                 if game.selected_order and not game.selected_order.rect.collidepoint(
                         event.pos) and not game.accept_button_rect.collidepoint(
-                    event.pos) and not game.reject_button_rect.collidepoint(event.pos):
+                    event.pos) and not game.reject_button_rect.collidepoint(event.pos) and not game.finished_order_rect.collidepoint(event.pos):
                     game.selected_order = None
 
                 if game.show_orders_window:
@@ -2164,8 +2179,14 @@ while running:
                         if order.max_accept_days > 0:
                             if order.rect.collidepoint(event.pos) and not order.is_rejected:
                                 game.selected_order = order
+                                print("Order_open")
 
-
+                    for item_models_name, item_models_value in models_created["First model"][
+                        "additional_items"].items():
+                        if game.selected_order is not None and game.selected_order.items_dict.get(item_models_name).get("count") > 0:
+                            if game.finished_order_rect.collidepoint(event.pos) and item_models_value > 0:
+                                game.order_complited_check(game.selected_order)
+                                print("Finished_order")
 
                 for item in game.items_all:
                     if item.rect.collidepoint(
@@ -2315,19 +2336,23 @@ while running:
                             game.money += 1000
                             print(game.credit)
 
-                if game.accept_button_rect.collidepoint(event.pos) and game.selected_order:
+                if game.accept_button_rect.collidepoint(event.pos) and game.selected_order and not game.active_order:
                     if game.money >= 500:
                         game.money += 500
+                        game.order_complited_check(game.selected_order)
+                        print("Accept_order")
 
                         if not game.active_order:
                             game.selected_order.is_active = True
                             game.active_order = True
+                            print(game.active_order)
 
-                if game.reject_button_rect.collidepoint(event.pos):
+                if game.reject_button_rect.collidepoint(event.pos) and game.selected_order and not game.selected_order.is_rejected:
                     if game.money >= 500:
                         game.money -= 500
+                        print("Reject_order")
 
-                        if not game.selected_order.is_rejected :
+                        if not game.selected_order.is_rejected:
                             game.selected_order.is_rejected = True
                             game.rejected_order = True
 
